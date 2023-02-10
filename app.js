@@ -20,25 +20,33 @@
 */
 
 // Importing libraries
-const express = require('express')
+const fastify = require('fastify')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
-const app = express()
 
 // Cors configuration to release API access
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*')
     response.header('Access-Control-Allow-Methos', 'GET, POST, PUT, DELETE, OPTIONS')
-
+    
     app.use(cors())
     next()
 })
-
+    
 // Creating an object that allows you to receive a JSON in the body of requests
 const jsonParser = bodyParser.json()
 
-// Enable the server to receive http requests
-app.listen(3030, () => {
-    console.log('Server waiting for requests...');
-})
+const buildApp = () => {
+    const app = fastify()
+    
+    app.get('/hello', async (req, reply) => {
+        return reply.send({
+            message: "Hello World \n"
+        })
+    })
+
+    return app
+}
+
+module.exports = buildApp
