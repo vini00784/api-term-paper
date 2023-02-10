@@ -21,28 +21,27 @@
 
 // Importing libraries
 const fastify = require('fastify')
-const cors = require('cors')
+const cors = require("@fastify/cors")
 const bodyParser = require('body-parser')
 
+const app = fastify()
 
 // Cors configuration to release API access
-app.use((request, response, next) => {
-    response.header('Access-Control-Allow-Origin', '*')
-    response.header('Access-Control-Allow-Methos', 'GET, POST, PUT, DELETE, OPTIONS')
-    
-    app.use(cors())
-    next()
-})
+async function middlewares() {
+    await app.register(cors, 
+        { origin: true }, 
+        { methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'] }
+    )
+} // ONDE USA ESSA FUNÇÃO??
     
 // Creating an object that allows you to receive a JSON in the body of requests
-const jsonParser = bodyParser.json()
+const jsonParser = app.addContentTypeParser // Esse é o bodyparser?
 
 const buildApp = () => {
-    const app = fastify()
     
-    app.get('/hello', async (req, reply) => {
+    app.get('/hello', async(req, reply) => {
         return reply.send({
-            message: "Hello World \n"
+            message: 'Hello World'
         })
     })
 
@@ -50,3 +49,5 @@ const buildApp = () => {
 }
 
 module.exports = buildApp
+
+// COMO FUNCIONA A CRIAÇÃO DE ROTAS?
