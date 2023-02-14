@@ -1,5 +1,5 @@
-const app = require('./app.js')()
+// const app = require('./app.js')()
 
-app.listen({port: 3030})
-    .then(() => console.log('Server waiting requests'))
-    .catch(console.error)
+// app.listen({port: 3030})
+//     .then(() => console.log('Server waiting requests'))
+//     .catch(console.error)
