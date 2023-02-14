@@ -9,6 +9,6 @@
     "prisma": "^4.10.0"
   },
   "scripts": {
-    "nodemon": "nodemon ./app.js"
+    "nodemon": "nodemon ./src/app.js"
   }
 }
