@@ -8,7 +8,6 @@
 const newUser = async (user) => {
 
 }
-
 const updateUser = async (user) => {
 
 }
