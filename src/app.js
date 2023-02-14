@@ -22,7 +22,6 @@
 // Importing libraries
 const express = require('express')
 const cors = require("cors")
-
 const app = express()
 
 // Cors configuration to release API access
@@ -37,10 +36,29 @@ app.use((request, response, next) => {
 // Creating an object that allows you to receive a JSON in the body of requests
 const jsonParser = express.json()
 
-app.get('/test', async(req, res) => {
-    let message = "Successfull"
-    res.status(200).json({message: message})
+// Routes to user CRUD
+
+app.post('/user', cors(), jsonParser, async(req, res) => {
+
 })
+
+app.get('/users', cors(), async(req, res) => {
+    
+})
+
+app.get('/user/user-name/:userName', cors(), async(req, res) => {
+
+})
+
+app.put('/user/:userId', cors(), jsonParser, async(req, res) => {
+
+})
+
+app.delete('/user/:userId', cors(), jsonParser, async(req, res) => {
+
+})
+
+// Routes to user CRUD
 
 app.listen(3030, () => {
     console.log("Server waiting requests...")
