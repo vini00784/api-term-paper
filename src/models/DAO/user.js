@@ -57,6 +57,22 @@ const selectUserByUsername = async (username) => {
 
 }
 
+const login = async (userData) => {
+    try {
+        let sql = `SELECT id FROM tbl_usuario WHERE user_name = '${userData.user_name}' AND senha = md5('${userData.senha}')`
+
+        const rsUser = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUser.length > 0)
+            return rsUser
+        else
+            return false
+    } catch(err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    insertUser
+    insertUser,
+    login
 }

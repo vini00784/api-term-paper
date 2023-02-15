@@ -9,7 +9,7 @@
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 
 // User model
-const userController = require('../models/DAO/user.js')
+const userModel = require('../models/DAO/user.js')
 
 const newUser = async (user) => {
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined || user.senha == ''|| user.senha == undefined)
@@ -20,7 +20,7 @@ const newUser = async (user) => {
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         user.premium = 0
-        const resultNewUser = userController.insertUser(user)
+        const resultNewUser = userModel.insertUser(user)
 
         if(resultNewUser)
             return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
@@ -40,6 +40,21 @@ const selectUserByUsername = async (username) => {
 
 }
 
+const userLogin = async (userData) => {
+    if(userData.user_name == '' || userData.user_name == undefined || userData.senha == '' || userData.senha == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const login = await userModel.login(userData)
+        console.log(login)
+
+        if(login)
+            return { status: 200, message: login[0] }
+        else 
+            return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 } 
+    }
+}
+
 module.exports = {
-    newUser
+    newUser,
+    userLogin
 }
