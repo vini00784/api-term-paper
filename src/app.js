@@ -24,6 +24,12 @@ const express = require('express')
 const cors = require("cors")
 const app = express()
 
+// File with standardized messages
+const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('./module/config.js')
+
+// Import of controllers
+const userController = require('./controllers/userController.js')
+
 // Cors configuration to release API access
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*')
@@ -39,7 +45,27 @@ const jsonParser = express.json()
 // Routes to user CRUD
 
 app.post('/user', cors(), jsonParser, async(req, res) => {
+    let statusCode
+    let message
+    let headerContentType
 
+    headerContentType = req.headers['content-type']
+
+    if(headerContentType == 'application/json') {
+        let bodyData = req.body
+
+        if(JSON.stringify(bodyData) != '') {
+            const newUser = await userController.newUser(bodyData)
+
+            statusCode = newUser.status
+            message = newUser.message
+        }
+    } else {
+        statusCode = 415
+        message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+    }
+
+    res.status(statusCode).json(message)
 })
 
 app.get('/users', cors(), async(req, res) => {

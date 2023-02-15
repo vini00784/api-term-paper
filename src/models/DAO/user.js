@@ -12,7 +12,37 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const insertUser = async (user) => {
+    try {
+        let sql = `INSERT INTO tbl_usuario (
+                                            user_name,
+                                            nome,
+                                            data_nascimento,
+                                            foto,
+                                            biografia,
+                                            email,
+                                            premium,
+                                            senha)
+                                            values (
+                                                '${user.user_name}',
+                                                '${user.nome}',
+                                                '${user.data_nascimento}',
+                                                '${user.foto}',
+                                                '${user.biografia}',
+                                                '${user.email}',
+                                                '${user.premium}',
+                                                md5('${user.senha}')
+                                            )`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch(err) {
+        console.log(err)
+    }
 }
 
 const updateUser = async (user) => {
@@ -25,4 +55,8 @@ const deleteUser = async (id) => {
 
 const selectUserByUsername = async (username) => {
 
+}
+
+module.exports = {
+    insertUser
 }
