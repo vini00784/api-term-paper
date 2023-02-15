@@ -45,7 +45,6 @@ const userLogin = async (userData) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const login = await userModel.login(userData)
-        console.log(login)
 
         if(login)
             return { status: 200, message: login[0] }
