@@ -125,6 +125,11 @@ app.post('/user/login', cors(), jsonParser, async(req, res) => {
                         message = createJwt.response
 
                         return res.status(statusCode).json(message)
+                    } else {
+                        statusCode = 401
+                        message = MESSAGE_ERROR.INVALID_USER
+                        
+                        return response.status(statusCode).json(message)
                     }
                 })
             } else {
