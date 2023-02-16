@@ -40,14 +40,31 @@ const selectUserByUsername = async (username) => {
 
 }
 
-const userLogin = async (userData) => {
-    if(userData.user_name == '' || userData.user_name == undefined || userData.senha == '' || userData.senha == undefined)
+const listAllUsers = async () => {
+    let usersJson = {}
+
+    const usersData = await userModel.selectAllUsers()
+
+    if(usersData) {
+        usersJson.users = usersData
+        return usersJson
+    } else
+        return false
+}
+
+const userLogin = async (userLogin, userPassword) => {
+    if(userLogin == '' || userLogin == undefined || userPassword == '' || userPassword == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const login = await userModel.login(userData)
+        const jwt = require('../../middleware/jwt.js')
 
-        if(login)
-            return { status: 200, message: login[0] }
+        const login = await userModel.login(userLogin, userPassword)
+
+        if(login) {
+            let userToken = await jwt.createJwt(login)
+            login.token = userToken
+            return { status: 200, message: login }
+        }
         else 
             return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 } 
     }
@@ -55,5 +72,6 @@ const userLogin = async (userData) => {
 
 module.exports = {
     newUser,
-    userLogin
+    userLogin,
+    listAllUsers
 }

@@ -30,6 +30,10 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('./module/config.js')
 // Import of controllers
 const userController = require('./controllers/userController.js')
 
+// Function to generate jwt
+const jwt = require('../middleware/jwt.js')
+const verifyUserLogin = require('../middleware/verifyUserLogin.js')
+
 // Cors configuration to release API access
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*')
@@ -41,6 +45,17 @@ app.use((request, response, next) => {
     
 // Creating an object that allows you to receive a JSON in the body of requests
 const jsonParser = express.json()
+
+const verifyJwt = async (request, response, next) => {
+    let token = request.headers['x-access-token']
+    const authenticatedToken = await jwt.validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return response.status(401).end()
+    }
+}
 
 // Routes to user CRUD
 
@@ -54,7 +69,7 @@ app.post('/user', cors(), jsonParser, async(req, res) => {
     if(headerContentType == 'application/json') {
         let bodyData = req.body
 
-        if(JSON.stringify(bodyData) != '') {
+        if(JSON.stringify(bodyData) != '{}') {
             const newUser = await userController.newUser(bodyData)
 
             statusCode = newUser.status
@@ -97,21 +112,40 @@ app.post('/user/login', cors(), jsonParser, async(req, res) => {
     if(headerContentType == 'application/json') {
         let bodyData = req.body
 
-        if(JSON.stringify(bodyData) != '') {
-            const userLogin = await userController.userLogin(bodyData)
+        if(JSON.stringify(bodyData) != '{}') {
+            const userLogin = await userController.userLogin(bodyData.user_name, bodyData.senha)
 
-            statusCode = userLogin.status
-            message = userLogin.message
+            if(userLogin.status == 200) {
+                userLogin.message.forEach(async (userInfo) => {
+                    const authenticatedUser = await verifyUserLogin.verifyLogin(userInfo)
+
+                    if(authenticatedUser) {
+                        const createJwt = await jwt.createJwt(authenticatedUser)
+                        statusCode = createJwt.status
+                        message = createJwt.response
+
+                        return res.status(statusCode).json(message)
+                    }
+                })
+            } else {
+                statusCode = userLogin.status
+                message = userLogin.message
+
+                return res.status(statusCode).json(message)
+            }
+
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.EMPTY_BODY
+
+            return res.status(statusCode).json(message)
         }
     } else {
         statusCode = 415
         message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
-    }
 
-    res.status(statusCode).json(message)
+        return res.status(statusCode).json(message)
+    }
 })
 
 // Routes to user CRUD

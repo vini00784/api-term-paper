@@ -57,9 +57,24 @@ const selectUserByUsername = async (username) => {
 
 }
 
-const login = async (userData) => {
+const selectAllUsers = async () => {
     try {
-        let sql = `SELECT id FROM tbl_usuario WHERE user_name = '${userData.user_name}' AND senha = md5('${userData.senha}')`
+        let sql = 'SELECT id, user_name, nome, data_nascimento, foto, biografia, email, premium, md5(senha) as senha FROM tbl_usuario ORDER BY id DESC'
+
+        const rsUsers = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUsers.length > 0)
+            return rsUsers
+        else
+            return false
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+const login = async (userLogin, userPassword) => {
+    try {
+        let sql = `SELECT id, user_name, md5(senha) as senha FROM tbl_usuario WHERE user_name = '${userLogin}' AND senha = md5('${userPassword}')`
 
         const rsUser = await prisma.$queryRawUnsafe(sql)
 
@@ -74,5 +89,6 @@ const login = async (userData) => {
 
 module.exports = {
     insertUser,
-    login
+    login,
+    selectAllUsers
 }
