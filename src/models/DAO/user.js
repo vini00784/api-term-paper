@@ -59,7 +59,7 @@ const selectUserByUsername = async (username) => {
 
 const selectAllUsers = async () => {
     try {
-        let sql = 'SELECT id, user_name, nome, data_nascimento, foto, biografia, email, premium, md5(senha) as senha FROM tbl_usuario ORDER BY id DESC'
+        let sql = 'SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium, md5(senha) as senha FROM tbl_usuario ORDER BY id DESC'
 
         const rsUsers = await prisma.$queryRawUnsafe(sql)
 
@@ -74,7 +74,7 @@ const selectAllUsers = async () => {
 
 const login = async (userLogin, userPassword) => {
     try {
-        let sql = `SELECT id, user_name, md5(senha) as senha FROM tbl_usuario WHERE user_name = '${userLogin}' AND senha = md5('${userPassword}')`
+        let sql = `SELECT cast(id AS decimal) AS ids, user_name, md5(senha) as senha FROM tbl_usuario WHERE user_name = '${userLogin}' AND senha = md5('${userPassword}')`
 
         const rsUser = await prisma.$queryRawUnsafe(sql)
 
