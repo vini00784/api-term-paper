@@ -23,18 +23,18 @@ const newUser = async (user) => {
 
         const { verifyUserName } = require('../../middleware/verifyUserName.js')
 
-        const verifiedUserName = await verifyUserName(user.user_name)
-        console.log(verifiedUserName)
+        // const verifiedUserName = await verifyUserName(user.user_name)
+        // console.log(verifiedUserName)
+        const resultNewUser = userModel.insertUser(user)
 
-        if(verifiedUserName) {
-            const resultNewUser = userModel.insertUser(user)
+        if(resultNewUser)
+            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
 
-            if(resultNewUser)
-                return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-            else
-                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
-        } else
-            return { status: 401, message: MESSAGE_ERROR.INVALID_USERNAME }
+        // if(verifiedUserName) {
+        // } else
+        //     return { status: 401, message: MESSAGE_ERROR.INVALID_USERNAME }
 
     }
 }
