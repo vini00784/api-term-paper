@@ -14,7 +14,8 @@ const MESSAGE_ERROR = {
     INTERNAL_ERROR_DB: 'Não foi possível realizar a operação com o banco de dados',
     REQUIRED_ID: 'O id do registro é obrigatório neste tipo de requisição!',
     EXCEEDED_CHARACTERS: 'Número de caracteres excedido!',
-    INVALID_USER: 'Falha na autenticação'
+    INVALID_USER: 'Falha na autenticação',
+    INVALID_USERNAME: 'Esse UserName já foi cadastrado anteriormente!'
 }
 
 const MESSAGE_SUCCESS = {
