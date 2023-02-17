@@ -20,12 +20,22 @@ const newUser = async (user) => {
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         user.premium = 0
-        const resultNewUser = userModel.insertUser(user)
 
-        if(resultNewUser)
-            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-        else
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        const { verifyUserName } = require('../../middleware/verifyUserName.js')
+
+        const verifiedUserName = await verifyUserName(user.user_name)
+        console.log(verifiedUserName)
+
+        if(verifiedUserName) {
+            const resultNewUser = userModel.insertUser(user)
+
+            if(resultNewUser)
+                return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+            else
+                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        } else
+            return { status: 401, message: MESSAGE_ERROR.INVALID_USERNAME }
+
     }
 }
 const updateUser = async (user) => {
