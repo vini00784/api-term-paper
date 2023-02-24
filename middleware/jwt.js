@@ -8,8 +8,9 @@ const createJwt = async (user) => {
     }, process.env.SECRET, {
         expiresIn: '5d'
     })
+    const id = user.id
 
-    return { status: 200, response: { message: MESSAGE_SUCCESS.JWT_CREATED, token } };
+    return { status: 200, response: { message: MESSAGE_SUCCESS.JWT_CREATED, token, id } };
 }
 
 const validateJwt = async (token) => {
