@@ -18,9 +18,9 @@ const listAllGenres = async () => {
 
     if(genresData) {
         genresJson.genres = genresData
-        return genresJson
+        return {status: 200, message: genresJson}
     } else
-        return false
+        return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
 }
 
 module.exports = {

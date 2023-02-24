@@ -104,15 +104,15 @@ app.get('/user/id/:userId', cors(), async(req, res) => {
         const userData = await userController.searchUserByID(id)
 
         if(userData) {
-            statusCode = 200
-            message = userData
+            statusCode = userData.status
+            message = userData.message
         } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
+            statusCode = userData.status
+            message = userData.message
         }
     } else {
-        statusCode = 400
-        message = MESSAGE_ERROR.REQUIRED_ID
+        statusCode = userData.status
+        message = userData.message
     }
 
     res.status(statusCode).json(message)
@@ -190,11 +190,11 @@ app.get('/genres', cors(), async (req, res) => {
     const genresData = await genreController.listAllGenres()
 
     if(genresData) {
-        statusCode = 200
-        message = genresData
+        statusCode = genresData.status
+        message = genresData.message
     } else {
-        statusCode = 404
-        message = MESSAGE_ERROR.NOT_FOUND_DB
+        statusCode = genresData.status
+        message = genresData.message
     }
 
     res.status(statusCode).json(message)

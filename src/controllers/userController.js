@@ -57,9 +57,9 @@ const listAllUsers = async () => {
 
     if(usersData) {
         usersJson.users = usersData
-        return usersJson
+        return {status: 200, message: usersJson}
     } else
-        return false
+        return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
 }
 
 const userLogin = async (userLogin, userPassword) => {
@@ -88,9 +88,9 @@ const searchUserByID = async (userId) => {
             let userJson = {}
 
             userJson.user = userData
-            return userJson
+            return {status: 200, message: userJson}
         } else
-            return false
+            return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 } 
     } else 
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
 }
