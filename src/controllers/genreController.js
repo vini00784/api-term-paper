@@ -1,0 +1,28 @@
+/*
+    Objetivo:     File responsible for handling genre (of books) data from the database (INSERT, UPDATE, SELECT, DELETE)
+    Autores:      Vinícius Santos Oliveira
+    Data Criação: 14/02/2023
+    Versão:       1.0
+*/
+
+// File with standardized messages
+const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
+
+// User model
+const genreModel = require('../models/DAO/genre.js')
+
+const listAllGenres = async () => {
+    let genresJson = {}
+
+    const genresData = await genreModel.selectAllGenres()
+
+    if(genresData) {
+        genresJson.genres = genresData
+        return genresJson
+    } else
+        return false
+}
+
+module.exports = {
+    listAllGenres
+}

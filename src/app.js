@@ -29,6 +29,7 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('./module/config.js')
 
 // Import of controllers
 const userController = require('./controllers/userController.js')
+const genreController = require('./controllers/genreController.js')
 
 // Function to generate jwt
 const jwt = require('../middleware/jwt.js')
@@ -177,6 +178,29 @@ app.post('/user/login', cors(), jsonParser, async(req, res) => {
 })
 
 // Routes to user CRUD
+
+/*******************************************************************/
+
+// Routes to genres (of books) CRUD
+
+app.get('/genres', cors(), async (req, res) => {
+    let statusCode
+    let message
+
+    const genresData = await genreController.listAllGenres()
+
+    if(genresData) {
+        statusCode = 200
+        message = genresData
+    } else {
+        statusCode = 404
+        message = MESSAGE_ERROR.NOT_FOUND_DB
+    }
+
+    res.status(statusCode).json(message)
+})
+
+// Routes to genres (of books) CRUD
 
 app.listen(3030, () => {
     console.log("Server waiting requests...")
