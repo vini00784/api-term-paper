@@ -80,8 +80,24 @@ const userLogin = async (userLogin, userPassword) => {
     }
 }
 
+const searchUserByID = async (userId) => {
+    if(userId != undefined && userId != '') {
+        const userData = await userModel.selectUserByID(userId)
+
+        if(userData) {
+            let userJson = {}
+
+            userJson.user = userData
+            return userJson
+        } else
+            return false
+    } else 
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+}
+
 module.exports = {
     newUser,
     userLogin,
-    listAllUsers
+    listAllUsers,
+    searchUserByID
 }

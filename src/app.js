@@ -94,6 +94,29 @@ app.get('/user/user-name/:userName', cors(), async(req, res) => {
 
 })
 
+app.get('/user/id/:userId', cors(), async(req, res) => {
+    let statusCode
+    let message
+    let id = req.params.userId
+
+    if(id != '' && id != undefined) {
+        const userData = await userController.searchUserByID(id)
+
+        if(userData) {
+            statusCode = 200
+            message = userData
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+    } else {
+        statusCode = 400
+        message = MESSAGE_ERROR.REQUIRED_ID
+    }
+
+    res.status(statusCode).json(message)
+})
+
 app.put('/user/:userId', cors(), jsonParser, async(req, res) => {
 
 })

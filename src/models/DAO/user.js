@@ -74,7 +74,22 @@ const selectAllUsers = async () => {
 
 const login = async (userLogin, userPassword) => {
     try {
-        let sql = `SELECT cast(id AS decimal) AS ids, user_name, md5(senha) as senha FROM tbl_usuario WHERE user_name = '${userLogin}' AND senha = md5('${userPassword}')`
+        let sql = `SELECT cast(id AS decimal) AS id, user_name, md5(senha) as senha FROM tbl_usuario WHERE user_name = '${userLogin}' AND senha = md5('${userPassword}')`
+
+        const rsUser = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUser.length > 0)
+            return rsUser
+        else
+            return false
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+const selectUserByID = async (userId) => {
+    try {
+        let sql = `SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario WHERE id = ${userId}`
 
         const rsUser = await prisma.$queryRawUnsafe(sql)
 
@@ -90,5 +105,6 @@ const login = async (userLogin, userPassword) => {
 module.exports = {
     insertUser,
     login,
-    selectAllUsers
+    selectAllUsers,
+    selectUserByID
 }
