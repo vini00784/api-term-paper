@@ -29,7 +29,6 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('./module/config.js')
 
 // Import of controllers
 const userController = require('./controllers/userController.js')
-const genreController = require('./controllers/genreController.js')
 
 // Function to generate jwt
 const jwt = require('../middleware/jwt.js')
@@ -46,6 +45,9 @@ app.use((request, response, next) => {
     
 // Creating an object that allows you to receive a JSON in the body of requests
 const jsonParser = express.json()
+
+// Exporting of routers
+const genreRouter = require('./routes/genreRoutes.js')
 
 const verifyJwt = async (request, response, next) => {
     let token = request.headers['x-access-token']
@@ -183,22 +185,7 @@ app.post('/user/login', cors(), jsonParser, async(req, res) => {
 
 // Routes to genres (of books) CRUD
 
-app.get('/genres', cors(), async (req, res) => {
-    let statusCode
-    let message
-
-    const genresData = await genreController.listAllGenres()
-
-    if(genresData) {
-        statusCode = genresData.status
-        message = genresData.message
-    } else {
-        statusCode = genresData.status
-        message = genresData.message
-    }
-
-    res.status(statusCode).json(message)
-})
+app.use(genreRouter)
 
 // Routes to genres (of books) CRUD
 
