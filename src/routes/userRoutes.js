@@ -116,7 +116,7 @@ router // Route to make user login
     }
 })
 
-router // Route to update user
+router // Route to get user by userName
     .route('/user/user-name/:username')
     .get(async(req, res) => {
         
@@ -135,5 +135,3 @@ router // Route to update and delete user
 module.exports = router
 
 // app.get('/users', cors(), async(req, res)
-
-// app.delete('/user/:userId', cors(), jsonParser, async(req, res)

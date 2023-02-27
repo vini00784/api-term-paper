@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     next()
 })
 
-// Exporting of routers
+// Importing of routers
 const genreRouter = require('./routes/genreRoutes.js')
 const userRouter = require('./routes/userRoutes.js')
 
