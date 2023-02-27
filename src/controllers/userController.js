@@ -55,6 +55,19 @@ const updateUser = async (user) => {
     }
 }
 
+const updateUserPassword = async (user) => {
+    if(user.senha != '' && user.senha != undefined) {
+        const updatedPassword = await userModel.updateUserPassword(user)
+
+        if(updatedPassword)
+            return {status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    } else {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    }
+}
+
 const deleteUser = async () => {
 
 }
@@ -112,6 +125,7 @@ module.exports = {
     newUser,
     userLogin,
     updateUser,
+    updateUserPassword,
     listAllUsers,
     searchUserByID
 }

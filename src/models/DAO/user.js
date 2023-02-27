@@ -68,6 +68,25 @@ const updateUser = async (user) => {
     }
 }
 
+const updateUserPassword = async (user) => {
+    try {
+        let sql = `UPDATE tbl_usuario SET
+                   senha = md5('${user.senha}')
+                   WHERE id = ${user.id}`
+        
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const deleteUser = async (id) => {
 
 }
@@ -126,5 +145,6 @@ module.exports = {
     login,
     selectAllUsers,
     updateUser,
+    updateUserPassword,
     selectUserByID
 }

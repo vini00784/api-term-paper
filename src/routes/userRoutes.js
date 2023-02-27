@@ -38,7 +38,7 @@ router // Route to register a new user
         res.status(statusCode).json(message)
     })
 
-router // Route to get user by ID
+router // Route to get user by ID, update user and delete user
     .route('/user/id/:userId')
     .get(async(req, res) => {
         let statusCode
@@ -160,6 +160,43 @@ router // Route to get user by userName
     .route('/user/user-name/:username')
     .get(async(req, res) => {
         
+    })
+
+router
+    .route('/password/:userId')
+    .put(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let headerContentType = req.headers['content-type']
+
+        if(headerContentType == 'application/json') {
+            let bodyData = req.body
+
+            if(JSON.stringify(bodyData)) {
+                let id = req.params.userId
+                
+                if(id != '' && id != undefined) {
+                    bodyData.id = id
+
+                    const updatedPassword = await userController.updateUserPassword(bodyData)
+
+                    statusCode = updatedPassword.status
+                    message = updatedPassword.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+
+        res.status(statusCode).json(message)
     })
 
 module.exports = router
