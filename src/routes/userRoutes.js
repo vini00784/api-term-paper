@@ -116,12 +116,24 @@ router // Route to make user login
     }
 })
 
+router // Route to update user
+    .route('/user/user-name/:username')
+    .get(async(req, res) => {
+        
+    })
+
+router // Route to update and delete user
+    .route('/user/:userId')
+    .put(jsonParser, async(req, res) => {
+
+    })
+
+    .delete(async(req, res) => {
+
+    })
+
 module.exports = router
 
 // app.get('/users', cors(), async(req, res)
-
-// app.get('/user/user-name/:userName', cors(), async(req, res)
-
-// app.put('/user/:userId', cors(), jsonParser, async(req, res)
 
 // app.delete('/user/:userId', cors(), jsonParser, async(req, res)
