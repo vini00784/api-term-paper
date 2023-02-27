@@ -140,11 +140,27 @@ const selectUserByID = async (userId) => {
     }
 }
 
+const verifyUserName = async (userName) => {
+    try {
+        let sql = `SELECT id FROM tbl_usuario WHERE user_name LIKE '${userName}'`
+
+        const rsId = await prisma.$queryRawUnsafe(sql)
+
+        if(rsId.length > 0)
+            return rsId
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertUser,
     login,
     selectAllUsers,
     updateUser,
     updateUserPassword,
-    selectUserByID
+    selectUserByID,
+    verifyUserName
 }

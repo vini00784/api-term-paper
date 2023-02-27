@@ -21,20 +21,18 @@ const newUser = async (user) => {
     else {
         user.premium = 0
 
-        const { verifyUserName } = require('../../middleware/verifyUserName.js')
+        const id = await verifyUserName(user.user_name)
 
-        // const verifiedUserName = await verifyUserName(user.user_name)
-        // console.log(verifiedUserName)
-        const resultNewUser = await userModel.insertUser(user)
-
-        if(resultNewUser)
-            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-        else
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
-
-        // if(verifiedUserName) {
-        // } else
-        //     return { status: 401, message: MESSAGE_ERROR.INVALID_USERNAME }
+        if(id.length > 0) {
+            return {status: 400, message: MESSAGE_ERROR.INVALID_USERNAME}
+        } else {
+            const resultNewUser = await userModel.insertUser(user)
+                    
+                if(resultNewUser)
+                    return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+                else
+                    return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        }
 
     }
 }
@@ -116,9 +114,22 @@ const searchUserByID = async (userId) => {
             userJson.user = userData
             return {status: 200, message: userJson}
         } else
-            return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 } 
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB} 
     } else 
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+}
+
+const verifyUserName = async (userName) => {
+    if(userName == '' && userName == undefined)
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
+    else {
+        const userId = await userModel.verifyUserName(userName)
+
+        if(userId) {
+            return userId
+        } else
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+    }
 }
 
 module.exports = {
