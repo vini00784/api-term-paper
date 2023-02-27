@@ -15,10 +15,10 @@ const app = express()
 const jwt = require('../middleware/jwt.js')
 
 // Cors configuration to release API access
-app.use((request, response, next) => {
-    response.header('Access-Control-Allow-Origin', '*')
-    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.header('Access-Control-Allow-Headers', 'Content-type')
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    res.header('Access-Control-Allow-Headers', 'Content-type')
 
     app.use(cors())
     next()
@@ -28,14 +28,14 @@ app.use((request, response, next) => {
 const genreRouter = require('./routes/genreRoutes.js')
 const userRouter = require('./routes/userRoutes.js')
 
-const verifyJwt = async (request, response, next) => {
-    let token = request.headers['x-access-token']
+const verifyJwt = async (req, res, next) => {
+    let token = req.headers['x-access-token']
     const authenticatedToken = await jwt.validateJwt(token)
 
     if(authenticatedToken) {
         next()
     } else {
-        return response.status(401).end()
+        return res.status(401).end()
     }
 }
 
