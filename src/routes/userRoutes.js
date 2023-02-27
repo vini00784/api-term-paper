@@ -9,7 +9,7 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 
 const router = express.Router()
 
-router
+router // Route to register a new user
     .route('/user')
     .post(jsonParser, async(req, res) => {
         let statusCode
@@ -38,7 +38,7 @@ router
         res.status(statusCode).json(message)
     })
 
-router
+router // Route to get user by ID
     .route('/user/id/:userId')
     .get(async(req, res) => {
         let statusCode
@@ -63,7 +63,7 @@ router
         res.status(statusCode).json(message)
     })
 
-router
+router // Route to make user login
     .route('/user/login')
     .post(jsonParser, async(req, res) => {
     let statusCode
