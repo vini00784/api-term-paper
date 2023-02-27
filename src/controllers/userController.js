@@ -25,7 +25,7 @@ const newUser = async (user) => {
 
         // const verifiedUserName = await verifyUserName(user.user_name)
         // console.log(verifiedUserName)
-        const resultNewUser = userModel.insertUser(user)
+        const resultNewUser = await userModel.insertUser(user)
 
         if(resultNewUser)
             return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
@@ -39,7 +39,20 @@ const newUser = async (user) => {
     }
 }
 const updateUser = async (user) => {
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else if(!user.email.includes('@'))
+        return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
+    else if(user.user_name.length > 30 || user.nome.length > 200 || user.email.length > 256)
+        return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
+    else {
+        const updatedUser = await userModel.updateUser(user)
 
+        if(updatedUser)
+            return {status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
 }
 
 const deleteUser = async () => {
@@ -98,6 +111,7 @@ const searchUserByID = async (userId) => {
 module.exports = {
     newUser,
     userLogin,
+    updateUser,
     listAllUsers,
     searchUserByID
 }

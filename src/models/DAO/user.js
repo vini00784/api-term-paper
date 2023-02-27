@@ -46,7 +46,26 @@ const insertUser = async (user) => {
 }
 
 const updateUser = async (user) => {
+    try {
+        let sql = `UPDATE tbl_usuario SET
+                   user_name = '${user.user_name}',
+                   nome = '${user.nome}',
+                   data_nascimento = '${user.data_nascimento}',
+                   foto = '${user.foto}',
+                   biografia = '${user.biografia}',
+                   email = '${user.email}'
+                   WHERE id = ${user.id}`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const deleteUser = async (id) => {
@@ -106,5 +125,6 @@ module.exports = {
     insertUser,
     login,
     selectAllUsers,
+    updateUser,
     selectUserByID
 }

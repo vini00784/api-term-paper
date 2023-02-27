@@ -63,6 +63,46 @@ router // Route to get user by ID
         res.status(statusCode).json(message)
     })
 
+    .put(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let headerContentType
+
+        headerContentType = req.headers['content-type']
+
+        if(headerContentType == 'application/json') {
+            let bodyData = req.body
+
+            if(JSON.stringify(bodyData) != '{}') {
+                let id = req.params.userId
+
+                if(id != '' && id != undefined) {
+                    bodyData.id = id
+
+                    const updatedUser = await userController.updateUser(bodyData)
+
+                    statusCode = updatedUser.status
+                    message = updatedUser.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+    .delete(async(req, res) => {
+
+    })
+
 router // Route to make user login
     .route('/user/login')
     .post(jsonParser, async(req, res) => {
@@ -120,16 +160,6 @@ router // Route to get user by userName
     .route('/user/user-name/:username')
     .get(async(req, res) => {
         
-    })
-
-router // Route to update and delete user
-    .route('/user/:userId')
-    .put(jsonParser, async(req, res) => {
-
-    })
-
-    .delete(async(req, res) => {
-
     })
 
 module.exports = router
