@@ -36,6 +36,7 @@ const newUser = async (user) => {
 
     }
 }
+
 const updateUser = async (user) => {
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -44,12 +45,18 @@ const updateUser = async (user) => {
     else if(user.user_name.length > 30 || user.nome.length > 200 || user.email.length > 256)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
-        const updatedUser = await userModel.updateUser(user)
+        const id = await verifyUserName(user.user_name)
 
-        if(updatedUser)
-            return {status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM}
-        else
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        if(id.length > 0)
+            return {status: 400, message: MESSAGE_ERROR.INVALID_USERNAME}
+        else {
+            const updatedUser = await userModel.updateUser(user)
+    
+            if(updatedUser)
+                return {status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM}
+            else
+                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        }
     }
 }
 
