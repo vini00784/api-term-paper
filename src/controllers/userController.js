@@ -152,6 +152,7 @@ const verifyUserName = async (userName) => {
 
 module.exports = {
     newUser,
+    listAllUsers,
     userLogin,
     updateUser,
     updateUserPassword,
