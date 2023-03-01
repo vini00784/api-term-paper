@@ -18,6 +18,7 @@ const verifyJwt = async (req, res, next) => {
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
+const e = require('express')
 
 const router = express.Router()
 
@@ -135,7 +136,22 @@ router // Route to get user by ID, update user and delete user
     })
 
     .delete(async(req, res) => {
+        let statusCode
+        let message
 
+        let id = req.params.userId
+
+        if(id != '' && id != undefined) {
+            const deletedUser = await userController.deleteUser(id)
+
+            statusCode = deletedUser.status
+            message = deletedUser.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+        
+        res.status(statusCode).json(message)
     })
 
 router // Route to make user login

@@ -73,8 +73,16 @@ const updateUserPassword = async (user) => {
     }
 }
 
-const deleteUser = async () => {
+const deleteUser = async (id) => {
+    if(id != '' & id != undefined) {
+        const deletedUser = await userModel.deleteUser(id)
 
+        if(deletedUser)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    } else
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
 }
 
 const selectUserByUsername = async (userName) => {
@@ -156,6 +164,7 @@ module.exports = {
     userLogin,
     updateUser,
     updateUserPassword,
+    deleteUser,
     selectUserByUsername,
     listAllUsers,
     searchUserByID
