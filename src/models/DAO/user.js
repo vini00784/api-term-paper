@@ -91,8 +91,19 @@ const deleteUser = async (id) => {
 
 }
 
-const selectUserByUsername = async (username) => {
+const selectUserByUsername = async (userName) => {
+    try {
+        let sql = `SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario WHERE user_name = '${userName}'`
 
+        const rsUserByUsername = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUserByUsername)
+            return rsUserByUsername
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const selectAllUsers = async () => {
@@ -158,6 +169,7 @@ const verifyUserName = async (userName) => {
 module.exports = {
     insertUser,
     login,
+    selectUserByUsername,
     selectAllUsers,
     updateUser,
     updateUserPassword,

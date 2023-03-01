@@ -77,8 +77,19 @@ const deleteUser = async () => {
 
 }
 
-const selectUserByUsername = async (username) => {
+const selectUserByUsername = async (userName) => {
+    if(userName != '' && userName != undefined) {
+        const userByUsername = await userModel.selectUserByUsername(userName)
 
+        if(userByUsername) {
+            let userByUsernameJson = {}
+
+            userByUsernameJson.user = userByUsername
+            return {status: 200, message: userByUsernameJson}
+        } else
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+    } else
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
 }
 
 const listAllUsers = async () => {
@@ -144,6 +155,7 @@ module.exports = {
     userLogin,
     updateUser,
     updateUserPassword,
+    selectUserByUsername,
     listAllUsers,
     searchUserByID
 }

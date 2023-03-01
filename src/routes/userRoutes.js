@@ -4,6 +4,18 @@ const userController = require('../controllers/userController.js')
 const verifyUserLogin = require('../../middleware/verifyUserLogin.js')
 const jwt = require('../../middleware/jwt.js')
 
+// Function to verify jwt
+const verifyJwt = async (req, res, next) => {
+    let token = req.headers['x-access-token']
+    const authenticatedToken = await jwt.validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return res.status(401).end()
+    }
+}
+
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 
@@ -159,7 +171,27 @@ router // Route to make user login
 router // Route to get user by userName
     .route('/user/user-name/:username')
     .get(async(req, res) => {
-        
+        let statusCode
+        let message
+
+        let userName = req.params.username
+
+        if(userName != '' && userName != undefined) {
+            const userByUsernameData = await userController.selectUserByUsername(userName)
+
+            if(userByUsernameData) {
+                statusCode = userByUsernameData.status
+                message = userByUsernameData.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
+        }
+
+        res.status(statusCode).json(message)
     })
 
 router
