@@ -255,5 +255,3 @@ router // Route to update user password
     })
 
 module.exports = router
-
-// app.get('/users', cors(), async(req, res)
