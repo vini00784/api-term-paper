@@ -23,9 +23,9 @@ const newUser = async (user) => {
 
         const id = await verifyUserName(user.user_name)
 
-        if(id.length > 0) {
+        if(id.length > 0)
             return {status: 400, message: MESSAGE_ERROR.INVALID_USERNAME}
-        } else {
+        else {
             const resultNewUser = await userModel.insertUser(user)
                     
                 if(resultNewUser)

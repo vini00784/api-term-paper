@@ -144,7 +144,7 @@ router // Route to make user login
                         statusCode = 401
                         message = MESSAGE_ERROR.INVALID_USER
                         
-                        return response.status(statusCode).json(message)
+                        return res.status(statusCode).json(message)
                     }
                 })
             } else {
@@ -194,7 +194,7 @@ router // Route to get user by userName
         res.status(statusCode).json(message)
     })
 
-router
+router // Route to update user password
     .route('/password/:userId')
     .put(jsonParser, async(req, res) => {
         let statusCode
