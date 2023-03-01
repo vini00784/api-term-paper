@@ -21,6 +21,29 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 
 const router = express.Router()
 
+/* ROUTE TO MAKE TESTS*/
+
+router
+    .route('/users')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const usersData = await userController.listAllUsers()
+
+        if(usersData) {
+            statusCode = usersData.status
+            message = usersData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+/* ROUTE TO MAKE TESTS*/
+
 router // Route to register a new user
     .route('/user')
     .post(jsonParser, async(req, res) => {
