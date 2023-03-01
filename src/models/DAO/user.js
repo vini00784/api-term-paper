@@ -23,7 +23,7 @@ const insertUser = async (user) => {
                                             premium,
                                             senha)
                                             values (
-                                                '${user.user_name}',
+                                                LOWER('${user.user_name}'),
                                                 '${user.nome}',
                                                 '${user.data_nascimento}',
                                                 '${user.foto}',
@@ -48,7 +48,7 @@ const insertUser = async (user) => {
 const updateUser = async (user) => {
     try {
         let sql = `UPDATE tbl_usuario SET
-                   user_name = '${user.user_name}',
+                   user_name = LOWER('${user.user_name}'),
                    nome = '${user.nome}',
                    data_nascimento = '${user.data_nascimento}',
                    foto = '${user.foto}',
