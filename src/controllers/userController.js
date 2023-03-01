@@ -27,11 +27,11 @@ const newUser = async (user) => {
             return {status: 400, message: MESSAGE_ERROR.INVALID_USERNAME}
         else {
             const resultNewUser = await userModel.insertUser(user)
-                    
-                if(resultNewUser)
-                    return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-                else
-                    return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+
+            if(resultNewUser)
+                return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+            else
+                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
         }
 
     }
