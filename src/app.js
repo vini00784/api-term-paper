@@ -24,11 +24,13 @@ app.use((req, res, next) => {
 // Importing of routers
 const genreRouter = require('./routes/genreRoutes.js')
 const userRouter = require('./routes/userRoutes.js')
+const tagRouter = require('./routes/tagRoutes.js')
 
 // Using routers
 
 app.use(userRouter)
 app.use(genreRouter)
+app.use(tagRouter)
 
 // Using routers
 
