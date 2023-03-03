@@ -11,6 +11,12 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // User model
 const userModel = require('../models/DAO/user.js')
 
+// user_tag model
+const userTagModel = require('../models/DAO/userTag.js')
+
+// user_genre model
+const userGenreModel = require('../models/DAO/userGenre.js')
+
 const newUser = async (user) => {
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined || user.senha == ''|| user.senha == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -28,9 +34,46 @@ const newUser = async (user) => {
         else {
             const resultNewUser = await userModel.insertUser(user)
 
-            if(resultNewUser)
-                return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-            else
+            if(resultNewUser) {
+                let newUserId = await userModel.selectLastId()
+
+                if(newUserId > 0) {
+                    let userTag = {}
+
+                    userTag.id_usuario = newUserId
+
+                    let tagArrayLength = user.tags.length
+                    let resultNewUserTag
+                    for(let i = 0; i < tagArrayLength; i++) {
+                        userTag.id_tag = user.tags[i].id_tag
+                        resultNewUserTag = await userTagModel.insertUserTag(userTag)
+                    }
+                    if(resultNewUserTag) {
+                        let userGenre = {}
+
+                        userGenre.id_usuario = newUserId
+
+                        let genreArrayLength = user.generos.length
+                        let resultNewUserGenre
+                        for(let i = 0; i < genreArrayLength; i++) {
+                            userGenre.id_generos = user.generos[i].id_genero
+                            resultNewUserGenre = await userGenreModel.insertUserGenre(userGenre)
+                        }
+                        if(resultNewUserGenre)
+                            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+                        else {
+                            await deleteUser(newUserId)
+                            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+                        }
+                    } else {
+                        await deleteUser(newUserId)
+                        return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+                    }
+                } else {
+                    await deleteUser(newUserId)
+                    return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+                }
+            } else
                 return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
         }
 
