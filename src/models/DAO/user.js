@@ -177,6 +177,21 @@ const verifyUserName = async (userName) => {
     }
 }
 
+const selectLastId = async () => {
+    try {
+        let sql = 'SELECT cast(id AS decimal) AS id FROM tbl_usuario ORDER BY id DESC LIMIT 1'
+
+        const rsLastId = await prisma.$queryRawUnsafe(sql)
+
+        if(rsLastId)
+            return rsLastId[0].id
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
@@ -186,5 +201,6 @@ module.exports = {
     selectAllUsers,
     login,
     selectUserByID,
-    verifyUserName
+    verifyUserName,
+    selectLastId
 }
