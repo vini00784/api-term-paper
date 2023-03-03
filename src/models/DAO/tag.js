@@ -11,6 +11,31 @@ const { PrismaClient } = require('@prisma/client')
 // Instance of the PrismaClient class
 const prisma = new PrismaClient()
 
-const selectIdByName = async () => {
-    
+const selectTagByUserId = async (userId) => {
+    try {
+        let sql = `SELECT tbl_tag.tag
+        
+        FROM tbl_tag
+        
+        INNER JOIN tbl_usuario_tag
+         ON tbl_tag.id = tbl_usuario_tag.id_tag
+         
+        INNER JOIN tbl_usuario
+         ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+         
+        WHERE tbl_usuario.id = ${userId}`
+
+        const rsTag = await prisma.$queryRawUnsafe(sql)
+
+        if(rsTag.length > 0)
+            return rsTag
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+module.exports = {
+    selectTagByUserId
 }
