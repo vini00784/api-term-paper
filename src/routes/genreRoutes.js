@@ -10,11 +10,11 @@ router
         let statusCode
         let message
     
-        const genresData = await genreController.selectAllGenres()
+        const genresData = await genreController.listAllGenres()
     
         if(genresData) {
-            statusCode = 200
-            message = genresData
+            statusCode = genresData.status
+            message = genresData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
