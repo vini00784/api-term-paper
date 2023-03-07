@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 const selectTagByUserId = async (userId) => {
     try {
-        let sql = `SELECT tbl_tag.tag
+        let sql = `SELECT tbl_tag.id, tbl_tag.tag
         
         FROM tbl_tag
         

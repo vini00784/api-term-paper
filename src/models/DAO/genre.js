@@ -28,7 +28,7 @@ const selectAllGenres = async () => {
 
 const selectGenreByUserId = async (userId) => {
     try {
-        let sql = `SELECT tbl_generos.nome
+        let sql = `SELECT tbl_generos.id, tbl_generos.nome
         
         FROM tbl_generos
         
