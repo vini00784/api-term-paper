@@ -11,19 +11,14 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // User model
 const genreModel = require('../models/DAO/genre.js')
 
-exports.listAllGenres = async (req, res) => {
-    let statusCode
-    let message
+exports.listAllGenres = async () => {
+    let genresJson = {}
 
     const genresData = await genreModel.selectAllGenres()
 
     if(genresData) {
-        statusCode = 200
-        message = genresData
-    } else {
-        statusCode = 404
-        message = MESSAGE_ERROR.NOT_FOUND_DB
-    }
-
-    res.status(statusCode).json(message)
+        genresJson.genres = genresData
+        return {status: 200, message: genresJson}
+    } else
+        return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
 }
