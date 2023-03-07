@@ -36,6 +36,22 @@ const selectTagByUserId = async (userId) => {
     }
 }
 
+const selectAllTags = async () => {
+    try {
+        let sql = 'SELECT cast(id AS decimal) AS id, tag FROM tbl_tag ORDER BY id DESC'
+
+        const rsTags = await prisma.$queryRawUnsafe(sql)
+
+        if(rsTags.length > 0)
+            return rsTags
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    selectTagByUserId
+    selectTagByUserId,
+    selectAllTags
 }

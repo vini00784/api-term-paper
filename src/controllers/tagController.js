@@ -26,6 +26,19 @@ const listTagByUserId = async (userId) => {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
 }
 
+const listAllTags = async () => {
+    let tagsJson = {}
+
+    const tagsData = await tagModel.selectAllTags()
+
+    if(tagsData) {
+        tagsJson.tags = tagsData
+        return {status: 200, message: tagsJson}
+    } else
+        return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+}
+
 module.exports = {
-    listTagByUserId
+    listTagByUserId,
+    listAllTags
 }

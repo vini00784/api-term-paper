@@ -32,4 +32,23 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/tags')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const tagsData = await tagController.listAllTags()
+
+        if(tagsData) {
+            statusCode = tagsData.status
+            message = tagsData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
