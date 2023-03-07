@@ -22,3 +22,18 @@ exports.listAllGenres = async () => {
     } else
         return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
 }
+
+exports.listGenreByUserId = async (userId) => {
+    if(userId != '' && userId != undefined) {
+        const genresData = await genreModel.selectGenreByUserId(userId)
+
+        if(genresData) {
+            let genresJson = {}
+
+            genresJson.genres = genresData
+            return {status: 200, message: genresJson}
+        } else
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+    } else
+        return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+}

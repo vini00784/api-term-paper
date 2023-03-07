@@ -26,6 +26,32 @@ const selectAllGenres = async () => {
     }
 }
 
+const selectGenreByUserId = async (userId) => {
+    try {
+        let sql = `SELECT tbl_generos.nome
+        
+        FROM tbl_generos
+        
+        INNER JOIN tbl_usuario_genero
+         ON tbl_generos.id = tbl_usuario_genero.id_generos
+         
+        INNER JOIN tbl_usuario
+         ON tbl_usuario.id = tbl_usuario_genero.id_usuario
+         
+        WHERE tbl_usuario.id = ${userId}`
+
+        const rsGenre = await prisma.$queryRawUnsafe(sql)
+
+        if(rsGenre.length > 0)
+            return rsGenre
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    selectAllGenres
+    selectAllGenres,
+    selectGenreByUserId
 }
