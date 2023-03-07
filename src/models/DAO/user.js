@@ -45,16 +45,36 @@ const insertUser = async (user) => {
     }
 }
 
+// const updateUser = async (user) => {
+//     try {
+//         let sql = `UPDATE tbl_usuario SET
+//                    user_name = LOWER('${user.user_name}'),
+//                    nome = '${user.nome}',
+//                    data_nascimento = '${user.data_nascimento}',
+//                    foto = '${user.foto}',
+//                    biografia = '${user.biografia}',
+//                    email = '${user.email}'
+//                    WHERE id = ${user.id}`
+
+//         const result = await prisma.$executeRawUnsafe(sql)
+
+//         if(result)
+//             return true
+//         else
+//             return false
+
+//     } catch (err) {
+//         console.log(err)
+//     }
+// }
+
 const updateUser = async (user) => {
     try {
-        let sql = `UPDATE tbl_usuario SET
-                   user_name = LOWER('${user.user_name}'),
-                   nome = '${user.nome}',
-                   data_nascimento = '${user.data_nascimento}',
-                   foto = '${user.foto}',
-                   biografia = '${user.biografia}',
-                   email = '${user.email}'
-                   WHERE id = ${user.id}`
+        const tagModel = require('./tag.js')
+
+        const tags = await tagModel.selectTagByUserId(user.id)
+
+        let sql = `call proc_update_dados_usuario (${user.id}, '${user.user_name}', '${user.nome}', '${user.data_nascimento}', '${user.foto}', '${user.biografia}', '${user.email}', ${user.premium}, '${user.senha}', id_tag_1, id_tag_2, '(id_usuario,1), (id_usuario, 2), (id_usuario, 3)')`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
