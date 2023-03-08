@@ -47,8 +47,8 @@ SELECT tbl_generos.nome as nome_generos,
         
 	   INNER JOIN tbl_usuario
 		ON tbl_usuario.id = tbl_usuario_genero.id_usuario;
-        
-call proc_update_dados_usuario (59, 'user_front', 'enzao', '2000-01-15', 'angola007', 'everson zoio', 'angola@gmail.com', 1, '123', NULL, 2, '(59,1), (59, 2), (59, 3)');
+         
+call proc_update_dados_usuario (59, 'user_front', 'enzao', '2000-01-15', NULL, 'everson zoio', 'user_front@gmail.com', 1, NULL, 2, '(59,1), (59, 2), (59, 3)');
 
 call proc_update_dados_usuario (58, 'testeee', 'enzao', '2000-01-15', 'angola007', 'everson zoio', 'angola@gmail.com', 1, 'aleke', 1, 2, '(58,1), (58, 2), (58, 3)');
         
@@ -56,7 +56,7 @@ call proc_update_dados_usuario (58, 'testeee', 'enzao', '2000-01-15', 'angola007
 
 delimiter $
 create procedure proc_update_dados_usuario
-	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(200), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint, in senha_usuario varchar(100),
+	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(200), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint,
 		in id_tag_1 int, in id_tag_2 int, in generos varchar(300))
 		begin
             
@@ -88,12 +88,16 @@ create procedure proc_update_dados_usuario
                                 foto = foto_usuario,
                                 biografia = biografia_usuario,
                                 email = email_usuario,
-                                premium = premium_usuario,
-                                senha = md5(senha_usuario)
+                                premium = premium_usuario
 			where id = id_usuario_user;
 		
 		end $
         
+-- DROP PROCEDURE proc_update_dados_usuario;
+
+SELECT * FROM tbl_generos;
+
+INSERT INTO tbl_generos (nome) values ('Terror')
         
         
         
