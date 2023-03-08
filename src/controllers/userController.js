@@ -81,7 +81,7 @@ const newUser = async (user) => {
 }
 
 const updateUser = async (user) => {
-    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined)
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined || user.id_genero_1 == '' || user.id_genero_1 == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(!user.email.includes('@'))
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
@@ -90,8 +90,29 @@ const updateUser = async (user) => {
     else {
         const id = await verifyUserName(user.user_name)
 
+        const tagsController = require('./tagController.js')
+
+        const userTags = await tagsController.listTagByUserId(user.id)
+
+        if(userTags.message.tags.length == 1)
+            user.id_tag_2 = null
+
+        const genresController = require('./genreController.js')
+
+        const userGenres = await genresController.listGenreByUserId(user.id)
+
+        // if(userGenres.message.genres.length == 1) {
+        //     user.id_genero_2 = null
+        //     user.id_genero_3 = null
+        // }
+
+        /* TRATAMENTO PARA VER SE OS IDS DE GENERO ENVIADO NÃO ESTÃO SENDO REPETIDOS */
+        if(user.id_genero_1 == user.id_genero_2 || user.id_genero_1 == user.id_genero_3 || user.id_genero_2 == user.id_genero_3) {
+            return {status: 400, message: "Não repita os gêneros"}
+        }
+
         if(id.length > 0)
-            return {status: 400, message: MESSAGE_ERROR.INVALID_USERNAME}
+            return {status: 400, message: MESSAGE_ERROR.INVALID_UPDATE_USERNAME}
         else {
             const updatedUser = await userModel.updateUser(user)
     
@@ -100,7 +121,7 @@ const updateUser = async (user) => {
             else
                 return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
         }
-    }
+    } 
 }
 
 const updateUserPassword = async (user) => {
