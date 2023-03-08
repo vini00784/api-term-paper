@@ -69,12 +69,7 @@ const insertUser = async (user) => {
 // }
 
 const updateUser = async (user) => {
-    try {
-        const tagModel = require('./tag.js')
-
-        const tags = await tagModel.selectTagByUserId(user.id)
-
-        let sql = `call proc_update_dados_usuario (${user.id}, '${user.user_name}', '${user.nome}', '${user.data_nascimento}', '${user.foto}', '${user.biografia}', '${user.email}', ${user.premium}, '${user.senha}', id_tag_1, id_tag_2, '(id_usuario,1), (id_usuario, 2), (id_usuario, 3)')`
+    try {let sql = `call proc_update_dados_usuario (${user.id}, '${user.user_name}', '${user.nome}', '${user.data_nascimento}', '${user.foto}', '${user.biografia}', '${user.email}', ${user.premium}, ${user.id_tag_1}, ${user.id_tag_2}, '(${user.id},${user.id_genero_1}), (${user.id}, ${user.id_genero_2}), (${user.id}, ${user.id_genero_3})')`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -87,6 +82,10 @@ const updateUser = async (user) => {
         console.log(err)
     }
 }
+
+// updateUser(0, 59)
+
+// call proc_update_dados_usuario (id_usuario, 'user_name', 'nome_usuario', 'data_nascimento', 'foto_usuario', 'biografia_usuario', 'email_usuario', tinyint_premium, 'senha_usuario', id_tag_1, id_tag_2, '(id_usuario, id_genero1), (id_usuario, id_genero2), (id_usuario, id_genero3)')
 
 const updateUserPassword = async (user) => {
     try {
