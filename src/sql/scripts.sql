@@ -47,3 +47,59 @@ SELECT tbl_generos.nome as nome_generos,
         
 	   INNER JOIN tbl_usuario
 		ON tbl_usuario.id = tbl_usuario_genero.id_usuario;
+        
+call proc_update_dados_usuario (59, 'user_front', 'enzao', '2000-01-15', 'angola007', 'everson zoio', 'angola@gmail.com', 1, '123', NULL, 2, '(59,1), (59, 2), (59, 3)');
+
+call proc_update_dados_usuario (58, 'testeee', 'enzao', '2000-01-15', 'angola007', 'everson zoio', 'angola@gmail.com', 1, 'aleke', 1, 2, '(58,1), (58, 2), (58, 3)');
+        
+-- call proc_update_dados_usuario (id_usuario, 'user_name', 'nome_usuario', 'data_nascimento', 'foto_usuario', 'biografia_usuario', 'email_usuario', tinyint_premium, 'senha_usuario', id_tag_1, id_tag_2, '(id_usuario,1), (id_usuario, 2), (id_usuario, 3)');
+
+delimiter $
+create procedure proc_update_dados_usuario
+	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(200), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint, in senha_usuario varchar(100),
+		in id_tag_1 int, in id_tag_2 int, in generos varchar(300))
+		begin
+            
+
+        
+        IF id_tag_1 IS NOT NULL AND id_tag_2 IS NOT NULL THEN
+			DELETE FROM tbl_usuario_tag WHERE id_usuario = id_usuario_user;
+			INSERT INTO tbl_usuario_tag (id_usuario, id_tag) values	(id_usuario_user, id_tag_1),
+																	(id_usuario_user, id_tag_2);
+		ELSEIF id_tag_1 IS NOT NULL AND id_tag_2 IS NULL THEN
+			DELETE FROM tbl_usuario_tag WHERE id_usuario = id_usuario_user;
+            INSERT INTO tbl_usuario_tag (id_usuario, id_tag) values	(id_usuario_user, id_tag_1);
+		ELSEIF id_tag_1 IS NULL AND id_tag_2 IS NOT NULL THEN
+			DELETE FROM tbl_usuario_tag WHERE id_usuario = id_usuario_user;
+            INSERT INTO tbl_usuario_tag (id_usuario, id_tag) values	(id_usuario_user, id_tag_2);
+		END IF;
+            
+            
+        DELETE FROM tbl_usuario_genero where id_usuario = id_usuario_user;
+		set @comando := 'insert into tbl_usuario_genero (id_usuario, id_generos) values ';
+        set @comando := concat(@comando, generos);
+		
+        PREPARE myquery from @comando;
+        EXECUTE myquery;  
+        
+        update tbl_usuario set 	user_name = user_name,
+								nome = nome_usuario,
+                                data_nascimento = data_nascimento,
+                                foto = foto_usuario,
+                                biografia = biografia_usuario,
+                                email = email_usuario,
+                                premium = premium_usuario,
+                                senha = md5(senha_usuario)
+			where id = id_usuario_user;
+		
+		end $
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
