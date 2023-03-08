@@ -15,7 +15,8 @@ const MESSAGE_ERROR = {
     REQUIRED_ID: 'O id do registro é obrigatório neste tipo de requisição!',
     EXCEEDED_CHARACTERS: 'Número de caracteres excedido!',
     INVALID_USER: 'Falha na autenticação',
-    INVALID_USERNAME: 'Esse UserName já foi cadastrado anteriormente!'
+    INVALID_USERNAME: 'Esse UserName já foi cadastrado anteriormente!',
+    INVALID_UPDATE_USERNAME: 'Escolha um UserName diferente do anterior!'
 }
 
 const MESSAGE_SUCCESS = {
