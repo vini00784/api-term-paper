@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/79aeb0e5-8355-4472-baea-58f1e66fabf1/resourceGroups/deploy-backend-tcc/providers/Microsoft.Web/sites/backend-tcc",
+    "appService.deploySubpath": "."
+}
