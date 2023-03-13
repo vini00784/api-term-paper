@@ -31,6 +31,7 @@ const tagRouter = require('./routes/tagRoutes.js')
 app.use(userRouter)
 app.use(genreRouter)
 app.use(tagRouter)
+// teste
 
 // Using routers
 
