@@ -110,6 +110,23 @@ const updateUser = async (user) => {
         if(user.id_genero_1 == user.id_genero_2 || user.id_genero_1 == user.id_genero_3 || user.id_genero_2 == user.id_genero_3) {
             return {status: 400, message: "Não repita os gêneros"}
         }
+        // user.generos.forEach(element => {
+        //     user.idGenero = ""
+        //     let generos = `(${user.id}, ${element.id_genero}), `
+        //     user.idGenero += generos
+        // })
+        let userGenresLength = user.generos.length
+        genresId = ""
+        for(let i = 0; i < userGenresLength; i++) {
+            if (userGenresLength == 1)
+                genresId = `(${user.id}, ${user.generos[0].id_genero})`
+            else {
+                genresId += `(${user.id}, ${user.generos[i].id_genero}), `
+            }
+        }
+
+        console.log(genresId)
+
 
         if(id.length > 0)
             return {status: 400, message: MESSAGE_ERROR.INVALID_UPDATE_USERNAME}
