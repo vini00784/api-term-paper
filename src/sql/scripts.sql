@@ -93,12 +93,11 @@ create procedure proc_update_dados_usuario
 		
 		end $
         
--- DROP PROCEDURE proc_update_dados_usuario;
+-- DROP PROCEDURE proc_update_dados_usuario; -- 
 
 SELECT * FROM tbl_generos;
 
 INSERT INTO tbl_generos (nome) values ('Terror')
-        
         
         
         
