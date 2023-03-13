@@ -56,7 +56,7 @@ call proc_update_dados_usuario (58, 'testeee', 'enzao', '2000-01-15', 'angola007
 
 delimiter $
 create procedure proc_update_dados_usuario
-	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(200), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint,
+	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(500), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint,
 		in id_tag_1 int, in id_tag_2 int, in generos varchar(300))
 		begin
             
