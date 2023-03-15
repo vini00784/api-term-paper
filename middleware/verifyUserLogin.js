@@ -5,7 +5,7 @@ const verifyLogin = async (userInfos) => {
     let foundUser
     
     object.message.users.forEach(user => {
-        if(user.user_name == userInfos.user_name && user.senha == userInfos.senha) {
+        if((user.user_name == userInfos.user_name || user.email == userInfos.email) && user.senha == userInfos.senha) {
             foundUser = user
         }
     })
