@@ -167,7 +167,7 @@ router // Route to make user login
         let bodyData = req.body
 
         if(JSON.stringify(bodyData) != '{}') {
-            const userLogin = await userController.userLogin(bodyData.user_name, bodyData.senha)
+            const userLogin = await userController.userLogin(bodyData.login, bodyData.senha)
 
             if(userLogin.status == 200) {
                 userLogin.message.forEach(async (userInfo) => {
