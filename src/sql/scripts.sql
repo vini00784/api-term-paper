@@ -117,8 +117,7 @@ INSERT INTO tbl_usuario (
                                                 'teste@gmail',
                                                 false,
                                                 md5('teste')
-                                            );
-                                            SELECT LAST_INSERT_ID()
+                                            )
         
         
         
