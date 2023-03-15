@@ -98,6 +98,27 @@ create procedure proc_update_dados_usuario
 SELECT * FROM tbl_generos;
 
 INSERT INTO tbl_generos (nome) values ('Terror')
+
+INSERT INTO tbl_usuario (
+                                            user_name,
+                                            nome,
+                                            data_nascimento,
+                                            foto,
+                                            biografia,
+                                            email,
+                                            premium,
+                                            senha)
+                                            values (
+                                                LOWER('teeeste'),
+                                                'teste',
+                                                '2000-01-01',
+                                                'teste',
+                                                'teste',
+                                                'teste@gmail',
+                                                false,
+                                                md5('teste')
+                                            );
+                                            SELECT LAST_INSERT_ID()
         
         
         
