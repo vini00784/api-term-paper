@@ -58,6 +58,7 @@ router // Route to register a new user
             let bodyData = req.body
     
             if(JSON.stringify(bodyData) != '{}') {
+                console.log(bodyData)
                 const newUser = await userController.newUser(bodyData)
     
                 statusCode = newUser.status

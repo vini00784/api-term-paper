@@ -62,6 +62,7 @@ const newUser = async (user) => {
                         if(resultNewUserGenre)
                             return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
                         else {
+                            console.log(user)
                             await deleteUser(newUserId)
                             return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
                         }
