@@ -81,7 +81,7 @@ const newUser = async (user) => {
 }
 
 const updateUser = async (user) => {
-    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined || user.id_genero_1 == '' || user.id_genero_1 == undefined)
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(!user.email.includes('@'))
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
@@ -96,42 +96,25 @@ const updateUser = async (user) => {
 
         if(userTags.message.tags.length == 1)
             user.id_tag_2 = null
-
-        const genresController = require('./genreController.js')
-
-        const userGenres = await genresController.listGenreByUserId(user.id)
-
-        // if(userGenres.message.genres.length == 1) {
-        //     user.id_genero_2 = null
-        //     user.id_genero_3 = null
-        // }
-
-        /* TRATAMENTO PARA VER SE OS IDS DE GENERO ENVIADO NÃO ESTÃO SENDO REPETIDOS */
-        if(user.id_genero_1 == user.id_genero_2 || user.id_genero_1 == user.id_genero_3 || user.id_genero_2 == user.id_genero_3) {
-            return {status: 400, message: "Não repita os gêneros"}
-        }
-        // user.generos.forEach(element => {
-        //     user.idGenero = ""
-        //     let generos = `(${user.id}, ${element.id_genero}), `
-        //     user.idGenero += generos
-        // })
+        
         let userGenresLength = user.generos.length
-        genresId = ""
+        let genresId = ""
         for(let i = 0; i < userGenresLength; i++) {
             if (userGenresLength == 1)
-                genresId = `(${user.id}, ${user.generos[0].id_genero})`
+                genresId += `(${user.id}, ${user.generos[0].id_genero})`
+
+            else if(i == userGenresLength - 1)
+                genresId += `(${user.id}, ${user.generos[i].id_genero})`
+
             else {
                 genresId += `(${user.id}, ${user.generos[i].id_genero}), `
             }
         }
 
-        console.log(genresId)
-
-
         if(id.length > 0)
             return {status: 400, message: MESSAGE_ERROR.INVALID_UPDATE_USERNAME}
         else {
-            const updatedUser = await userModel.updateUser(user)
+            const updatedUser = await userModel.updateUser(user, genresId)
     
             if(updatedUser)
                 return {status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM}

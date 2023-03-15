@@ -31,12 +31,14 @@ const insertUser = async (user) => {
                                                 '${user.email}',
                                                 '${user.premium}',
                                                 md5('${user.senha}')
-                                            )`
+                                            );
+                                            SELECT LAST_INSERT_ID()`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
+        console.log(result)
 
         if(result)
-            return true
+            return result
         else
             return false
 
@@ -45,31 +47,9 @@ const insertUser = async (user) => {
     }
 }
 
-// const updateUser = async (user) => {
-//     try {
-//         let sql = `UPDATE tbl_usuario SET
-//                    user_name = LOWER('${user.user_name}'),
-//                    nome = '${user.nome}',
-//                    data_nascimento = '${user.data_nascimento}',
-//                    foto = '${user.foto}',
-//                    biografia = '${user.biografia}',
-//                    email = '${user.email}'
-//                    WHERE id = ${user.id}`
-
-//         const result = await prisma.$executeRawUnsafe(sql)
-
-//         if(result)
-//             return true
-//         else
-//             return false
-
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
-
-const updateUser = async (user) => {
-    try {let sql = `call proc_update_dados_usuario (${user.id}, '${user.user_name}', '${user.nome}', '${user.data_nascimento}', '${user.foto}', '${user.biografia}', '${user.email}', ${user.premium}, ${user.id_tag_1}, ${user.id_tag_2}, '(${user.id},${user.id_genero_1}), (${user.id}, ${user.id_genero_2}), (${user.id}, ${user.id_genero_3})')`
+const updateUser = async (user, genresId) => {
+    try {
+        let sql = `call proc_update_dados_usuario (${user.id}, '${user.user_name}', '${user.nome}', '${user.data_nascimento}', '${user.foto}', '${user.biografia}', '${user.email}', ${user.premium}, ${user.id_tag_1}, ${user.id_tag_2}, '${genresId}')`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -82,10 +62,6 @@ const updateUser = async (user) => {
         console.log(err)
     }
 }
-
-// updateUser(0, 59)
-
-// call proc_update_dados_usuario (id_usuario, 'user_name', 'nome_usuario', 'data_nascimento', 'foto_usuario', 'biografia_usuario', 'email_usuario', tinyint_premium, 'senha_usuario', id_tag_1, id_tag_2, '(id_usuario, id_genero1), (id_usuario, id_genero2), (id_usuario, id_genero3)')
 
 const updateUserPassword = async (user) => {
     try {
