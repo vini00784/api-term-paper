@@ -31,14 +31,21 @@ const insertUser = async (user) => {
                                                 '${user.email}',
                                                 '${user.premium}',
                                                 md5('${user.senha}')
-                                            );
-                                            SELECT LAST_INSERT_ID()`
+                                            )`
 
         const result = await prisma.$queryRawUnsafe(sql)
         console.log(result)
 
-        if(result)
+        if(result) {
+            let sqlLastId = 'SELECT max(id) FROM tbl_usuario'
+
+            const result = await prisma.$queryRawUnsafe(sqlLastId)
+
+            if(result)
+                return result
+
             return result
+        }
         else
             return false
 
