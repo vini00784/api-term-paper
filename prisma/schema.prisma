@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://eulirio:Admin123@dbeulirio.mysql.database.azure.com:3306/db_eulirio"
+  url      = env("DATABASE_URL")
 }
 
 // model tbl_usuario {
