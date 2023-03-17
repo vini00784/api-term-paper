@@ -117,7 +117,27 @@ INSERT INTO tbl_usuario (
                                                 'teste@gmail',
                                                 false,
                                                 md5('teste')
-                                            )
+                                            );
+                                            
+ALTER TABLE tbl_classificacao_indicativa MODIFY COLUMN descricao varchar(150) NOT NULL;
+
+DESC tbl_classificacao_indicativa;
+							
+INSERT INTO tbl_classificacao_indicativa (classificacao, descricao)
+										values ('Livre', 'Não expõe as crianças a conteúdos potencialmente prejudiciais.'),
+											   ('10 anos', 'Conteúdo violento ou linquagem inapropriada para criancas, ainda que em menor intensidade.'),
+                                               ('12 anos', 'Podem conter alusão a agressão física, consumo de drogas e insinuação sexual.'),
+                                               ('14 anos', 'Conteúdos mais acentuados com violência e ou linguagem sexual.'),
+                                               ('16 anos', 'Conteúdos de sexo ou violência mais intensos, com cenas de tortura, suicídio, estupro ou nudez total.'),
+                                               ('18 anos', 'Conteúdos violentos e sexuais extremos. Cenas de sexo, incesto ou atos repetidos de tortura, multilação ou abuso sexual.');
+
+SELECT * FROM tbl_classificacao_indicativa;
+
+SELECT * FROM tbl_tipo_publicacao;
+
+UPDATE tbl_tipo_publicacao SET tipo = 'História curta' WHERE id = 2;
+
+SELECT * FROM tbl_anuncio;
         
         
         
