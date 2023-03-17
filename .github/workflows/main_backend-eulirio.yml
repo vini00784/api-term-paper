@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'backend-eulirio'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A387E9668229488DB336830AEFE9C52D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F823573336A74E34AD72904F3F511D93 }}
           package: .
