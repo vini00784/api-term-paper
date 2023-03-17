@@ -26,6 +26,7 @@ const genreRouter = require('./routes/genreRoutes.js')
 const userRouter = require('./routes/userRoutes.js')
 const tagRouter = require('./routes/tagRoutes.js')
 const announcementRouter = require('./routes/announcementRoutes.js')
+const parentalRatingRouter = require('./routes/parentalRatingRoutes.js')
 
 // Using routers
 
@@ -33,6 +34,7 @@ app.use(userRouter)
 app.use(genreRouter)
 app.use(tagRouter)
 app.use(announcementRouter)
+app.use(parentalRatingRouter)
 
 // Using routers
 
