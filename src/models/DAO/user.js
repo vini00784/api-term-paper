@@ -21,7 +21,7 @@ const insertUser = async (user) => {
                                             biografia,
                                             email,
                                             premium,
-                                            senha)
+                                            uid)
                                             values (
                                                 LOWER('${user.user_name}'),
                                                 '${user.nome}',
@@ -30,11 +30,10 @@ const insertUser = async (user) => {
                                                 '${user.biografia}',
                                                 '${user.email}',
                                                 '${user.premium}',
-                                                md5('${user.senha}')
+                                                '${user.uid}'
                                             )`
 
         const result = await prisma.$queryRawUnsafe(sql)
-        console.log(result)
 
         if(result) {
             let sqlLastId = 'SELECT max(id) FROM tbl_usuario'
@@ -121,7 +120,7 @@ const selectUserByUsername = async (userName) => {
 
 const selectAllUsers = async () => {
     try {
-        let sql = 'SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium, md5(senha) as senha FROM tbl_usuario ORDER BY id DESC'
+        let sql = 'SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario ORDER BY id DESC'
 
         const rsUsers = await prisma.$queryRawUnsafe(sql)
 
