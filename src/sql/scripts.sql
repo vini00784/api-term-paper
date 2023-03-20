@@ -133,13 +133,52 @@ INSERT INTO tbl_classificacao_indicativa (classificacao, descricao)
 
 SELECT * FROM tbl_classificacao_indicativa;
 
-SELECT * FROM tbl_tipo_publicacao;
+SELECT * FROM tbl_anuncio;
 
 UPDATE tbl_tipo_publicacao SET tipo = 'História curta' WHERE id = 2;
 
-SELECT * FROM tbl_anuncio;
+SELECT * FROM tbl_classificacao_indicativa;
+
+call proc_insert_anuncio ('titulozao', '1', 'https', 1, 1, 'uma marreta', '2021-01-15', "300", "120.00", "ofimesoifmseo", "kofsegmiosfgmo", "danmkfds", 14, 83, 1, '(@id_anuncio_criado, 1), (@id_anuncio_criado, 2)');
+
+DESC tbl_usuario;
+
+        CALL proc_insert_anuncio01 (
+                                                '${announcement.titulo}', 
+                                                1, 
+                                                '${announcement.capa}', 
+                                                1, 
+                                                0,
+                                                '${announcement.sinopse}',
+                                                '2023-03-20',
+                                                182,
+                                                15.00,
+                                                '${announcement.pdf}',
+                                                '${announcement.epub}',
+                                                '${announcement.mobi}',
+                                                14,
+                                                83,
+                                                1
+                                                )
         
+        delimiter $
+        create procedure proc_insert_anuncio01
+			(in titulo_anuncio varchar(50), in volume_anuncio int, in capa_anuncio varchar(500), in status_anuncio tinyint, in premium_anuncio tinyint, in sinopse_anuncio varchar(300), in data_anuncio_anuncio date,
+			in quantidade_paginas_anuncio int, in preco_anuncio double, in pdf_anuncio varchar(500),  in epub_anuncio varchar(500), in mobi_anuncio varchar(200), in id_classificacao_anuncio int, in id_usuario_anuncio int, in id_tipo_publicacao_anuncio int)
+            begin
+            
+            
+            START TRANSACTION;
+            
+            insert into tbl_anuncio(titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, id_classificacao, id_usuario, id_tipo_publicacao, epub, mobi)
+				values(titulo_anuncio, volume_anuncio, capa_anuncio, status_anuncio, premium_anuncio, sinopse_anuncio, data_anuncio_anuncio, quantidade_paginas_anuncio, preco_anuncio, pdf_anuncio, id_classificacao_anuncio,
+                id_usuario_anuncio, id_tipo_publicacao_anuncio, epub_anuncio, mobi_anuncio);
+
+            
+            COMMIT;
+        end $
         
+delimiter $ 
         
         
         
