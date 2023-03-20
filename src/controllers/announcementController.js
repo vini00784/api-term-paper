@@ -20,7 +20,23 @@ const newAnnouncement = async (announcement) => {
         const currentDate = new Date().toJSON().slice(0, 10)
         announcement.data = currentDate
         announcement.status = 1
-        const resultNewAnnouncement = await announcementModel.insertAnnouncement(announcement)
+
+        let announcementGenresLength = announcement.generos.length
+        let genresId = ""
+
+        for(let i = 0; i < announcementGenresLength; i++) {
+            if(announcementGenresLength == 1)
+                genresId += `(@id_anuncio_criado, ${announcement.generos[0].id_genero})`
+
+            else if (i == announcementGenresLength - 1) 
+                genresId += `(@id_anuncio_criado, ${announcement.generos[i].id_genero})`
+
+            else 
+                genresId += `(@id_anuncio_criado, ${announcement.generos[i].id_genero}), `
+            
+        }
+
+        const resultNewAnnouncement = await announcementModel.insertAnnouncement(announcement, genresId)
 
         if(resultNewAnnouncement)
             return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}

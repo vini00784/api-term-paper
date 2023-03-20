@@ -11,43 +11,28 @@ const { PrismaClient } = require('@prisma/client')
 // Instance of the PrismaClient class
 const prisma = new PrismaClient()
 
-const insertAnnouncement = async (announcement) => {
+const insertAnnouncement = async (announcement, genresId) => {
     try {
-        let sql = `INSERT INTO tbl_anuncio (
-                                                titulo,
-                                                volume,
-                                                capa,
-                                                status,
-                                                premium,
-                                                sinopse,
-                                                data,
-                                                quantidade_paginas,
-                                                preco,
-                                                pdf,
-                                                id_classificacao,
-                                                id_usuario,
-                                                id_tipo_publicacao,
-                                                epub,
-                                                mobi
-                                            ) values (
-                                                '${announcement.titulo}',
-                                                ${announcement.volume},
-                                                '${announcement.capa}',
-                                                ${announcement.status},
+        let sql = `CALL proc_insert_anuncio (
+                                                '${announcement.titulo}', 
+                                                ${announcement.volume}, 
+                                                '${announcement.capa}', 
+                                                ${announcement.status}, 
                                                 ${announcement.premium},
                                                 '${announcement.sinopse}',
                                                 '${announcement.data}',
                                                 ${announcement.quantidade_paginas},
                                                 ${announcement.preco},
                                                 '${announcement.pdf}',
+                                                '${announcement.epub}',
+                                                '${announcement.mobi}',
                                                 ${announcement.id_classificacao},
                                                 ${announcement.id_usuario},
                                                 ${announcement.id_tipo_publicacao},
-                                                '${announcement.epub}',
-                                                '${announcement.mobi}'
-                                            )`
+                                                '${genresId}'
+                                                )`
                         
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if(result)
             return true
