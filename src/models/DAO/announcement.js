@@ -43,8 +43,36 @@ const insertAnnouncement = async (announcement, genresId) => {
     }
 }
 
-const updateAnnouncement = async () => {
+const updateAnnouncement = async (announcement, genresId) => {
+    try {
+        let sql = `CALL proc_update_anuncio (
+            ${announcement.id},
+            '${announcement.titulo}', 
+            ${announcement.volume}, 
+            '${announcement.capa}', 
+            ${announcement.status}, 
+            ${announcement.premium},
+            '${announcement.sinopse}',
+            ${announcement.quantidade_paginas},
+            ${announcement.preco},
+            '${announcement.pdf}',
+            '${announcement.epub}',
+            '${announcement.mobi}',
+            ${announcement.id_classificacao},
+            ${announcement.id_usuario},
+            ${announcement.id_tipo_publicacao},
+            '${genresId}'
+        )`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const deleteAnnouncement = async () => {
@@ -56,5 +84,6 @@ const selectAllAnnouncements = async () => {
 }
 
 module.exports = {
-    insertAnnouncement
+    insertAnnouncement,
+    updateAnnouncement
 }
