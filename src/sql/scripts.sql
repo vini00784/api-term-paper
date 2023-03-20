@@ -159,26 +159,9 @@ DESC tbl_usuario;
                                                 14,
                                                 83,
                                                 1
-                                                )
+                                                );
         
-        delimiter $
-        create procedure proc_insert_anuncio01
-			(in titulo_anuncio varchar(50), in volume_anuncio int, in capa_anuncio varchar(500), in status_anuncio tinyint, in premium_anuncio tinyint, in sinopse_anuncio varchar(300), in data_anuncio_anuncio date,
-			in quantidade_paginas_anuncio int, in preco_anuncio double, in pdf_anuncio varchar(500),  in epub_anuncio varchar(500), in mobi_anuncio varchar(200), in id_classificacao_anuncio int, in id_usuario_anuncio int, in id_tipo_publicacao_anuncio int)
-            begin
-            
-            
-            START TRANSACTION;
-            
-            insert into tbl_anuncio(titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, id_classificacao, id_usuario, id_tipo_publicacao, epub, mobi)
-				values(titulo_anuncio, volume_anuncio, capa_anuncio, status_anuncio, premium_anuncio, sinopse_anuncio, data_anuncio_anuncio, quantidade_paginas_anuncio, preco_anuncio, pdf_anuncio, id_classificacao_anuncio,
-                id_usuario_anuncio, id_tipo_publicacao_anuncio, epub_anuncio, mobi_anuncio);
-
-            
-            COMMIT;
-        end $
-        
-delimiter $ 
+SELECT * FROM tbl_historia_curta;
         
         
         
