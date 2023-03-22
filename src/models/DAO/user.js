@@ -133,9 +133,9 @@ const selectAllUsers = async () => {
     }
 }
 
-const login = async (userLogin, userPassword) => {
+const login = async (userUID) => {
     try {
-        let sql = `SELECT cast(id AS decimal) AS id, user_name, email, md5(senha) as senha FROM tbl_usuario WHERE (user_name = '${userLogin}' OR email = '${userLogin}') AND senha = md5('${userPassword}')`
+        let sql = `SELECT cast(id AS decimal) AS id, user_name, email FROM tbl_usuario WHERE uid = '${userUID}'`
 
         const rsUser = await prisma.$queryRawUnsafe(sql)
 

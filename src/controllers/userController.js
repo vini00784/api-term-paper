@@ -177,13 +177,13 @@ const listAllUsers = async () => {
         return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
 }
 
-const userLogin = async (userLogin, userPassword) => {
-    if(userLogin == '' || userLogin == undefined || userPassword == '' || userPassword == undefined)
+const userLogin = async (userUID) => {
+    if(userUID == '' || userUID == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const jwt = require('../../middleware/jwt.js')
 
-        const login = await userModel.login(userLogin, userPassword)
+        const login = await userModel.login(userUID)
 
         if(login) {
             let userToken = await jwt.createJwt(login)
