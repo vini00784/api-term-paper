@@ -51,6 +51,9 @@ const updateAnnouncement = async (announcement) => {
     else if(announcement.titulo.length > 50 || announcement.capa.length > 200 || announcement.sinopse.length > 300 || announcement.pdf.length > 200 || announcement.epub.length > 200 || announcement.mobi.length > 200)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
+        const currentDate = new Date().toJSON().slice(0, 10)
+        announcement.data = currentDate
+        
         let announcementGenresLength = announcement.generos.length
         let genresId = ""
 

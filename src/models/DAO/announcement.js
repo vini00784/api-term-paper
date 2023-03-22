@@ -53,6 +53,7 @@ const updateAnnouncement = async (announcement, genresId) => {
             ${announcement.status}, 
             ${announcement.premium},
             '${announcement.sinopse}',
+            '${announcement.data}',
             ${announcement.quantidade_paginas},
             ${announcement.preco},
             '${announcement.pdf}',
@@ -64,7 +65,7 @@ const updateAnnouncement = async (announcement, genresId) => {
             '${genresId}'
         )`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if(result)
             return true

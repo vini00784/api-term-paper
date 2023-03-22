@@ -47,7 +47,7 @@ router
             let bodyData = req.body
 
             if(JSON.stringify(bodyData) != '{}') {
-                let id = req.params.id
+                let id = req.params.announcementId
 
                 if(id != '' && id != undefined) {
                     bodyData.id = id
