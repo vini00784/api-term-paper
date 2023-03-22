@@ -163,7 +163,7 @@ DESC tbl_usuario;
         
 SELECT * FROM tbl_historia_curta;
 
-SELECT * FROM tbl_usuario;
+SELECT * FROM tbl_anuncio;
         
         
         
