@@ -217,7 +217,7 @@ const verifyUserName = async (userName) => {
         const userId = await userModel.verifyUserName(userName)
 
         if(userId) {
-            return userId
+            return {status: 200, message: userId}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
     }
@@ -232,5 +232,6 @@ module.exports = {
     deleteUser,
     selectUserByUsername,
     listAllUsers,
-    searchUserByID
+    searchUserByID,
+    verifyUserName
 }

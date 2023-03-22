@@ -271,4 +271,25 @@ router // Route to update user password
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/verify-username/:userName')
+    .get(async (req, res) => {
+        let statusCode
+        let message
+
+        let userName = req.params.userName
+
+        if(userName != '' && userName != undefined) {
+            const userId = await userController.verifyUserName(userName)
+
+            statusCode = userId.status
+            message = userId.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
