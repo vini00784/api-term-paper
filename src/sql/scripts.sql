@@ -166,6 +166,12 @@ SELECT * FROM tbl_historia_curta;
 call proc_update_historia_curta(2, 'vinizao', 'fmsdoi', 'mfisd', 1, 'uma historia mto engraçada', '2022-01-15', 1, 83, 1, 14, '(2, 1), (2, 2), (2, 3)');
 
 SELECT * FROM tbl_anuncio;
+
+DESC tbl_anuncio;
+
+ALTER TABLE tbl_anuncio MODIFY COLUMN mobi varchar(500) NOT NULL;
+
+SELECT cast(tbl_usuario.id AS decimal) AS tbl_usuario.id, tbl_usuario.user_name, tbl_usuario.nome, tbl_usuario.data_nascimento, tbl_usuario.foto, tbl_usuario.biografia, tbl_usuario.email, tbl_usuario.premium
         
         
         
