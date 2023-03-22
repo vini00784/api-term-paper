@@ -40,6 +40,37 @@ const insertShortStorie = async (shortStorie, genresId) => {
     }
 }
 
+const updateShortStorie = async (shortStorie, genresId) => {
+    try {
+        let sql = `CALL proc_update_historia_curta (
+            ${shortStorie.id},
+            '${shortStorie.titulo}',
+            '${shortStorie.sinopse}',
+            '${shortStorie.capa}',
+            ${shortStorie.status},
+            '${shortStorie.historia}',
+            '${shortStorie.data}',
+            ${shortStorie.premium},
+            ${shortStorie.id_usuario},
+            ${shortStorie.id_tipo_publicacao},
+            ${shortStorie.id_classificacao},
+            '${genresId}'
+        )`
+
+        // console.log(sql)
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    insertShortStorie
+    insertShortStorie,
+    updateShortStorie
 }

@@ -45,6 +45,40 @@ const newShortStorie = async (shortStorie) => {
     }
 }
 
+const updateShortStorie = async (shortStorie) => {
+    if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.status == '' || shortStorie.status == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.premium == '' || shortStorie.premium == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else if(shortStorie.titulo.length > 50 || shortStorie.sinopse.length > 200 || shortStorie.capa.length > 500)
+        return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
+    else {
+        const currentDate = new Date().toJSON().slice(0, 10)
+        shortStorie.data = currentDate
+
+        let shortStorieGenresLength = shortStorie.generos.length
+        let genresId = ""
+
+        for(let i = 0; i < shortStorieGenresLength; i++) {
+            if(shortStorieGenresLength == 1)
+                genresId += `(${shortStorie.id}, ${shortStorie.generos[0].id_genero})`
+
+            else if (i == shortStorieGenresLength - 1) 
+                genresId += `(${shortStorie.id}, ${shortStorie.generos[i].id_genero})`
+
+            else 
+                genresId += `(${shortStorie.id}, ${shortStorie.generos[i].id_genero}), `
+            
+        }
+
+        const updatedShortStorie = await shortStorieModel.updateShortStorie(shortStorie, genresId)
+
+        if(updatedShortStorie)
+            return {status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
-    newShortStorie
+    newShortStorie,
+    updateShortStorie
 }
