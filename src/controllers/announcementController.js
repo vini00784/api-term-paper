@@ -78,8 +78,17 @@ const updateAnnouncement = async (announcement) => {
     }
 }
 
-const deleteAnnouncement = async () => {
+const deleteAnnouncement = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const deletedAnnouncement = await announcementModel.deleteAnnouncement(announcementId)
 
+        if(deletedAnnouncement)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
 }
 
 const selectAllAnnouncements = async () => {
@@ -88,5 +97,6 @@ const selectAllAnnouncements = async () => {
 
 module.exports = {
     newAnnouncement,
-    updateAnnouncement
+    updateAnnouncement,
+    deleteAnnouncement
 }

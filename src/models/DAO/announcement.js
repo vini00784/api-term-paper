@@ -76,8 +76,19 @@ const updateAnnouncement = async (announcement, genresId) => {
     }
 }
 
-const deleteAnnouncement = async () => {
+const deleteAnnouncement = async (announcementId) => {
+    try {
+        let sql = `DELETE FROM tbl_anuncio WHERE id = ${announcementId}`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const selectAllAnnouncements = async () => {
@@ -86,5 +97,6 @@ const selectAllAnnouncements = async () => {
 
 module.exports = {
     insertAnnouncement,
-    updateAnnouncement
+    updateAnnouncement,
+    deleteAnnouncement
 }

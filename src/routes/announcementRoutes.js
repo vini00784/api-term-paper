@@ -72,4 +72,23 @@ router
         res.status(statusCode).json(message)
     })
 
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+
+        let id = req.params.announcementId
+
+        if(id != '' && id != undefined) {
+            const deletedAnnouncement = await announcementController.deleteAnnouncement(id)
+
+            statusCode = deletedAnnouncement.status
+            message = deletedAnnouncement.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
