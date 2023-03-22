@@ -78,7 +78,21 @@ const updateShortStorie = async (shortStorie) => {
     }
 }
 
+const deleteShortStorie = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const deletedShortStorie = await shortStorieModel.deleteShortStorie(shortStorieId)
+
+        if(deletedShortStorie)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newShortStorie,
-    updateShortStorie
+    updateShortStorie,
+    deleteShortStorie
 }

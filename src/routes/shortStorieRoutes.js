@@ -72,4 +72,23 @@ router
         res.status(statusCode).json(message)
     })
 
+    .delete(async (req, res) => {
+        let statusCode
+        let message
+
+        let id = req.params.shortStorieId
+
+        if(id != '' && id != undefined) {
+            const deletedShortStorie = await shortStorieController.deleteShortStorie(id)
+
+            statusCode = deletedShortStorie.status
+            message = deletedShortStorie.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

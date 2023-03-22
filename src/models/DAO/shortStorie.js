@@ -70,7 +70,23 @@ const updateShortStorie = async (shortStorie, genresId) => {
     }
 }
 
+const deleteShortStorie = async (shortStorieId) => {
+    try {
+        let sql = `DELETE FROM tbl_historia_curta WHERE id = ${shortStorieId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
-    updateShortStorie
+    updateShortStorie,
+    deleteShortStorie
 }
