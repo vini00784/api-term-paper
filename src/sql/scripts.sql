@@ -163,6 +163,8 @@ DESC tbl_usuario;
         
 SELECT * FROM tbl_historia_curta;
 
+call proc_update_historia_curta(2, 'vinizao', 'fmsdoi', 'mfisd', 1, 'uma historia mto engraçada', '2022-01-15', 1, 83, 1, 14, '(2, 1), (2, 2), (2, 3)');
+
 SELECT * FROM tbl_anuncio;
         
         
