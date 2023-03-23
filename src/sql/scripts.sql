@@ -169,9 +169,35 @@ SELECT * FROM tbl_anuncio;
 
 DESC tbl_anuncio;
 
+SHOW TABLES;
+
 ALTER TABLE tbl_anuncio MODIFY COLUMN mobi varchar(500) NOT NULL;
 
-SELECT cast(tbl_usuario.id AS decimal) AS tbl_usuario.id, tbl_usuario.user_name, tbl_usuario.nome, tbl_usuario.data_nascimento, tbl_usuario.foto, tbl_usuario.biografia, tbl_usuario.email, tbl_usuario.premium
+-- Gêneros, tags, qtde obras --
+
+SELECT cast(tbl_usuario.id as DECIMAL) as id_usuario, tbl_usuario.user_name, tbl_usuario.nome, tbl_usuario.data_nascimento, tbl_usuario.foto, tbl_usuario.biografia, tbl_usuario.email, tbl_usuario.premium,
+		tbl_tag.id as id_tag, tbl_tag.tag as nome_tag,
+        tbl_generos.id as id_genero, tbl_generos.nome as nome_genero,
+        tbl_anuncio.id as id_anuncio
+        
+        FROM tbl_usuario
+        
+        INNER JOIN tbl_usuario_tag
+			ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+		INNER JOIN tbl_tag
+			ON tbl_tag.id = tbl_usuario_tag.id_tag
+            
+		INNER JOIN tbl_usuario_genero
+			ON tbl_usuario.id = tbl_usuario_genero.id_usuario
+		INNER JOIN tbl_generos
+			ON tbl_generos.id = tbl_usuario_genero.id_generos
+            
+		INNER JOIN tbl_anuncio
+			ON tbl_usuario.id = tbl_anuncio.id_usuario;
+
+SELECT * FROM tbl_anuncio;
+
+
         
         
         
