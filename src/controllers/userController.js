@@ -168,10 +168,34 @@ const selectUserByUsername = async (userName) => {
 const listAllUsers = async () => {
     let usersJson = {}
 
+    const { selectGenreByUserId } = require('../models/DAO/genre.js')
+    const { selectTagByUserId } = require('../models/DAO/tag.js')
+    const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+
     const usersData = await userModel.selectAllUsers()
 
     if(usersData) {
-        usersJson.users = usersData
+        const usersDataArray = usersData.map(async userItem => {
+            const userTagArrayData = await selectTagByUserId(userItem.id)
+            const userGenreArrayData = await selectGenreByUserId(userItem.id)
+            const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+            console.log(userAnnouncementArrayData)
+
+            if(userTagArrayData) {
+                userItem.tags = userTagArrayData
+
+                if(userGenreArrayData) {
+                    userItem.generos = userGenreArrayData
+
+                    if(userAnnouncementArrayData)
+                        userItem.anuncios = userAnnouncementArrayData
+                }
+            }
+
+            return userItem
+        })
+
+        usersJson.users = await Promise.all(usersDataArray)
         return {status: 200, message: usersJson}
     } else
         return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
