@@ -179,7 +179,6 @@ const listAllUsers = async () => {
             const userTagArrayData = await selectTagByUserId(userItem.id)
             const userGenreArrayData = await selectGenreByUserId(userItem.id)
             const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
-            console.log(userAnnouncementArrayData)
 
             if(userTagArrayData) {
                 userItem.tags = userTagArrayData
