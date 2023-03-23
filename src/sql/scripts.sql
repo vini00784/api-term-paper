@@ -195,7 +195,7 @@ SELECT cast(tbl_usuario.id as DECIMAL) as id_usuario, tbl_usuario.user_name, tbl
 		INNER JOIN tbl_anuncio
 			ON tbl_usuario.id = tbl_anuncio.id_usuario;
 
-SELECT * FROM tbl_anuncio;
+SELECT * FROM tbl_historia_curta;
 
 
         
