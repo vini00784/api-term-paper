@@ -95,8 +95,32 @@ const selectAllAnnouncements = async () => {
 
 }
 
+const selectAnnouncementByUserId = async (userId) => {
+    try {
+        let sql = `SELECT tbl_anuncio.id, tbl_anuncio.titulo
+        
+        FROM tbl_anuncio
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_anuncio.id_usuario
+         
+        WHERE tbl_anuncio.id_usuario = ${userId}`
+
+        const rsAnnouncement = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncement.length > 0)
+            return rsAnnouncement
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
-    deleteAnnouncement
+    deleteAnnouncement,
+    selectAllAnnouncements,
+    selectAnnouncementByUserId
 }
