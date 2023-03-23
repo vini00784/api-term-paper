@@ -157,7 +157,29 @@ const selectUserByUsername = async (userName) => {
         if(userByUsername) {
             let userByUsernameJson = {}
 
-            userByUsernameJson.user = userByUsername
+            const { selectGenreByUserId } = require('../models/DAO/genre.js')
+            const { selectTagByUserId } = require('../models/DAO/tag.js')
+            const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+
+            const userDataArray = userByUsername.map(async userItem => {
+                const userTagArrayData = await selectTagByUserId(userItem.id)
+                const userGenreArrayData = await selectGenreByUserId(userItem.id)
+                const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+
+                if(userTagArrayData) {
+                    userItem.tags = userTagArrayData
+
+                    if(userGenreArrayData) {
+                        userItem.generos = userGenreArrayData
+
+                        if(userAnnouncementArrayData)
+                            userItem.anuncios = userAnnouncementArrayData
+                    }
+                }
+                return userItem
+            })
+
+            userByUsernameJson.user = await Promise.all(userDataArray)
             return {status: 200, message: userByUsernameJson}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
@@ -225,8 +247,31 @@ const searchUserByID = async (userId) => {
         if(userData) {
             let userJson = {}
 
-            userJson.user = userData
-            return {status: 200, message: userJson}
+            const { selectGenreByUserId } = require('../models/DAO/genre.js')
+            const { selectTagByUserId } = require('../models/DAO/tag.js')
+            const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+
+            if(userData) {
+                const userDataArray = userData.map(async userItem => {
+                    const userTagArrayData = await selectTagByUserId(userItem.id)
+                    const userGenreArrayData = await selectGenreByUserId(userItem.id)
+                    const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+
+                    if(userTagArrayData) {
+                        userItem.tags = userTagArrayData
+
+                        if(userGenreArrayData) {
+                            userItem.generos = userGenreArrayData
+
+                            if(userAnnouncementArrayData)
+                                userItem.anuncios = userAnnouncementArrayData
+                        }
+                    }
+                    return userItem
+                })
+                userJson.user = await Promise.all(userDataArray)
+                return {status: 200, message: userJson}
+            }
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB} 
     } else 
