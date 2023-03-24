@@ -262,7 +262,7 @@ const searchUserByID = async (userId) => {
                     }
                     return userItem
                 })
-                userJson.user = await Promise.all(userDataArray)
+                userJson = await Promise.all(userDataArray)
                 return {status: 200, message: userJson}
             }
         } else
