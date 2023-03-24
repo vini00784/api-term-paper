@@ -90,13 +90,6 @@ const updateUser = async (user) => {
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const id = await verifyUserName(user.user_name)
-
-        const tagsController = require('./tagController.js')
-
-        const userTags = await tagsController.listTagByUserId(user.id)
-
-        if(userTags.message.tags.length == 1)
-            user.id_tag_2 = null
         
         let userGenresLength = user.generos.length
         let genresId = ""
