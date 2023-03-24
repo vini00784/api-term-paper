@@ -106,6 +106,7 @@ const selectAllAnnouncements = async () => {
     }
 }
 
+// Seleciona todos os anúncios referidos a um certo usuário
 const selectAnnouncementByUserId = async (userId) => {
     try {
         let sql = `SELECT tbl_anuncio.id, tbl_anuncio.titulo
@@ -128,10 +129,33 @@ const selectAnnouncementByUserId = async (userId) => {
     }
 }
 
+// Seleciona apenas o usuário vinculado a tal anúncio
+const selectUserByAnnouncementId = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_usuario.id AS DECIMAL) as id_usuario, tbl_usuario.nome as nome_usuario, tbl_usuario.user_name, tbl_usuario.foto
+        FROM tbl_anuncio
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_anuncio.id_usuario
+     
+        WHERE tbl_anuncio.id = ${userId}`
+
+        const rsUser = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUser.length > 0)
+            return rsUser
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
     deleteAnnouncement,
     selectAllAnnouncements,
-    selectAnnouncementByUserId
+    selectAnnouncementByUserId,
+    selectUserByAnnouncementId
 }
