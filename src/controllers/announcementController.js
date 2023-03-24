@@ -92,12 +92,22 @@ const deleteAnnouncement = async (announcementId) => {
     }
 }
 
-const selectAllAnnouncements = async () => {
+const listAllAnnouncements = async () => {
+    let announcementsJson = {}
 
+    const announcementsData = await announcementModel.selectAllAnnouncements()
+
+    if(announcementsData) {
+        announcementsJson = announcementsData
+        return { status: 200, message: announcementsJson }
+    }
+    else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
-    deleteAnnouncement
+    deleteAnnouncement,
+    listAllAnnouncements
 }

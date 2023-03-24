@@ -37,6 +37,25 @@ router
     })
 
 router
+    .route('/announcements')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const announcementsData = await announcementController.listAllAnnouncements()
+
+        if(announcementsData) {
+            statusCode = announcementsData.status
+            message = announcementsData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
     .route('/announcement/id/:announcementId')
     .put(jsonParser, async(req, res) => {
         let statusCode

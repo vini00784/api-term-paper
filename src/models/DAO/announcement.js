@@ -92,7 +92,18 @@ const deleteAnnouncement = async (announcementId) => {
 }
 
 const selectAllAnnouncements = async () => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi FROM tbl_anuncio ORDER BY id DESC`
 
+        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncements.length > 0)
+            return rsAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const selectAnnouncementByUserId = async (userId) => {
