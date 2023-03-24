@@ -26,6 +26,28 @@ const selectAllParentalRatings = async () => {
     }
 }
 
+const selectParentalRatingByAnnouncementId = async (announcementId) => {
+    try {
+        let sql = `SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao
+        FROM tbl_anuncio
+     
+        INNER JOIN tbl_classificacao_indicativa
+           ON tbl_classificacao_indicativa.id = tbl_anuncio.id_classificacao
+     
+        WHERE tbl_anuncio.id = ${announcementId}`
+
+        const rsParentalRating = await prisma.$queryRawUnsafe(sql)
+
+        if(rsParentalRating.length > 0)
+            return rsParentalRating
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    selectAllParentalRatings
+    selectAllParentalRatings,
+    selectParentalRatingByAnnouncementId
 }
