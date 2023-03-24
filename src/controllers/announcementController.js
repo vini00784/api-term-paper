@@ -95,10 +95,32 @@ const deleteAnnouncement = async (announcementId) => {
 const listAllAnnouncements = async () => {
     let announcementsJson = {}
 
+    const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
+    const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
+
     const announcementsData = await announcementModel.selectAllAnnouncements()
 
     if(announcementsData) {
-        announcementsJson = announcementsData
+        const announcementsDataArray = announcementsData.map(async announcementItem => {
+            const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
+            const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
+            const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
+            
+            if(announcementParentalRatingData) {
+                announcementItem.classificacao = announcementParentalRatingData
+
+                if(announcementUserData) {
+                    announcementItem.usuario = announcementUserData
+
+                    if(publicationTypeData)
+                        announcementItem.tipo = publicationTypeData
+                }
+            }
+
+            return announcementItem
+        })
+        
+        announcementsJson = await Promise.all(announcementsDataArray)
         return { status: 200, message: announcementsJson }
     }
     else

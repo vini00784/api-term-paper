@@ -130,7 +130,7 @@ const selectAnnouncementByUserId = async (userId) => {
 }
 
 // Seleciona apenas o usuário vinculado a tal anúncio
-const selectUserByAnnouncementId = async (userId) => {
+const selectUserByAnnouncementId = async (announcementId) => {
     try {
         let sql = `SELECT cast(tbl_usuario.id AS DECIMAL) as id_usuario, tbl_usuario.nome as nome_usuario, tbl_usuario.user_name, tbl_usuario.foto
         FROM tbl_anuncio
@@ -138,12 +138,33 @@ const selectUserByAnnouncementId = async (userId) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_anuncio.id_usuario
      
-        WHERE tbl_anuncio.id = ${userId}`
+        WHERE tbl_anuncio.id = ${announcementId}`
 
         const rsUser = await prisma.$queryRawUnsafe(sql)
 
         if(rsUser.length > 0)
             return rsUser
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectPublicationTypeByAnnouncementId = async (announcementId) => {
+    try {
+        let sql = `SELECT cast(tbl_tipo_publicacao.id AS DECIMAL) as id_tipo_publicacao, tbl_tipo_publicacao.tipo
+        FROM tbl_anuncio
+     
+        INNER JOIN tbl_tipo_publicacao
+           ON tbl_tipo_publicacao.id = tbl_anuncio.id_tipo_publicacao
+     
+        WHERE tbl_anuncio.id = ${announcementId}`
+
+        const rsPublicationType = await prisma.$queryRawUnsafe(sql)
+
+        if(rsPublicationType.length > 0)
+            return rsPublicationType
         else
             return false
     } catch (err) {
@@ -157,5 +178,6 @@ module.exports = {
     deleteAnnouncement,
     selectAllAnnouncements,
     selectAnnouncementByUserId,
-    selectUserByAnnouncementId
+    selectUserByAnnouncementId,
+    selectPublicationTypeByAnnouncementId
 }
