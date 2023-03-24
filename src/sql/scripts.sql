@@ -197,6 +197,30 @@ SELECT cast(tbl_usuario.id as DECIMAL) as id_usuario, tbl_usuario.user_name, tbl
 
 SELECT * FROM tbl_historia_curta;
 
+SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao
+   FROM tbl_anuncio
+
+   INNER JOIN tbl_classificacao_indicativa
+      ON tbl_classificacao_indicativa.id = tbl_anuncio.id_classificacao
+
+   WHERE tbl_anuncio.id = 44;
+
+SELECT cast(tbl_usuario.id AS DECIMAL) as id_usuario, tbl_usuario.nome as nome_usuario, tbl_usuario.user_name, tbl_usuario.foto
+   FROM tbl_anuncio
+
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_anuncio.id_usuario
+
+   WHERE tbl_anuncio.id = 44;
+
+SELECT cast(tbl_tipo_publicacao.id AS DECIMAL) as id_tipo_publicacao, tbl_tipo_publicacao.tipo
+   FROM tbl_anuncio
+
+   INNER JOIN tbl_tipo_publicacao
+      ON tbl_tipo_publicacao.id = tbl_anuncio.id_tipo_publicacao
+
+   WHERE tbl_anuncio.id = 44;
+
 
         
         
