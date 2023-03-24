@@ -263,7 +263,7 @@ const searchUserByID = async (userId) => {
                     return userItem
                 })
                 userJson = await Promise.all(userDataArray)
-                return {status: 200, message: userJson}
+                return {status: 200, message: userJson[0]}
             }
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB} 
