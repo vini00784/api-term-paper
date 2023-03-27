@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 const selectAllGenres = async () => {
     try {
-        let sql = 'SELECT cast(id AS decimal) as id, nome FROM tbl_generos ORDER BY nome ASC'
+        let sql = 'SELECT cast(id AS decimal) as id_genero, nome as nome_genero FROM tbl_generos ORDER BY nome ASC'
 
         const rsGenres = await prisma.$queryRawUnsafe(sql)
 
@@ -28,7 +28,7 @@ const selectAllGenres = async () => {
 
 const selectGenreByUserId = async (userId) => {
     try {
-        let sql = `SELECT tbl_generos.id, tbl_generos.nome
+        let sql = `SELECT tbl_generos.id as id_genero, tbl_generos.nome as nome_genero
         
         FROM tbl_generos
         

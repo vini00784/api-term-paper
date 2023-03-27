@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 const selectTagByUserId = async (userId) => {
     try {
-        let sql = `SELECT tbl_tag.id, tbl_tag.tag
+        let sql = `SELECT tbl_tag.id as id_tag, tbl_tag.tag as nome_tag
         
         FROM tbl_tag
         
@@ -38,7 +38,7 @@ const selectTagByUserId = async (userId) => {
 
 const selectAllTags = async () => {
     try {
-        let sql = 'SELECT cast(id AS decimal) AS id, tag FROM tbl_tag ORDER BY id DESC'
+        let sql = 'SELECT cast(id AS decimal) AS id as id_tag, tag as nome_tag FROM tbl_tag ORDER BY id DESC'
 
         const rsTags = await prisma.$queryRawUnsafe(sql)
 

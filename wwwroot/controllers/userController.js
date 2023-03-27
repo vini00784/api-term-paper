@@ -81,11 +81,10 @@ const newUser = async (user) => {
 }
 
 const updateUser = async (user) => {
-    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined)
+    console.log(user);
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else if(!user.email.includes('@'))
-        return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
-    else if(user.user_name.length > 30 || user.nome.length > 200 || user.email.length > 256)
+    else if(user.user_name.length > 30 || user.nome.length > 200)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const id = await verifyUserName(user.user_name)
@@ -103,6 +102,11 @@ const updateUser = async (user) => {
                 genresId += `(${user.id}, ${user.generos[i].id_genero}), `
             }
         }
+
+        if(user.id_tag_1 == undefined)
+            user.id_tag_1 = null
+        else if (user.id_tag_2 == undefined)
+            user.id_tag_2 = null
 
         if(id.length > 0)
             return {status: 400, message: MESSAGE_ERROR.INVALID_UPDATE_USERNAME}
@@ -277,7 +281,7 @@ const verifyUserName = async (userName) => {
         const userId = await userModel.verifyUserName(userName)
 
         if(userId) {
-            return {status: 200, message: userId}
+            return {status: 200, message: userId[0]}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
     }
