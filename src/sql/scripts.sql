@@ -220,10 +220,8 @@ SELECT cast(tbl_tipo_publicacao.id AS DECIMAL) as id_tipo_publicacao, tbl_tipo_p
 
    WHERE tbl_anuncio.id = 44;
 
+DESC tbl_anuncio;
 
-        
-        
-        
-        
-        
-        
+SELECT * FROM tbl_anuncio;
+
+UPDATE tbl_anuncio SET status = FALSE WHERE id = 18;
