@@ -140,10 +140,24 @@ const desactivateAnnouncement = async (announcementId) => {
     }
 }
 
+const activateAnnouncement = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const activatedAnnouncement = await announcementModel.activateAnnouncement(announcementId)
+
+        if(activatedAnnouncement)
+            return { status: 200, message: MESSAGE_SUCCESS.ACTIVATE_ITEM }
+        else
+            return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
     deleteAnnouncement,
     listAllAnnouncements,
-    desactivateAnnouncement
+    desactivateAnnouncement,
+    activateAnnouncement
 }

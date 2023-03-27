@@ -132,4 +132,25 @@ router
         res.status(statusCode).json(message)
     })
 
+    router
+    .route('/activate-announcement/id/:announcementId')
+    .put(async(req, res) => {
+        let statusCode
+        let message
+
+        let id = req.params.announcementId
+
+        if(id != '' && id != undefined) {
+            const activatedAnnouncement = await announcementController.activateAnnouncement(id)
+
+            statusCode = activatedAnnouncement.status
+            message = activatedAnnouncement.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

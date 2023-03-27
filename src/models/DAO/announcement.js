@@ -186,6 +186,21 @@ const desactivateAnnouncement = async (announcementId) => {
     }
 }
 
+const activateAnnouncement = async (announcementId) => {
+    try {
+        let sql = `UPDATE tbl_anuncio SET status = true WHERE id = ${announcementId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
@@ -194,5 +209,6 @@ module.exports = {
     selectAnnouncementByUserId,
     selectUserByAnnouncementId,
     selectPublicationTypeByAnnouncementId,
-    desactivateAnnouncement
+    desactivateAnnouncement,
+    activateAnnouncement
 }
