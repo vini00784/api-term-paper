@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { MESSAGE_SUCCESS } = require('../src/module/config.js')
+const { MESSAGE_SUCCESS } = require('../wwwroot/module/config.js')
 
 const createJwt = async (user) => {
     const token = jwt.sign({

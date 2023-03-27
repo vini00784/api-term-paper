@@ -1,4 +1,4 @@
-const userController = require('../src/controllers/userController.js')
+const userController = require('../wwwroot/controllers/userController.js')
 
 const verifyLogin = async (userInfos) => {
     const object = await userController.listAllUsers()
