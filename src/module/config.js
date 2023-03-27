@@ -24,7 +24,8 @@ const MESSAGE_SUCCESS = {
     UPDATE_ITEM: 'Item atualizado com sucesso no Banco de Dados',
     DELETE_ITEM: 'Item excluído com sucesso no Banco de Dados',
     JWT_CREATED: 'Web Token criado com sucesso!',
-    DESACTIVATE_ITEM: 'Item desativado com sucesso!'
+    DESACTIVATE_ITEM: 'Item desativado com sucesso!',
+    ACTIVATE_ITEM: 'Item ativado com sucesso!'
 }
 
 module.exports = {
