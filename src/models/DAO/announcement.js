@@ -50,7 +50,6 @@ const updateAnnouncement = async (announcement, genresId) => {
             '${announcement.titulo}', 
             ${announcement.volume}, 
             '${announcement.capa}', 
-            ${announcement.status}, 
             ${announcement.premium},
             '${announcement.sinopse}',
             '${announcement.data}',
@@ -172,6 +171,21 @@ const selectPublicationTypeByAnnouncementId = async (announcementId) => {
     }
 }
 
+const desactivateAnnouncement = async (announcementId) => {
+    try {
+        let sql = `UPDATE tbl_anuncio SET status = false WHERE id = ${announcementId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
@@ -179,5 +193,6 @@ module.exports = {
     selectAllAnnouncements,
     selectAnnouncementByUserId,
     selectUserByAnnouncementId,
-    selectPublicationTypeByAnnouncementId
+    selectPublicationTypeByAnnouncementId,
+    desactivateAnnouncement
 }
