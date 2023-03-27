@@ -18,7 +18,7 @@ const userTagModel = require('../models/DAO/userTag.js')
 const userGenreModel = require('../models/DAO/userGenre.js')
 
 const newUser = async (user) => {
-    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined)
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined || user.uid == ''|| user.uid == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(!user.email.includes('@'))
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
@@ -62,7 +62,6 @@ const newUser = async (user) => {
                         if(resultNewUserGenre)
                             return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
                         else {
-                            console.log(user)
                             await deleteUser(newUserId)
                             return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
                         }

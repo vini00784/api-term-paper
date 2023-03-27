@@ -20,7 +20,8 @@ const insertUser = async (user) => {
                                             foto,
                                             biografia,
                                             email,
-                                            premium)
+                                            premium,
+                                            uid)
                                             values (
                                                 LOWER('${user.user_name}'),
                                                 '${user.nome}',
@@ -28,7 +29,8 @@ const insertUser = async (user) => {
                                                 '${user.foto}',
                                                 '${user.biografia}',
                                                 '${user.email}',
-                                                '${user.premium}'
+                                                '${user.premium}',
+                                                '${user.uid}'
                                             )`
 
         const result = await prisma.$queryRawUnsafe(sql)
