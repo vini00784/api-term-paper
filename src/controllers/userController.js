@@ -82,7 +82,7 @@ const newUser = async (user) => {
 }
 
 const updateUser = async (user) => {
-    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined)
+    if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined || user.email == '' || user.email == undefined || user.id_tag_1 == '' || user.id_tag_1 == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(!user.email.includes('@'))
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }

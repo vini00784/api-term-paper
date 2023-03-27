@@ -56,7 +56,7 @@ call proc_update_dados_usuario (58, 'testeee', 'enzao', '2000-01-15', 'angola007
 
 delimiter $
 create procedure proc_update_dados_usuario
-	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in data_nascimento date, in foto_usuario varchar(500), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint,
+	(in id_usuario_user int, in user_name varchar(30), in nome_usuario varchar(200), in foto_usuario varchar(500), in biografia_usuario text, in email_usuario varchar(256), in premium_usuario tinyint,
 		in id_tag_1 int, in id_tag_2 int, in generos varchar(300))
 		begin
             
@@ -84,7 +84,6 @@ create procedure proc_update_dados_usuario
         
         update tbl_usuario set 	user_name = user_name,
 								nome = nome_usuario,
-                                data_nascimento = data_nascimento,
                                 foto = foto_usuario,
                                 biografia = biografia_usuario,
                                 email = email_usuario,
@@ -93,7 +92,7 @@ create procedure proc_update_dados_usuario
 		
 		end $
         
--- DROP PROCEDURE proc_update_dados_usuario; -- 
+DROP PROCEDURE proc_update_dados_usuario;
 
 SELECT * FROM tbl_generos;
 
