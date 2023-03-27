@@ -51,7 +51,55 @@ const selectGenreByUserId = async (userId) => {
     }
 }
 
+const selectGenreByAnnouncementId = async (announcementId) => {
+    try {
+        let sql = `SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
+        FROM tbl_genero_anuncio
+     
+        INNER JOIN tbl_generos
+           ON tbl_generos.id = tbl_genero_anuncio.id_genero
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
+     
+        WHERE tbl_genero_anuncio.id_anuncio = ${announcementId}`
+
+        const rsGenres = await prisma.$queryRawUnsafe(sql)
+
+        if(rsGenres.length > 0)
+            return rsGenres
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectGenreByShortStorieId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
+        FROM tbl_genero_historia_curta
+     
+        INNER JOIN tbl_generos
+           ON tbl_generos.id = tbl_genero_historia_curta.id_genero
+        INNER JOIN tbl_historia_curta
+           ON tbl_historia_curta.id = tbl_genero_historia_curta.id_historia_curta
+     
+        WHERE tbl_genero_historia_curta.id_historia_curta = ${shortStorieId}`
+
+        const rsGenres = await prisma.$queryRawUnsafe(sql)
+
+        if(rsGenres.length > 0)
+            return rsGenres
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     selectAllGenres,
-    selectGenreByUserId
+    selectGenreByUserId,
+    selectGenreByAnnouncementId,
+    selectGenreByShortStorieId
 }
