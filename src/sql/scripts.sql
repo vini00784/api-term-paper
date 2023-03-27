@@ -222,6 +222,26 @@ SELECT cast(tbl_tipo_publicacao.id AS DECIMAL) as id_tipo_publicacao, tbl_tipo_p
 
 DESC tbl_anuncio;
 
-SELECT * FROM tbl_anuncio;
+SELECT * FROM tbl_genero_historia_curta;
 
 UPDATE tbl_anuncio SET status = FALSE WHERE id = 18;
+
+SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
+   FROM tbl_genero_anuncio
+
+   INNER JOIN tbl_generos
+      ON tbl_generos.id = tbl_genero_anuncio.id_genero
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
+
+   WHERE tbl_genero_anuncio.id_anuncio = 46;
+
+SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
+   FROM tbl_genero_historia_curta
+
+   INNER JOIN tbl_generos
+      ON tbl_generos.id = tbl_genero_historia_curta.id_genero
+   INNER JOIN tbl_historia_curta
+      ON tbl_historia_curta.id = tbl_genero_historia_curta.id_historia_curta
+
+   WHERE tbl_genero_historia_curta.id_historia_curta = 7;
