@@ -85,6 +85,21 @@ const deleteShortStorie = async (shortStorieId) => {
     }
 }
 
+const selectAllShortStories = async () => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta ORDER BY id DESC`
+
+        const rsShortStories = await prisma.$queryRawUnsafe(sql)
+
+        if(rsShortStories)
+            return rsShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const desactivateShortStorie = async (shortStorieId) => {
     try {
         let sql = `UPDATE tbl_historia_curta SET status = false WHERE id = ${shortStorieId}`
@@ -115,10 +130,56 @@ const activateShortStorie = async (shortStorieId) => {
     }
 }
 
+// Seleciona apenas o usuário vinculado a tal anúncio
+const selectUserByShortStorieId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT cast(tbl_usuario.id AS DECIMAL) as id_usuario, tbl_usuario.nome as nome_usuario, tbl_usuario.user_name, tbl_usuario.foto
+        FROM tbl_historia_curta
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_historia_curta.id_usuario
+     
+        WHERE tbl_historia_curta.id = ${shortStorieId}`
+
+        const rsUser = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUser.length > 0)
+            return rsUser
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectPublicationTypeByShortStorieId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT cast(tbl_tipo_publicacao.id AS DECIMAL) as id_tipo_publicacao, tbl_tipo_publicacao.tipo
+        FROM tbl_historia_curta
+     
+        INNER JOIN tbl_tipo_publicacao
+           ON tbl_tipo_publicacao.id = tbl_historia_curta.id_tipo_publicacao
+     
+        WHERE tbl_historia_curta.id = ${shortStorieId}`
+
+        const rsPublicationType = await prisma.$queryRawUnsafe(sql)
+
+        if(rsPublicationType.length > 0)
+            return rsPublicationType
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
     deleteShortStorie,
+    selectAllShortStories,
     desactivateShortStorie,
-    activateShortStorie
+    activateShortStorie,
+    selectUserByShortStorieId,
+    selectPublicationTypeByShortStorieId
 }

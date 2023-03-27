@@ -37,6 +37,25 @@ router
     })
 
 router
+    .route('/short-stories')
+    .get(async (req, res) => {
+        let statusCode
+        let message
+
+        const shortStoriesData = await shortStorieController.listAllShortStories()
+
+        if(shortStoriesData) {
+            statusCode = shortStoriesData.status
+            message = shortStoriesData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
     .route('/short-storie/id/:shortStorieId')
     .put(jsonParser, async (req, res) => {
         let statusCode

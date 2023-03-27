@@ -91,6 +91,40 @@ const deleteShortStorie = async (shortStorieId) => {
     }
 }
 
+const listAllShortStories = async () => {
+    let shortStoriesJson = {}
+
+    const { selectParentalRatingByShortStorieId } = require('../models/DAO/parentalRating.js')
+    const { selectUserByShortStorieId, selectPublicationTypeByShortStorieId } = require('../models/DAO/shortStorie.js')
+
+    const shortStoriesData = await shortStorieModel.selectAllShortStories()
+
+    if(shortStoriesData) {
+        const shortStoriesDataArray = shortStoriesData.map(async shortStorieItem => {
+            const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
+            const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
+            const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
+
+            if(shortStorieParentalRatingData) {
+                shortStorieItem.classificacao = shortStorieParentalRatingData
+
+                if(shortStorieUserData) {
+                    shortStorieItem.usuario = shortStorieUserData
+
+                    if(publicationTypeData)
+                        shortStorieItem.tipo = publicationTypeData
+                }
+            }
+
+            return shortStorieItem
+        })
+
+        shortStoriesJson = await Promise.all(shortStoriesDataArray)
+        return { status: 200, message: shortStoriesJson }
+    } else
+        return { status: 400, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 const desactivateShortStorie = async (shortStorieId) => {
     if(shortStorieId == '' || shortStorieId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
@@ -117,10 +151,13 @@ const activateShortStorie = async (shortStorieId) => {
     }
 }
 
+
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
     deleteShortStorie,
+    listAllShortStories,
     desactivateShortStorie,
     activateShortStorie
 }
