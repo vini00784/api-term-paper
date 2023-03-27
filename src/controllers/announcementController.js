@@ -97,6 +97,7 @@ const listAllAnnouncements = async () => {
 
     const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
     const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
+    const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
 
     const announcementsData = await announcementModel.selectAllAnnouncements()
 
@@ -105,6 +106,7 @@ const listAllAnnouncements = async () => {
             const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
             const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
             const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
+            const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
             
             if(announcementParentalRatingData) {
                 announcementItem.classificacao = announcementParentalRatingData
@@ -112,8 +114,12 @@ const listAllAnnouncements = async () => {
                 if(announcementUserData) {
                     announcementItem.usuario = announcementUserData
 
-                    if(publicationTypeData)
+                    if(publicationTypeData) {
                         announcementItem.tipo = publicationTypeData
+
+                        if(announcementGenresData)
+                            announcementItem.generos = announcementGenresData
+                    }
                 }
             }
 
