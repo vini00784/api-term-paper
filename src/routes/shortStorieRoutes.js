@@ -91,4 +91,46 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/desactivate-short-storie/id/:shortStorieId')
+    .put(async(req, res) => {
+        let statusCode
+        let message
+
+        let id = req.params.shortStorieId
+
+        if(id != '' && id != undefined) {
+            const desactivatedShortStorie = await shortStorieController.desactivateShortStorie(id)
+
+            statusCode = desactivatedShortStorie.status
+            message = desactivatedShortStorie.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
+    .route('/activate-short-storie/id/:shortStorieId')
+    .put(async(req, res) => {
+        let statusCode
+        let message
+
+        let id = req.params.shortStorieId
+
+        if(id != '' && id != undefined) {
+            const activatedShortStorie = await shortStorieController.activateShortStorie(id)
+
+            statusCode = activatedShortStorie.status
+            message = activatedShortStorie.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

@@ -85,8 +85,40 @@ const deleteShortStorie = async (shortStorieId) => {
     }
 }
 
+const desactivateShortStorie = async (shortStorieId) => {
+    try {
+        let sql = `UPDATE tbl_historia_curta SET status = false WHERE id = ${shortStorieId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const activateShortStorie = async (shortStorieId) => {
+    try {
+        let sql = `UPDATE tbl_historia_curta SET status = true WHERE id = ${shortStorieId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
-    deleteShortStorie
+    deleteShortStorie,
+    desactivateShortStorie,
+    activateShortStorie
 }

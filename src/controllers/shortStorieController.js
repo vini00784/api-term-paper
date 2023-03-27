@@ -91,8 +91,36 @@ const deleteShortStorie = async (shortStorieId) => {
     }
 }
 
+const desactivateShortStorie = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const desactivatedShortStorie = await shortStorieModel.desactivateShortStorie(shortStorieId)
+
+        if(desactivatedShortStorie)
+            return { status: 200, message: MESSAGE_SUCCESS.DESACTIVATE_ITEM }
+        else
+            return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
+const activateShortStorie = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const activatedShortStorie = await shortStorieModel.activateShortStorie(shortStorieId)
+
+        if(activatedShortStorie)
+            return { status: 200, message: MESSAGE_SUCCESS.ACTIVATE_ITEM }
+        else
+            return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
-    deleteShortStorie
+    deleteShortStorie,
+    desactivateShortStorie,
+    activateShortStorie
 }
