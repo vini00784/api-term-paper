@@ -110,6 +110,29 @@ router
         res.status(statusCode).json(message)
     })
 
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let id = req.params.shortStorieId
+
+        if(id != '' && id != undefined) {
+            const shortStorieData = await shortStorieController.searchShortStorieById(id)
+
+            if(shortStorieData) {
+                statusCode = shortStorieData.status
+                message = shortStorieData.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 router
     .route('/desactivate-short-storie/id/:shortStorieId')
     .put(async(req, res) => {

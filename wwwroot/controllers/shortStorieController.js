@@ -157,6 +157,50 @@ const activateShortStorie = async (shortStorieId) => {
     }
 }
 
+const searchShortStorieById = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const shortStorieData = await shortStorieModel.selectShortStorieById(shortStorieId)
+
+        const { selectParentalRatingByShortStorieId } = require('../models/DAO/parentalRating.js')
+        const { selectUserByShortStorieId, selectPublicationTypeByShortStorieId } = require('../models/DAO/shortStorie.js')
+        const { selectGenreByShortStorieId } = require('../models/DAO/genre.js')
+
+        if(shortStorieData) {
+            let shortStorieJson = {}
+
+            const shortStorieDataArray = shortStorieData.map(async shortStorieItem => {
+                const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
+                const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
+                const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
+                const shortStorieGenresData = await selectGenreByShortStorieId(shortStorieItem.id)
+
+                if(shortStorieParentalRatingData) {
+                    shortStorieItem.classificacao = shortStorieParentalRatingData
+
+                    if(shortStorieUserData) {
+                        shortStorieItem.usuario = shortStorieUserData
+
+                        if(publicationTypeData) {
+                            shortStorieItem.tipo = publicationTypeData
+
+                            if(shortStorieGenresData)
+                                shortStorieItem.generos = shortStorieGenresData
+                        }
+                    }
+                }
+
+                return shortStorieItem
+            })
+
+            shortStorieJson = await Promise.all(shortStorieDataArray)
+            return { status: 200, message: shortStorieJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 
 
 module.exports = {
@@ -165,5 +209,6 @@ module.exports = {
     deleteShortStorie,
     listAllShortStories,
     desactivateShortStorie,
-    activateShortStorie
+    activateShortStorie,
+    searchShortStorieById
 }
