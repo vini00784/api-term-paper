@@ -159,11 +159,56 @@ const activateAnnouncement = async (announcementId) => {
     }
 }
 
+const searchAnnouncementById = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementData = await announcementModel.selectAnnouncementById(announcementId)
+
+        const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
+        const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
+        const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
+
+        if(announcementData) {
+            let announcementJson = {}
+
+            const announcementDataArray = announcementData.map(async announcementItem => {
+                const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
+                const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
+                const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
+                const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
+            
+                if(announcementParentalRatingData) {
+                    announcementItem.classificacao = announcementParentalRatingData
+
+                    if(announcementUserData) {
+                        announcementItem.usuario = announcementUserData
+
+                        if(publicationTypeData) {
+                            announcementItem.tipo = publicationTypeData
+
+                            if(announcementGenresData)
+                                announcementItem.generos = announcementGenresData
+                        }
+                    }
+                }
+
+            return announcementItem
+            })
+
+            announcementJson = await Promise.all(announcementDataArray)
+            return { status: 200, message: announcementJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
     deleteAnnouncement,
     listAllAnnouncements,
     desactivateAnnouncement,
-    activateAnnouncement
+    activateAnnouncement,
+    searchAnnouncementById
 }

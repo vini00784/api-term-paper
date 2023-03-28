@@ -111,6 +111,29 @@ router
         res.status(statusCode).json(message)
     })
 
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let id = req.params.announcementId
+
+        if(id != '' && id != undefined) {
+            const announcementData = await announcementController.searchAnnouncementById(id)
+
+            if(announcementData) {
+                statusCode = announcementData.status
+                message = announcementData.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 router
     .route('/desactivate-announcement/id/:announcementId')
     .put(async(req, res) => {
