@@ -193,7 +193,7 @@ const searchAnnouncementById = async (announcementId) => {
                     }
                 }
 
-            return announcementItem
+                return announcementItem
             })
 
             announcementJson = await Promise.all(announcementDataArray)
