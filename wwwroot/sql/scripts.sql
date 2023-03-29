@@ -245,3 +245,5 @@ SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
       ON tbl_historia_curta.id = tbl_genero_historia_curta.id_historia_curta
 
    WHERE tbl_genero_historia_curta.id_historia_curta = 7;
+
+ALTER TABLE tbl_anuncio MODIFY COLUMN sinopse varchar(2000) NOT NULL;
