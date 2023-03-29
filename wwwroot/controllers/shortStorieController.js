@@ -14,7 +14,7 @@ const shortStorieModel = require('../models/DAO/shortStorie.js')
 const newShortStorie = async (shortStorie) => {
     if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else if(shortStorie.titulo.length > 50 || shortStorie.sinopse.length > 200 || shortStorie.capa.length > 500)
+    else if(shortStorie.titulo.length > 50 || shortStorie.sinopse.length > 2000 || shortStorie.capa.length > 500)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const currentDate = new Date().toJSON().slice(0, 10)
