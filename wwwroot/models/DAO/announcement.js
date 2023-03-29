@@ -50,7 +50,6 @@ const updateAnnouncement = async (announcement, genresId) => {
             '${announcement.titulo}', 
             ${announcement.volume}, 
             '${announcement.capa}', 
-            ${announcement.premium},
             '${announcement.sinopse}',
             '${announcement.data}',
             ${announcement.quantidade_paginas},
