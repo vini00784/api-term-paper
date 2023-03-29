@@ -156,11 +156,13 @@ const selectUserByUsername = async (userName) => {
             const { selectGenreByUserId } = require('../models/DAO/genre.js')
             const { selectTagByUserId } = require('../models/DAO/tag.js')
             const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+            const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
 
             const userDataArray = userByUsername.map(async userItem => {
                 const userTagArrayData = await selectTagByUserId(userItem.id)
                 const userGenreArrayData = await selectGenreByUserId(userItem.id)
                 const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+                const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
 
                 if(userTagArrayData) {
                     userItem.tags = userTagArrayData
@@ -168,8 +170,12 @@ const selectUserByUsername = async (userName) => {
                     if(userGenreArrayData) {
                         userItem.generos = userGenreArrayData
 
-                        if(userAnnouncementArrayData)
+                        if(userAnnouncementArrayData) {
                             userItem.anuncios = userAnnouncementArrayData
+    
+                            if(userShortStorieArrayData)
+                                userItem.historias_curtas = userShortStorieArrayData
+                        }
                     }
                 }
                 return userItem
@@ -189,6 +195,7 @@ const listAllUsers = async () => {
     const { selectGenreByUserId } = require('../models/DAO/genre.js')
     const { selectTagByUserId } = require('../models/DAO/tag.js')
     const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+    const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
 
     const usersData = await userModel.selectAllUsers()
 
@@ -197,6 +204,7 @@ const listAllUsers = async () => {
             const userTagArrayData = await selectTagByUserId(userItem.id)
             const userGenreArrayData = await selectGenreByUserId(userItem.id)
             const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+            const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
 
             if(userTagArrayData) {
                 userItem.tags = userTagArrayData
@@ -204,8 +212,12 @@ const listAllUsers = async () => {
                 if(userGenreArrayData) {
                     userItem.generos = userGenreArrayData
 
-                    if(userAnnouncementArrayData)
+                    if(userAnnouncementArrayData) {
                         userItem.anuncios = userAnnouncementArrayData
+
+                        if(userShortStorieArrayData)
+                            userItem.historias_curtas = userShortStorieArrayData
+                    }
                 }
             }
 
@@ -246,12 +258,14 @@ const searchUserByID = async (userId) => {
             const { selectGenreByUserId } = require('../models/DAO/genre.js')
             const { selectTagByUserId } = require('../models/DAO/tag.js')
             const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+            const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
 
             if(userData) {
                 const userDataArray = userData.map(async userItem => {
                     const userTagArrayData = await selectTagByUserId(userItem.id)
                     const userGenreArrayData = await selectGenreByUserId(userItem.id)
                     const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+                    const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
 
                     if(userTagArrayData) {
                         userItem.tags = userTagArrayData
@@ -259,8 +273,12 @@ const searchUserByID = async (userId) => {
                         if(userGenreArrayData) {
                             userItem.generos = userGenreArrayData
 
-                            if(userAnnouncementArrayData)
+                            if(userAnnouncementArrayData) {
                                 userItem.anuncios = userAnnouncementArrayData
+        
+                                if(userShortStorieArrayData)
+                                    userItem.historias_curtas = userShortStorieArrayData
+                            }
                         }
                     }
                     return userItem

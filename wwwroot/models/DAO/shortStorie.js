@@ -188,6 +188,29 @@ const selectShortStorieById = async (shortStorieId) => {
     }
 }
 
+// Seleciona todas as histórias curtas referidas a um certo usuário
+const selectShortStorieByUserId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT tbl_historia_curta.id, tbl_historia_curta.titulo
+        
+        FROM tbl_historia_curta
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_historia_curta.id_usuario
+         
+        WHERE tbl_historia_curta.id_usuario = ${shortStorieId}`
+
+        const rsShortStorie = await prisma.$queryRawUnsafe(sql)
+
+        if(rsShortStorie.length > 0)
+            return rsShortStorie
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
@@ -197,5 +220,6 @@ module.exports = {
     activateShortStorie,
     selectUserByShortStorieId,
     selectPublicationTypeByShortStorieId,
-    selectShortStorieById
+    selectShortStorieById,
+    selectShortStorieByUserId
 }
