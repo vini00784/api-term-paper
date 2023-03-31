@@ -96,38 +96,12 @@ const deleteAnnouncement = async (announcementId) => {
 }
 
 const listAllAnnouncements = async () => {
-    let announcementsJson = {}
-
-    const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
-    const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
-    const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
-
     const announcementsData = await announcementModel.selectAllAnnouncements()
-
+    
     if(announcementsData) {
-        const announcementsDataArray = announcementsData.map(async announcementItem => {
-            const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
-            const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
-            const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
-            const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
-            
-            if(announcementParentalRatingData) {
-                announcementItem.classificacao = announcementParentalRatingData
+        let announcementsJson = {}
 
-                if(announcementUserData) {
-                    announcementItem.usuario = announcementUserData
-
-                    if(publicationTypeData) {
-                        announcementItem.tipo = publicationTypeData
-
-                        if(announcementGenresData)
-                            announcementItem.generos = announcementGenresData
-                    }
-                }
-            }
-
-            return announcementItem
-        })
+        const announcementsDataArray = await destructureAnnouncementJson(announcementsData)
         
         announcementsJson = await Promise.all(announcementsDataArray)
         return { status: 200, message: announcementsJson }
@@ -168,36 +142,10 @@ const searchAnnouncementById = async (announcementId) => {
     else {
         const announcementData = await announcementModel.selectAnnouncementById(announcementId)
 
-        const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
-        const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
-        const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
-
         if(announcementData) {
             let announcementJson = {}
 
-            const announcementDataArray = announcementData.map(async announcementItem => {
-                const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
-                const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
-                const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
-                const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
-            
-                if(announcementParentalRatingData) {
-                    announcementItem.classificacao = announcementParentalRatingData
-
-                    if(announcementUserData) {
-                        announcementItem.usuario = announcementUserData
-
-                        if(publicationTypeData) {
-                            announcementItem.tipo = publicationTypeData
-
-                            if(announcementGenresData)
-                                announcementItem.generos = announcementGenresData
-                        }
-                    }
-                }
-
-                return announcementItem
-            })
+            const announcementDataArray = await destructureAnnouncementJson(announcementData)
 
             announcementJson = await Promise.all(announcementDataArray)
             return { status: 200, message: announcementJson }
@@ -209,37 +157,11 @@ const searchAnnouncementById = async (announcementId) => {
 const listActivatedAnnouncements = async () => {
     const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements()
     
-    const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
-    const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
-    const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
-    
     if(activatedAnnouncementsData) {
         let announcementsJson = {}
 
-        const announcementDataArray = activatedAnnouncementsData.map(async announcementItem => {
-            const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
-            const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
-            const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
-            const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
+        const announcementDataArray = await destructureAnnouncementJson(activatedAnnouncementsData)
         
-            if(announcementParentalRatingData) {
-                announcementItem.classificacao = announcementParentalRatingData
-
-                if(announcementUserData) {
-                    announcementItem.usuario = announcementUserData
-
-                    if(publicationTypeData) {
-                        announcementItem.tipo = publicationTypeData
-
-                        if(announcementGenresData)
-                            announcementItem.generos = announcementGenresData
-                    }
-                }
-            }
-
-            return announcementItem
-        })
-
         announcementsJson = await Promise.all(announcementDataArray)
         return { status: 200, message: announcementsJson }
     } else
