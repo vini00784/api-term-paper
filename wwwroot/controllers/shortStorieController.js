@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Short storie model
 const shortStorieModel = require('../models/DAO/shortStorie.js')
 
+// Function to destructure short storie json
+const { destructureShortStorieJson } = require('../utils/destructureJson.js')
+
 const newShortStorie = async (shortStorie) => {
     if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -201,7 +204,19 @@ const searchShortStorieById = async (shortStorieId) => {
     }
 }
 
+const listActivatedShortStories = async () => {
+    const activatedShortStoriesData = await shortStorieModel.selectActivatedShortStories()
+    
+    if(activatedShortStoriesData) {
+        let shortStoriesJson = {}
 
+        const shortStoriesDataArray = await destructureShortStorieJson(activatedShortStoriesData)
+        
+        shortStoriesJson = await Promise.all(shortStoriesDataArray)
+        return { status: 200, message: shortStoriesJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
 
 module.exports = {
     newShortStorie,
@@ -210,5 +225,6 @@ module.exports = {
     listAllShortStories,
     desactivateShortStorie,
     activateShortStorie,
-    searchShortStorieById
+    searchShortStorieById,
+    listActivatedShortStories
 }

@@ -211,6 +211,21 @@ const selectShortStorieByUserId = async (shortStorieId) => {
     }
 }
 
+const selectActivatedShortStories = async () => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta WHERE status = true ORDER BY id DESC`
+
+        const rsActivatedShortStories = await prisma.$queryRawUnsafe(sql)
+
+        if(rsActivatedShortStories.length > 0)
+            return rsActivatedShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
@@ -221,5 +236,6 @@ module.exports = {
     selectUserByShortStorieId,
     selectPublicationTypeByShortStorieId,
     selectShortStorieById,
-    selectShortStorieByUserId
+    selectShortStorieByUserId,
+    selectActivatedShortStories
 }
