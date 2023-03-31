@@ -81,7 +81,6 @@ const newUser = async (user) => {
 }
 
 const updateUser = async (user) => {
-    console.log(user);
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.foto == '' || user.foto == undefined || user.biografia == '' || user.biografia == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(user.user_name.length > 30 || user.nome.length > 200)
