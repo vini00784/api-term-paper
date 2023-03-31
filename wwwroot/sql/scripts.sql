@@ -279,3 +279,26 @@ ALTER TABLE tbl_anuncio MODIFY COLUMN sinopse varchar(2000) NOT NULL;
 delimiter $ 
 
 DROP PROCEDURE proc_insert_anuncio;
+
+SELECT * FROM tbl_anuncio;
+
+SET @teste = 'Romance';
+
+SELECT @teste;
+
+set @teste2 := '';
+set @teste2 := concat(@insert_tbl_genero_anuncio, genero_script);
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+   FROM tbl_genero_anuncio
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
+   INNER JOIN tbl_generos
+      ON tbl_generos.id = tbl_genero_anuncio.id_genero
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_anuncio.id_usuario
+
+   WHERE tbl_generos.nome = @teste;
+
+DESC tbl_anuncio;

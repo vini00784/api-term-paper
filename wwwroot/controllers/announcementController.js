@@ -50,9 +50,9 @@ const newAnnouncement = async (announcement) => {
 }
 
 const updateAnnouncement = async (announcement) => {
-    if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.epub == '' || announcement.epub == undefined || announcement.mobi == '' || announcement.mobi == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined)
+    if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.epub == '' || announcement.epub == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else if(announcement.titulo.length > 50 || announcement.capa.length > 200 || announcement.sinopse.length > 300 || announcement.pdf.length > 200 || announcement.epub.length > 200 || announcement.mobi.length > 200)
+    else if(announcement.titulo.length > 50 || announcement.capa.length > 500 || announcement.sinopse.length > 2000 || announcement.pdf.length > 500 || announcement.epub.length > 500 || announcement.mobi?.length > 500)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const currentDate = new Date().toJSON().slice(0, 10)
@@ -63,13 +63,13 @@ const updateAnnouncement = async (announcement) => {
 
         for(let i = 0; i < announcementGenresLength; i++) {
             if(announcementGenresLength == 1)
-                genresId += `(@id_anuncio_criado, ${announcement.generos[0].id_genero})`
+                genresId += `(${announcement.id}, ${announcement.generos[0].id_genero})`
 
             else if (i == announcementGenresLength - 1) 
-                genresId += `(@id_anuncio_criado, ${announcement.generos[i].id_genero})`
+                genresId += `(${announcement.id}, ${announcement.generos[i].id_genero})`
 
             else 
-                genresId += `(@id_anuncio_criado, ${announcement.generos[i].id_genero}), `
+                genresId += `(${announcement.id}, ${announcement.generos[i].id_genero}), `
             
         }
         
@@ -180,6 +180,12 @@ const listDesactivatedAnnouncements = async () => {
         return { status: 200, message: announcementsJson }
     } else
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
+const listAnnouncementsByGenres = async () => {
+    const genres = await announcementModel
+    
+    const announcementsByGenreData = await announcementModel.selectAnnouncementsByGenres()
 }
 
 module.exports = {
