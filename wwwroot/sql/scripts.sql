@@ -302,3 +302,34 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    WHERE tbl_generos.nome = @teste;
 
 DESC tbl_anuncio;
+
+ delimiter $
+        create procedure proc_update_anuncio
+			(in anuncio_id int,in titulo_anuncio varchar(50), in volume_anuncio int, in capa_anuncio varchar(500), in sinopse_anuncio varchar(2000), in data_anuncio_anuncio date,
+			in quantidade_paginas_anuncio int, in preco_anuncio double, in pdf_anuncio varchar(500),  in epub_anuncio varchar(500), in mobi_anuncio varchar(500), in id_classificacao_anuncio int, in id_usuario_anuncio int, in id_tipo_publicacao_anuncio int,
+            in generos_script varchar(200))
+            begin
+            START TRANSACTION;
+            update tbl_anuncio set
+									titulo = titulo_anuncio,
+                                    volume = volume_anuncio,
+                                    capa = capa_anuncio,
+                                    sinopse = sinopse_anuncio,
+                                    data = data_anuncio_anuncio,
+                                    quantidade_paginas = quantidade_paginas_anuncio,
+                                    preco = preco_anuncio,
+                                    pdf = pdf_anuncio,
+                                    id_classificacao = id_classificacao_anuncio,
+                                    id_usuario = id_usuario_anuncio,
+                                    id_tipo_publicacao = id_tipo_publicacao_anuncio,
+                                    epub = epub_anuncio,
+                                    mobi = mobi_anuncio
+							where id = anuncio_id;
+                            
+		DELETE FROM tbl_genero_anuncio where id_anuncio = anuncio_id;
+		set @insert_inject := 'insert into tbl_genero_anuncio(id_anuncio, id_genero) values ';
+        set @insert_inject := concat(@comando, generos_script);            
+            COMMIT;
+        end $
+        
+        DROP PROCEDURE proc_update_anuncio;
