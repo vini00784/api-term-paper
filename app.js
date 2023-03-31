@@ -22,12 +22,12 @@ app.use((req, res, next) => {
 })
 
 // Importing of routers
-const genreRouter = require('./routes/genreRoutes.js')
-const userRouter = require('./routes/userRoutes.js')
-const tagRouter = require('./routes/tagRoutes.js')
-const announcementRouter = require('./routes/announcementRoutes.js')
-const parentalRatingRouter = require('./routes/parentalRatingRoutes.js')
-const shortStorieRouter = require('./routes/shortStorieRoutes.js')
+const genreRouter = require('./wwwroot/routes/genreRoutes.js')
+const userRouter = require('./wwwroot/routes/userRoutes.js')
+const tagRouter = require('./wwwroot/routes/tagRoutes.js')
+const announcementRouter = require('./wwwroot/routes/announcementRoutes.js')
+const parentalRatingRouter = require('./wwwroot/routes/parentalRatingRoutes.js')
+const shortStorieRouter = require('./wwwroot/routes/shortStorieRoutes.js')
 
 // Using routers
 
@@ -39,6 +39,12 @@ app.use(parentalRatingRouter)
 app.use(shortStorieRouter)
 
 // Using routers
+
+app.get('/', (req, res) => {
+    res.status(200).statusMessage({
+        message: 'TESTE'
+    })
+})
 
 const port = process.env.PORT || 3030
 
