@@ -95,38 +95,12 @@ const deleteShortStorie = async (shortStorieId) => {
 }
 
 const listAllShortStories = async () => {
-    let shortStoriesJson = {}
-
-    const { selectParentalRatingByShortStorieId } = require('../models/DAO/parentalRating.js')
-    const { selectUserByShortStorieId, selectPublicationTypeByShortStorieId } = require('../models/DAO/shortStorie.js')
-    const { selectGenreByShortStorieId } = require('../models/DAO/genre.js')
-
     const shortStoriesData = await shortStorieModel.selectAllShortStories()
-
+    
     if(shortStoriesData) {
-        const shortStoriesDataArray = shortStoriesData.map(async shortStorieItem => {
-            const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
-            const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
-            const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
-            const shortStorieGenresData = await selectGenreByShortStorieId(shortStorieItem.id)
-
-            if(shortStorieParentalRatingData) {
-                shortStorieItem.classificacao = shortStorieParentalRatingData
-
-                if(shortStorieUserData) {
-                    shortStorieItem.usuario = shortStorieUserData
-
-                    if(publicationTypeData) {
-                        shortStorieItem.tipo = publicationTypeData
-
-                        if(shortStorieGenresData)
-                            shortStorieItem.generos = shortStorieGenresData
-                    }
-                }
-            }
-
-            return shortStorieItem
-        })
+        let shortStoriesJson = {}
+        
+        const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesData)
 
         shortStoriesJson = await Promise.all(shortStoriesDataArray)
         return { status: 200, message: shortStoriesJson }
@@ -166,36 +140,10 @@ const searchShortStorieById = async (shortStorieId) => {
     else {
         const shortStorieData = await shortStorieModel.selectShortStorieById(shortStorieId)
 
-        const { selectParentalRatingByShortStorieId } = require('../models/DAO/parentalRating.js')
-        const { selectUserByShortStorieId, selectPublicationTypeByShortStorieId } = require('../models/DAO/shortStorie.js')
-        const { selectGenreByShortStorieId } = require('../models/DAO/genre.js')
-
         if(shortStorieData) {
             let shortStorieJson = {}
 
-            const shortStorieDataArray = shortStorieData.map(async shortStorieItem => {
-                const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
-                const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
-                const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
-                const shortStorieGenresData = await selectGenreByShortStorieId(shortStorieItem.id)
-
-                if(shortStorieParentalRatingData) {
-                    shortStorieItem.classificacao = shortStorieParentalRatingData
-
-                    if(shortStorieUserData) {
-                        shortStorieItem.usuario = shortStorieUserData
-
-                        if(publicationTypeData) {
-                            shortStorieItem.tipo = publicationTypeData
-
-                            if(shortStorieGenresData)
-                                shortStorieItem.generos = shortStorieGenresData
-                        }
-                    }
-                }
-
-                return shortStorieItem
-            })
+            const shortStorieDataArray = await destructureShortStorieJson(shortStorieData)
 
             shortStorieJson = await Promise.all(shortStorieDataArray)
             return { status: 200, message: shortStorieJson }
