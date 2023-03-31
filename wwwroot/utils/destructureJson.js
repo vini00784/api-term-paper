@@ -30,4 +30,39 @@ const destructureAnnouncementJson = async (json) => {
     return announcementDataArray
 }
 
-module.exports = {destructureAnnouncementJson}
+const destructureShortStorieJson = async (json) => {
+    const { selectParentalRatingByShortStorieId } = require('../models/DAO/parentalRating.js')
+    const { selectUserByShortStorieId, selectPublicationTypeByShortStorieId } = require('../models/DAO/shortStorie.js')
+    const { selectGenreByShortStorieId } = require('../models/DAO/genre.js')
+
+    const shortStoriesDataArray = json.map(async shortStorieItem => {
+        const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
+        const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
+        const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
+        const shortStorieGenresData = await selectGenreByShortStorieId(shortStorieItem.id)
+
+        if(shortStorieParentalRatingData) {
+            shortStorieItem.classificacao = shortStorieParentalRatingData
+
+            if(shortStorieUserData) {
+                shortStorieItem.usuario = shortStorieUserData
+
+                if(publicationTypeData) {
+                    shortStorieItem.tipo = publicationTypeData
+
+                    if(shortStorieGenresData)
+                        shortStorieItem.generos = shortStorieGenresData
+                }
+            }
+        }
+
+        return shortStorieItem
+    })
+
+    return shortStoriesDataArray
+}
+
+module.exports = {
+    destructureAnnouncementJson,
+    destructureShortStorieJson
+}
