@@ -194,4 +194,23 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/desactivated-short-stories')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const desactivatedShortStories = await shortStorieController.listDesactivatedShortStories()
+
+        if(desactivatedShortStories) {
+            statusCode = desactivatedShortStories.status
+            message = desactivatedShortStories.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
