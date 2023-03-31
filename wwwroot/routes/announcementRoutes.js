@@ -195,4 +195,23 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/desactivated-announcements')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const desactivatedAnnouncements = await announcementController.listDesactivatedAnnouncements()
+
+        if(desactivatedAnnouncements) {
+            statusCode = desactivatedAnnouncements.status
+            message = desactivatedAnnouncements.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

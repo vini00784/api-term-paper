@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Announcement model
 const announcementModel = require('../models/DAO/announcement.js')
 
+// Function to destructure announcement json
+const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
+
 const newAnnouncement = async (announcement) => {
     if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined || announcement.epub == '' || announcement.epub == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -243,6 +246,20 @@ const listActivatedAnnouncements = async () => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
+const listDesactivatedAnnouncements = async () => {
+    const desactivatedAnnouncementsData = await announcementModel.selectDesactivatedAnnouncements()
+
+    if(desactivatedAnnouncementsData) {
+        let announcementsJson = {}
+        
+        const announcementDataArray = await destructureAnnouncementJson(desactivatedAnnouncementsData)
+
+        announcementsJson = await Promise.all(announcementDataArray)
+        return { status: 200, message: announcementsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -251,5 +268,6 @@ module.exports = {
     desactivateAnnouncement,
     activateAnnouncement,
     searchAnnouncementById,
-    listActivatedAnnouncements
+    listActivatedAnnouncements,
+    listDesactivatedAnnouncements
 }
