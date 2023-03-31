@@ -215,6 +215,21 @@ const selectAnnouncementById = async (announcementId) => {
     }
 }
 
+const selectActivatedAnnouncements = async () => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi FROM tbl_anuncio WHERE status = true ORDER BY id DESC`
+
+        const rsActivatedAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsActivatedAnnouncements.length > 0)
+            return rsActivatedAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
@@ -225,5 +240,6 @@ module.exports = {
     selectPublicationTypeByAnnouncementId,
     desactivateAnnouncement,
     activateAnnouncement,
-    selectAnnouncementById
+    selectAnnouncementById,
+    selectActivatedAnnouncements
 }

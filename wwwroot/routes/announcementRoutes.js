@@ -155,7 +155,7 @@ router
         res.status(statusCode).json(message)
     })
 
-    router
+router
     .route('/activate-announcement/id/:announcementId')
     .put(async(req, res) => {
         let statusCode
@@ -171,6 +171,25 @@ router
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
+    .route('/activated-announcements')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const activatedAnnouncements = await announcementController.listActivatedAnnouncements()
+
+        if(activatedAnnouncements) {
+            statusCode = activatedAnnouncements.status
+            message = activatedAnnouncements.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
         }
 
         res.status(statusCode).json(message)

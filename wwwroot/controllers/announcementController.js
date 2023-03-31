@@ -203,6 +203,46 @@ const searchAnnouncementById = async (announcementId) => {
     }
 }
 
+const listActivatedAnnouncements = async () => {
+    const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements()
+    
+    const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
+    const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
+    const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
+    
+    if(activatedAnnouncementsData) {
+        let announcementsJson = {}
+
+        const announcementDataArray = activatedAnnouncementsData.map(async announcementItem => {
+            const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
+            const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
+            const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
+            const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
+        
+            if(announcementParentalRatingData) {
+                announcementItem.classificacao = announcementParentalRatingData
+
+                if(announcementUserData) {
+                    announcementItem.usuario = announcementUserData
+
+                    if(publicationTypeData) {
+                        announcementItem.tipo = publicationTypeData
+
+                        if(announcementGenresData)
+                            announcementItem.generos = announcementGenresData
+                    }
+                }
+            }
+
+            return announcementItem
+        })
+
+        announcementsJson = await Promise.all(announcementDataArray)
+        return { status: 200, message: announcementsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -210,5 +250,6 @@ module.exports = {
     listAllAnnouncements,
     desactivateAnnouncement,
     activateAnnouncement,
-    searchAnnouncementById
+    searchAnnouncementById,
+    listActivatedAnnouncements
 }
