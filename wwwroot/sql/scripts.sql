@@ -247,3 +247,35 @@ SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
    WHERE tbl_genero_historia_curta.id_historia_curta = 7;
 
 ALTER TABLE tbl_anuncio MODIFY COLUMN sinopse varchar(2000) NOT NULL;
+
+          delimiter $
+        create procedure proc_insert_anuncio
+			(in titulo_anuncio varchar(50), in volume_anuncio int, in capa_anuncio varchar(500), in status_anuncio tinyint, in premium_anuncio tinyint, in sinopse_anuncio text, in data_anuncio_anuncio date,
+			in quantidade_paginas_anuncio int, in preco_anuncio double, in pdf_anuncio varchar(500),  in epub_anuncio varchar(500), in mobi_anuncio varchar(500), in id_classificacao_anuncio int, in id_usuario_anuncio int, in id_tipo_publicacao_anuncio int,
+             in genero_script varchar(200))
+            begin
+            
+            
+            START TRANSACTION;
+            
+            insert into tbl_anuncio(titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, id_classificacao, id_usuario, id_tipo_publicacao, epub, mobi)
+				values(titulo_anuncio, volume_anuncio, capa_anuncio, status_anuncio, premium_anuncio, sinopse_anuncio, data_anuncio_anuncio, quantidade_paginas_anuncio, preco_anuncio, pdf_anuncio, id_classificacao_anuncio,
+                id_usuario_anuncio, id_tipo_publicacao_anuncio, epub_anuncio, mobi_anuncio);
+                
+            
+            SET @id_anuncio_criado = LAST_INSERT_ID();
+                
+                
+			set @insert_tbl_genero_anuncio := 'insert into tbl_genero_anuncio(id_anuncio, id_genero) values';
+			set @insert_tbl_genero_anuncio := concat(@insert_tbl_genero_anuncio, genero_script);
+            
+                
+			PREPARE myquery FROM @insert_tbl_genero_anuncio;
+			EXECUTE myquery;
+            
+            COMMIT;
+        end $
+        
+delimiter $ 
+
+DROP PROCEDURE proc_insert_anuncio;
