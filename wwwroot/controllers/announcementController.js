@@ -218,6 +218,24 @@ const listAnnouncementsByGenres = async (userId) => {
     }
 }
 
+const listAnnouncementsByGenresName = async (genreName) => {
+    if(genreName == '' || genreName == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const announcementsByGenreName = await announcementModel.selectAnnouncementByGenresName(genreName)
+
+        if(announcementsByGenreName) {
+            let announcementsJson = {}
+
+            const announcementDataArray = await destructureAnnouncementJson(announcementsByGenreName)
+            
+            announcementsJson = await Promise.all(announcementDataArray)
+            return { status: 200, message: announcementsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -228,5 +246,6 @@ module.exports = {
     searchAnnouncementById,
     listActivatedAnnouncements,
     listDesactivatedAnnouncements,
-    listAnnouncementsByGenres
+    listAnnouncementsByGenres,
+    listAnnouncementsByGenresName
 }
