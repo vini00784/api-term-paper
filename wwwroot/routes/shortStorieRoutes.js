@@ -233,4 +233,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/short-stories/genre-name/:genreName') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let genreName = req.params.genreName
+
+        const shortStoriesData = await shortStorieController.listShortStoriesByGenresName(genreName)
+
+        if(shortStoriesData) {
+            statusCode = shortStoriesData.status
+            message = shortStoriesData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

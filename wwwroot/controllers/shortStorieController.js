@@ -215,6 +215,24 @@ const listShortStoriesByGenres = async (userId) => {
     }
 }
 
+const listShortStoriesByGenresName = async (genreName) => {
+    if(genreName == '' || genreName == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const shortStoriesByGenreName = await shortStorieModel.selectShortStoriesByGenresName(genreName)
+
+        if(shortStoriesByGenreName) {
+            let shrotStoriesJson = {}
+
+            const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByGenreName)
+            
+            shrotStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shrotStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -225,5 +243,6 @@ module.exports = {
     searchShortStorieById,
     listActivatedShortStories,
     listDesactivatedShortStories,
-    listShortStoriesByGenres
+    listShortStoriesByGenres,
+    listShortStoriesByGenresName
 }
