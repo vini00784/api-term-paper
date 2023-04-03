@@ -180,6 +180,41 @@ const listDesactivatedShortStories = async () => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
+const listShortStoriesByGenres = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const { listGenreByUserId } = require('./genreController.js')
+
+        const userGenres = await listGenreByUserId(userId)
+
+        const userGenresLength = userGenres.message.genres.length
+
+        let genresId = ""
+
+        for(let i = 0; i < userGenresLength; i++) {
+            if(userGenresLength == 1)
+                genresId += userGenres.message.genres.id_genero[0]
+            else if (i == userGenresLength - 1)
+                genresId += userGenres.message.genres[i].id_genero
+            else
+                genresId += `${userGenres.message.genres[i].id_genero}, `
+        }
+
+        const shortStoriesByGenre = await shortStorieModel.selectShortStoriesByGenres(genresId)
+
+        if(shortStoriesByGenre) {
+            let shortStoriesJson = {}
+
+            const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByGenre)
+
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -189,5 +224,6 @@ module.exports = {
     activateShortStorie,
     searchShortStorieById,
     listActivatedShortStories,
-    listDesactivatedShortStories
+    listDesactivatedShortStories,
+    listShortStoriesByGenres
 }
