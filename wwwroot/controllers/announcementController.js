@@ -13,6 +13,7 @@ const announcementModel = require('../models/DAO/announcement.js')
 
 // Function to destructure announcement json
 const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
+const e = require('express')
 
 const newAnnouncement = async (announcement) => {
     if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined || announcement.epub == '' || announcement.epub == undefined)
@@ -182,10 +183,39 @@ const listDesactivatedAnnouncements = async () => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
-const listAnnouncementsByGenres = async () => {
-    const genres = await announcementModel
-    
-    const announcementsByGenreData = await announcementModel.selectAnnouncementsByGenres()
+const listAnnouncementsByGenres = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const { listGenreByUserId } = require('./genreController.js')
+
+        const userGenres = await listGenreByUserId(userId)
+
+        const userGenresLength = userGenres.message.genres.length
+
+        let genresId = ""
+
+        for(let i = 0; i < userGenresLength; i++) {
+            if(userGenresLength == 1)
+                genresId += userGenres.message.genres.id_genero[0]
+            else if (i == userGenresLength - 1)
+                genresId += userGenres.message.genres[i].id_genero
+            else
+                genresId += `${userGenres.message.genres[i].id_genero}, `
+        }
+
+        const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
+
+        if(announcementsByGenre) {
+            let announcementsJson = {}
+
+            const announcementDataArray = await destructureAnnouncementJson(announcementsByGenre)
+
+            announcementsJson = await Promise.all(announcementDataArray)
+            return { status: 200, message: announcementsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
 }
 
 module.exports = {
@@ -197,5 +227,6 @@ module.exports = {
     activateAnnouncement,
     searchAnnouncementById,
     listActivatedAnnouncements,
-    listDesactivatedAnnouncements
+    listDesactivatedAnnouncements,
+    listAnnouncementsByGenres
 }

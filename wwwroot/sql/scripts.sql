@@ -280,14 +280,7 @@ delimiter $
 
 DROP PROCEDURE proc_insert_anuncio;
 
-SELECT * FROM tbl_anuncio;
-
-SET @teste = 'Romance';
-
-SELECT @teste;
-
-set @teste2 := '';
-set @teste2 := concat(@insert_tbl_genero_anuncio, genero_script);
+SELECT * FROM tbl_genero_anuncio;
 
 SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
    FROM tbl_genero_anuncio
@@ -299,7 +292,7 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    INNER JOIN tbl_usuario
       ON tbl_usuario.id = tbl_anuncio.id_usuario
 
-   WHERE tbl_generos.nome = @teste;
+   WHERE tbl_genero_anuncio.id_genero in(1, 4, 3);
 
 DESC tbl_anuncio;
 
