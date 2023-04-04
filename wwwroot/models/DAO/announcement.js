@@ -231,9 +231,15 @@ const selectActivatedAnnouncements = async () => {
     }
 }
 
-const selectDesactivatedAnnouncements = async () => {
+const selectDesactivatedAnnouncements = async (userId) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi FROM tbl_anuncio WHERE status = false ORDER BY id DESC`
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM tbl_anuncio
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_anuncio.id_usuario
+            
+        WHERE tbl_usuario.id = ${userId} AND tbl_anuncio.status = false`
 
         const rsDesactivatedAnnouncements = await prisma.$queryRawUnsafe(sql)
 

@@ -196,19 +196,25 @@ router
     })
 
 router
-    .route('/desactivated-announcements')
+    .route('/desactivated-announcements/user-id/:userId')
     .get(async(req, res) => {
         let statusCode
         let message
-
-        const desactivatedAnnouncements = await announcementController.listDesactivatedAnnouncements()
-
-        if(desactivatedAnnouncements) {
-            statusCode = desactivatedAnnouncements.status
-            message = desactivatedAnnouncements.message
+        let userId = req.params.userId
+        
+        if(userId != '' && userId != undefined) {
+            const desactivatedAnnouncements = await announcementController.listDesactivatedAnnouncements(userId)
+            
+            if(desactivatedAnnouncements) {
+                statusCode = desactivatedAnnouncements.status
+                message = desactivatedAnnouncements.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
         } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         res.status(statusCode).json(message)

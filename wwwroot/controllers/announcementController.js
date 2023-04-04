@@ -169,18 +169,22 @@ const listActivatedAnnouncements = async () => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
-const listDesactivatedAnnouncements = async () => {
-    const desactivatedAnnouncementsData = await announcementModel.selectDesactivatedAnnouncements()
-
-    if(desactivatedAnnouncementsData) {
-        let announcementsJson = {}
-        
-        const announcementDataArray = await destructureAnnouncementJson(desactivatedAnnouncementsData)
-
-        announcementsJson = await Promise.all(announcementDataArray)
-        return { status: 200, message: announcementsJson }
-    } else
-        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+const listDesactivatedAnnouncements = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const desactivatedAnnouncementsData = await announcementModel.selectDesactivatedAnnouncements(userId)
+    
+        if(desactivatedAnnouncementsData) {
+            let announcementsJson = {}
+            
+            const announcementDataArray = await destructureAnnouncementJson(desactivatedAnnouncementsData)
+    
+            announcementsJson = await Promise.all(announcementDataArray)
+            return { status: 200, message: announcementsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
 }
 
 const listAnnouncementsByGenres = async (userId) => {
