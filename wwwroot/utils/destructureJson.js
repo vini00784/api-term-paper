@@ -62,7 +62,40 @@ const destructureShortStorieJson = async (json) => {
     return shortStoriesDataArray
 }
 
+const destructureUserJson = async (json) => {
+    const { selectGenreByUserId } = require('../models/DAO/genre.js')
+    const { selectTagByUserId } = require('../models/DAO/tag.js')
+    const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+    const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
+
+    const userDataArray = json.map(async userItem => {
+        const userTagArrayData = await selectTagByUserId(userItem.id)
+        const userGenreArrayData = await selectGenreByUserId(userItem.id)
+        const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+        const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
+
+        if(userTagArrayData) {
+            userItem.tags = userTagArrayData
+
+            if(userGenreArrayData) {
+                userItem.generos = userGenreArrayData
+
+                if(userAnnouncementArrayData) {
+                    userItem.anuncios = userAnnouncementArrayData
+    
+                    if(userShortStorieArrayData)
+                        userItem.historias_curtas = userShortStorieArrayData
+                }
+            }
+        }
+        return userItem
+    })
+
+    return userDataArray
+}
+
 module.exports = {
     destructureAnnouncementJson,
-    destructureShortStorieJson
+    destructureShortStorieJson,
+    destructureUserJson
 }
