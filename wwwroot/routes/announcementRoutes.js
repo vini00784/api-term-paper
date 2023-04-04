@@ -254,4 +254,23 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/announcements/announcement-title/:announcementTitle')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let announcementTitle = req.params.announcementTitle
+
+        const announcementsData = await announcementController.listAnnouncementsByTitleName(announcementTitle)
+
+        if(announcementsData) {
+            statusCode = announcementsData.status
+            message = announcementsData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
 module.exports = router
