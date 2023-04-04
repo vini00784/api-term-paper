@@ -264,7 +264,7 @@ const selectAnnouncementsByGenres = async (genresId) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_anuncio.id_usuario
      
-        WHERE tbl_genero_anuncio.id_genero in(${genresId})
+        WHERE tbl_genero_anuncio.id_genero in(${genresId}) AND tbl_anuncio.status = true
         ORDER BY tbl_anuncio.id DESC`
 
         const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
@@ -290,7 +290,7 @@ const selectAnnouncementByGenresName = async (genreName) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_anuncio.id_usuario
      
-        WHERE LOCATE('${genreName}', tbl_generos.nome)
+        WHERE LOCATE('${genreName}', tbl_generos.nome) AND tbl_anuncio.status = true
         ORDER BY tbl_anuncio.id DESC`
 
         const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
@@ -306,7 +306,7 @@ const selectAnnouncementByGenresName = async (genreName) => {
 
 const selectAnnouncementByTitleName = async (announcementTitle) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi FROM tbl_anuncio WHERE LOCATE('${announcementTitle}', titulo)`
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi FROM tbl_anuncio WHERE LOCATE('${announcementTitle}', titulo) AND tbl_anuncio.status = true`
 
         const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
 
