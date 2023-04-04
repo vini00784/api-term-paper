@@ -253,7 +253,7 @@ const selectShortStoriesByGenres = async (genresId) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_historia_curta.id_usuario
      
-        WHERE tbl_genero_historia_curta.id_genero in(${genresId})
+        WHERE tbl_genero_historia_curta.id_genero in(${genresId}) AND tbl_historia_curta.status = true
         ORDER BY tbl_historia_curta.id DESC`
 
         const rsShortStories = await prisma.$queryRawUnsafe(sql)
@@ -279,8 +279,23 @@ const selectShortStoriesByGenresName = async (genreName) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_historia_curta.id_usuario
      
-        WHERE LOCATE('${genreName}', tbl_generos.nome)
+        WHERE LOCATE('${genreName}', tbl_generos.nome) AND tbl_historia_curta.status = true
         ORDER BY tbl_historia_curta.id DESC`
+
+        const rsShortStories = await prisma.$queryRawUnsafe(sql)
+
+        if(rsShortStories.length > 0)
+            return rsShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectShortStorieByTitleName = async (shortStorieTitle) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta WHERE LOCATE('${shortStorieTitle}', titulo) AND tbl_historia_curta.status = true`
 
         const rsShortStories = await prisma.$queryRawUnsafe(sql)
 
@@ -307,5 +322,6 @@ module.exports = {
     selectActivatedShortStories,
     selectDesactivatedShortStories,
     selectShortStoriesByGenres,
-    selectShortStoriesByGenresName
+    selectShortStoriesByGenresName,
+    selectShortStorieByTitleName
 }

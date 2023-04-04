@@ -222,12 +222,30 @@ const listShortStoriesByGenresName = async (genreName) => {
         const shortStoriesByGenreName = await shortStorieModel.selectShortStoriesByGenresName(genreName)
 
         if(shortStoriesByGenreName) {
-            let shrotStoriesJson = {}
+            let shortStoriesJson = {}
 
             const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByGenreName)
             
-            shrotStoriesJson = await Promise.all(shortStoriesDataArray)
-            return { status: 200, message: shrotStoriesJson }
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
+const listShortStoriesByTitleName = async (shortStorieTitle) => {
+    if(shortStorieTitle == '' || shortStorieTitle == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const shortStoriesByTitleName = await shortStorieModel.selectShortStorieByTitleName(shortStorieTitle)
+
+        if(shortStoriesByTitleName) {
+            let shortStoriesJson = {}
+
+            const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByTitleName)
+
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
     }
@@ -244,5 +262,6 @@ module.exports = {
     listActivatedShortStories,
     listDesactivatedShortStories,
     listShortStoriesByGenres,
-    listShortStoriesByGenresName
+    listShortStoriesByGenresName,
+    listShortStoriesByTitleName
 }
