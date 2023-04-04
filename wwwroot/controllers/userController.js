@@ -17,6 +17,9 @@ const userTagModel = require('../models/DAO/userTag.js')
 // user_genre model
 const userGenreModel = require('../models/DAO/userGenre.js')
 
+// Function to destructure announcement json
+const { destructureUserJson } = require('../utils/destructureJson.js')
+
 const newUser = async (user) => {
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined || user.uid == ''|| user.uid == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -152,33 +155,7 @@ const selectUserByUsername = async (userName) => {
         if(userByUsername) {
             let userByUsernameJson = {}
 
-            const { selectGenreByUserId } = require('../models/DAO/genre.js')
-            const { selectTagByUserId } = require('../models/DAO/tag.js')
-            const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
-            const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
-
-            const userDataArray = userByUsername.map(async userItem => {
-                const userTagArrayData = await selectTagByUserId(userItem.id)
-                const userGenreArrayData = await selectGenreByUserId(userItem.id)
-                const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
-                const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
-
-                if(userTagArrayData) {
-                    userItem.tags = userTagArrayData
-
-                    if(userGenreArrayData) {
-                        userItem.generos = userGenreArrayData
-
-                        if(userAnnouncementArrayData) {
-                            userItem.anuncios = userAnnouncementArrayData
-    
-                            if(userShortStorieArrayData)
-                                userItem.historias_curtas = userShortStorieArrayData
-                        }
-                    }
-                }
-                return userItem
-            })
+            const userDataArray = await destructureUserJson(userByUsername)
 
             userByUsernameJson.user = await Promise.all(userDataArray)
             return {status: 200, message: userByUsernameJson}
@@ -189,39 +166,12 @@ const selectUserByUsername = async (userName) => {
 }
 
 const listAllUsers = async () => {
-    let usersJson = {}
-
-    const { selectGenreByUserId } = require('../models/DAO/genre.js')
-    const { selectTagByUserId } = require('../models/DAO/tag.js')
-    const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
-    const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
-
     const usersData = await userModel.selectAllUsers()
-
+    
     if(usersData) {
-        const usersDataArray = usersData.map(async userItem => {
-            const userTagArrayData = await selectTagByUserId(userItem.id)
-            const userGenreArrayData = await selectGenreByUserId(userItem.id)
-            const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
-            const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
+        let usersJson = {}
 
-            if(userTagArrayData) {
-                userItem.tags = userTagArrayData
-
-                if(userGenreArrayData) {
-                    userItem.generos = userGenreArrayData
-
-                    if(userAnnouncementArrayData) {
-                        userItem.anuncios = userAnnouncementArrayData
-
-                        if(userShortStorieArrayData)
-                            userItem.historias_curtas = userShortStorieArrayData
-                    }
-                }
-            }
-
-            return userItem
-        })
+        const usersDataArray = await destructureUserJson(usersData)
 
         usersJson.users = await Promise.all(usersDataArray)
         return {status: 200, message: usersJson}
@@ -253,38 +203,11 @@ const searchUserByID = async (userId) => {
 
         if(userData) {
             let userJson = {}
+            
+            const userDataArray = await destructureUserJson(userData)
 
-            const { selectGenreByUserId } = require('../models/DAO/genre.js')
-            const { selectTagByUserId } = require('../models/DAO/tag.js')
-            const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
-            const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
-
-            if(userData) {
-                const userDataArray = userData.map(async userItem => {
-                    const userTagArrayData = await selectTagByUserId(userItem.id)
-                    const userGenreArrayData = await selectGenreByUserId(userItem.id)
-                    const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
-                    const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
-
-                    if(userTagArrayData) {
-                        userItem.tags = userTagArrayData
-
-                        if(userGenreArrayData) {
-                            userItem.generos = userGenreArrayData
-
-                            if(userAnnouncementArrayData) {
-                                userItem.anuncios = userAnnouncementArrayData
-        
-                                if(userShortStorieArrayData)
-                                    userItem.historias_curtas = userShortStorieArrayData
-                            }
-                        }
-                    }
-                    return userItem
-                })
-                userJson = await Promise.all(userDataArray)
-                return {status: 200, message: userJson[0]}
-            }
+            userJson = await Promise.all(userDataArray)
+            return {status: 200, message: userJson[0]}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB} 
     } else 
