@@ -166,18 +166,22 @@ const listActivatedShortStories = async () => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
-const listDesactivatedShortStories = async () => {
-    const desactivatedShortStoriesData = await shortStorieModel.selectDesactivatedShortStories()
-    
-    if(desactivatedShortStoriesData) {
-        let shortStoriesJson = {}
-
-        const shortStoriesDataArray = await destructureShortStorieJson(desactivatedShortStoriesData)
+const listDesactivatedShortStories = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const desactivatedShortStoriesData = await shortStorieModel.selectDesactivatedShortStories(userId)
         
-        shortStoriesJson = await Promise.all(shortStoriesDataArray)
-        return { status: 200, message: shortStoriesJson }
-    } else
-        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        if(desactivatedShortStoriesData) {
+            let shortStoriesJson = {}
+    
+            const shortStoriesDataArray = await destructureShortStorieJson(desactivatedShortStoriesData)
+            
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
 }
 
 const listShortStoriesByGenres = async (userId) => {

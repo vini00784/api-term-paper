@@ -195,20 +195,27 @@ router
     })
 
 router
-    .route('/desactivated-short-stories')
+    .route('/desactivated-short-stories/user-id/:userId')
     .get(async(req, res) => {
         let statusCode
         let message
+        let userId = req.params.userId
 
-        const desactivatedShortStories = await shortStorieController.listDesactivatedShortStories()
-
-        if(desactivatedShortStories) {
-            statusCode = desactivatedShortStories.status
-            message = desactivatedShortStories.message
+        if(userId != '' && userId != undefined) {
+            const desactivatedShortStories = await shortStorieController.listDesactivatedShortStories(userId)
+    
+            if(desactivatedShortStories) {
+                statusCode = desactivatedShortStories.status
+                message = desactivatedShortStories.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
         } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
+
 
         res.status(statusCode).json(message)
     })
