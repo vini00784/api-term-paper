@@ -239,7 +239,8 @@ const selectDesactivatedAnnouncements = async (userId) => {
         INNER JOIN tbl_usuario
             ON tbl_usuario.id = tbl_anuncio.id_usuario
             
-        WHERE tbl_usuario.id = ${userId} AND tbl_anuncio.status = false`
+        WHERE tbl_usuario.id = ${userId} AND tbl_anuncio.status = false
+        ORDER BY tbl_anuncio.id DESC`
 
         const rsDesactivatedAnnouncements = await prisma.$queryRawUnsafe(sql)
 
