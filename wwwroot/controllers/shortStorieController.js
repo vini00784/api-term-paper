@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Short storie model
 const shortStorieModel = require('../models/DAO/shortStorie.js')
 
+// Short storie like
+const shortStorieLikeModel = require('../models/DAO/shortStorieLike.js')
+
 // Function to destructure short storie json
 const { destructureShortStorieJson } = require('../utils/destructureJson.js')
 
@@ -255,6 +258,19 @@ const listShortStoriesByTitleName = async (shortStorieTitle) => {
     }
 }
 
+const likeShortStorie = async (shortStorieLike) => {
+    if(shortStorieLike.id_historia_curta == '' || shortStorieLike.id_historia_curta == undefined || shortStorieLike.id_usuario == '' || shortStorieLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newShortStorieLike = await shortStorieLikeModel.insertShortStorieLike(shortStorieLike)
+
+        if(newShortStorieLike)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -267,5 +283,6 @@ module.exports = {
     listDesactivatedShortStories,
     listShortStoriesByGenres,
     listShortStoriesByGenresName,
-    listShortStoriesByTitleName
+    listShortStoriesByTitleName,
+    likeShortStorie
 }
