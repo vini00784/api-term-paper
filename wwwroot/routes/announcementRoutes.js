@@ -282,7 +282,7 @@ router
 
 router
     .route('/like-announcement')
-    .put(jsonParser, async (req, res) => {
+    .post(jsonParser, async (req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
