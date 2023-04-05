@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Announcement model
 const announcementModel = require('../models/DAO/announcement.js')
 
+// Announcement like
+const announcementLikeModel = require('../models/DAO/announcementLike.js')
+
 // Function to destructure announcement json
 const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
 const e = require('express')
@@ -258,6 +261,19 @@ const listAnnouncementsByTitleName = async (announcementTitle) => {
     }
 }
 
+const likeAnnouncement = async (announcementLike) => {
+    if(announcementLike.id_anuncio == '' || announcementLike.id_anuncio == undefined || announcementLike.id_usuario == '' || announcementLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newAnnouncementLike = await announcementLikeModel.insertAnnouncementLike(announcementLike)
+
+        if(newAnnouncementLike)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -270,5 +286,6 @@ module.exports = {
     listDesactivatedAnnouncements,
     listAnnouncementsByGenres,
     listAnnouncementsByGenresName,
-    listAnnouncementsByTitleName
+    listAnnouncementsByTitleName,
+    likeAnnouncement
 }
