@@ -274,6 +274,21 @@ const likeAnnouncement = async (announcementLike) => {
     }
 }
 
+const countAnnouncementLikes = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementLikes = await announcementLikeModel.countAnnouncementLikes(announcementId)
+
+        if(announcementLikes) {
+            let likesJson = {}
+
+            likesJson = announcementLikes
+            return { status: 200, message: likesJson }
+        }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -287,5 +302,6 @@ module.exports = {
     listAnnouncementsByGenres,
     listAnnouncementsByGenresName,
     listAnnouncementsByTitleName,
-    likeAnnouncement
+    likeAnnouncement,
+    countAnnouncementLikes
 }
