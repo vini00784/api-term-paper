@@ -45,11 +45,23 @@ const countAnnouncementLikes = async (announcementId) => {
     }
 }
 
-const deleteAnnouncementLike = async () => {
+const deleteAnnouncementLike = async (announcementLike) => {
+    try {
+        let sql = `DELETE FROM tbl_anuncio_curtida WHERE id_anuncio = ${announcementLike.id_anuncio} AND id_usuario = ${announcementLike.id_usuario}`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
     insertAnnouncementLike,
-    countAnnouncementLikes
+    countAnnouncementLikes,
+    deleteAnnouncementLike
 }

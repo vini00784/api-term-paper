@@ -284,8 +284,25 @@ const countAnnouncementLikes = async (announcementId) => {
             let likesJson = {}
 
             likesJson = announcementLikes
-            return { status: 200, message: likesJson }
+
+            if(likesJson.id_anuncio == null || likesJson.id_anuncio == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: likesJson[0] }
         }
+    }
+}
+
+const dislikeAnnouncement = async (announcementLike) => {
+    if(announcementLike.id_anuncio == '' || announcementLike.id_anuncio == undefined || announcementLike.id_usuario == '' || announcementLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const dislikeAnnouncement = await announcementLikeModel.deleteAnnouncementLike(announcementLike)
+
+        if(dislikeAnnouncement)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
 }
 
@@ -303,5 +320,6 @@ module.exports = {
     listAnnouncementsByGenresName,
     listAnnouncementsByTitleName,
     likeAnnouncement,
-    countAnnouncementLikes
+    countAnnouncementLikes,
+    dislikeAnnouncement
 }
