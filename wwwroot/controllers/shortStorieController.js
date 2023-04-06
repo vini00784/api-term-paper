@@ -290,6 +290,19 @@ const countShortStorieLikes = async (shortStorieId) => {
     }
 }
 
+const dislikeShortStorie = async (shortStorieLike) => {
+    if(shortStorieLike.id_historia_curta == '' || shortStorieLike.id_historia_curta == undefined || shortStorieLike.id_usuario == '' || shortStorieLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const dislikeShortStorie = await shortStorieLikeModel.deleteShortStorieLike(shortStorieLike)
+
+        if(dislikeShortStorie)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -304,5 +317,6 @@ module.exports = {
     listShortStoriesByGenresName,
     listShortStoriesByTitleName,
     likeShortStorie,
-    countShortStorieLikes
+    countShortStorieLikes,
+    dislikeShortStorie
 }
