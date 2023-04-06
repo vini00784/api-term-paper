@@ -17,6 +17,9 @@ const shortStorieLikeModel = require('../models/DAO/shortStorieLike.js')
 // Short storie favorite model
 const shortStorieFavoriteModel = require('../models/DAO/shortStorieFavorite.js')
 
+// Short storie read model
+const shortStorieReadModel = require('../models/DAO/shortStorieRead.js')
+
 // Function to destructure short storie json
 const { destructureShortStorieJson } = require('../utils/destructureJson.js')
 
@@ -352,6 +355,19 @@ const unfavoriteShortStorie = async (shortStorieFavorite) => {
     }
 }
 
+const markShortStorieAsRead = async (shortStorieRead) => {
+    if(shortStorieRead.id_historia_curta == '' || shortStorieRead.id_historia_curta == undefined || shortStorieRead.id_usuario == '' || shortStorieRead.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newShortStorieRead = await shortStorieReadModel.insertShortStorieRead(shortStorieRead)
+
+        if(newShortStorieRead)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -370,5 +386,6 @@ module.exports = {
     dislikeShortStorie,
     favoriteShortStorie,
     countShortStorieFavorites,
-    unfavoriteShortStorie
+    unfavoriteShortStorie,
+    markShortStorieAsRead
 }
