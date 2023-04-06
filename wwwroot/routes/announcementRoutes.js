@@ -386,4 +386,29 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/count-announcement-favorites/announcement-id/:announcementId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let announcementId = req.params.announcementId
+
+        if(announcementId != ''&& announcementId != undefined) {
+            const announcementFavorites = await announcementController.countAnnouncementFavorites(announcementId)
+
+            if(announcementFavorites) {
+                statusCode = announcementFavorites.status
+                message = announcementFavorites.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

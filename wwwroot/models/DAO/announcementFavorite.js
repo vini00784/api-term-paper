@@ -31,7 +31,18 @@ const insertAnnouncementFavorite = async (announcementFavorite) => {
 }
 
 const countAnnouncementFavorites = async (announcementId) => {
-    
+    try {
+        let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_anuncio_favorito WHERE id_anuncio = ${announcementId}`
+
+        const rsFavorites = await prisma.$queryRawUnsafe(sql)
+
+        if(rsFavorites.length > 0)
+            return rsFavorites[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const deleteAnnouncementFavorite = async (announcementFavorite) => {
@@ -39,5 +50,6 @@ const deleteAnnouncementFavorite = async (announcementFavorite) => {
 }
 
 module.exports = {
-    insertAnnouncementFavorite
+    insertAnnouncementFavorite,
+    countAnnouncementFavorites
 }

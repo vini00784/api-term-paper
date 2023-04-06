@@ -322,6 +322,25 @@ const favoriteAnnouncement = async (announcementFavorite) => {
     }
 }
 
+const countAnnouncementFavorites = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementFavorites = await announcementFavoriteModel.countAnnouncementFavorites(announcementId)
+
+        if(announcementFavorites) {
+            let favoritesJson = {}
+
+            favoritesJson = announcementFavorites
+
+            if(favoritesJson.id_anuncio == null || favoritesJson.id_anuncio == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: favoritesJson }
+        }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -338,5 +357,6 @@ module.exports = {
     likeAnnouncement,
     countAnnouncementLikes,
     dislikeAnnouncement,
-    favoriteAnnouncement
+    favoriteAnnouncement,
+    countAnnouncementFavorites
 }
