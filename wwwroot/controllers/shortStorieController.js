@@ -339,6 +339,19 @@ const countShortStorieFavorites = async (shortStorieId) => {
     }
 }
 
+const unfavoriteShortStorie = async (shortStorieFavorite) => {
+    if(shortStorieFavorite.id_historia_curta == '' || shortStorieFavorite.id_historia_curta == undefined || shortStorieFavorite.id_usuario == '' || shortStorieFavorite.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const unfavoriteShortStorie = await shortStorieFavoriteModel.deleteShortStorieFavorite(shortStorieFavorite)
+
+        if(unfavoriteShortStorie)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -356,5 +369,6 @@ module.exports = {
     countShortStorieLikes,
     dislikeShortStorie,
     favoriteShortStorie,
-    countShortStorieFavorites
+    countShortStorieFavorites,
+    unfavoriteShortStorie
 }
