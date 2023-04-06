@@ -316,7 +316,6 @@ router
 
         if(shortStorieId != ''&& shortStorieId != undefined) {
             const shortStorieLikes = await shortStorieController.countShortStorieLikes(shortStorieId)
-            console.log(shortStorieLikes)
 
             if(shortStorieLikes) {
                 statusCode = shortStorieLikes.status
