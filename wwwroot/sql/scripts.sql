@@ -344,4 +344,4 @@ SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_an
 
 SELECT * FROM tbl_curtida_historia_curta;
 
-SELECT * FROM tbl_anuncio_curtida;
+SELECT * FROM tbl_anuncio_favorito;

@@ -11,8 +11,11 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Announcement model
 const announcementModel = require('../models/DAO/announcement.js')
 
-// Announcement like
+// Announcement like model
 const announcementLikeModel = require('../models/DAO/announcementLike.js')
+
+// Announcement like model
+const announcementFavoriteModel = require('../models/DAO/announcementFavorite.js')
 
 // Function to destructure announcement json
 const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
@@ -306,6 +309,19 @@ const dislikeAnnouncement = async (announcementLike) => {
     }
 }
 
+const favoriteAnnouncement = async (announcementFavorite) => {
+    if(announcementFavorite.id_anuncio == '' || announcementFavorite.id_anuncio == undefined || announcementFavorite.id_usuario == '' || announcementFavorite.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newAnnouncementFavorite = await announcementFavoriteModel.insertAnnouncementFavorite(announcementFavorite)
+
+        if(newAnnouncementFavorite)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -321,5 +337,6 @@ module.exports = {
     listAnnouncementsByTitleName,
     likeAnnouncement,
     countAnnouncementLikes,
-    dislikeAnnouncement
+    dislikeAnnouncement,
+    favoriteAnnouncement
 }
