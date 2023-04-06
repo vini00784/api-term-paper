@@ -11,8 +11,11 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Short storie model
 const shortStorieModel = require('../models/DAO/shortStorie.js')
 
-// Short storie like
+// Short storie like model
 const shortStorieLikeModel = require('../models/DAO/shortStorieLike.js')
+
+// Short storie favorite model
+const shortStorieFavoriteModel = require('../models/DAO/shortStorieFavorite.js')
 
 // Function to destructure short storie json
 const { destructureShortStorieJson } = require('../utils/destructureJson.js')
@@ -303,6 +306,19 @@ const dislikeShortStorie = async (shortStorieLike) => {
     }
 }
 
+const favoriteShortStorie = async (shortStorieFavorite) => {
+    if(shortStorieFavorite.id_historia_curta == '' || shortStorieFavorite.id_historia_curta == undefined || shortStorieFavorite.id_usuario == '' || shortStorieFavorite.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newShortStorieFavorite = await shortStorieFavoriteModel.insertShortStorieFavorite(shortStorieFavorite)
+
+        if(newShortStorieFavorite)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -318,5 +334,6 @@ module.exports = {
     listShortStoriesByTitleName,
     likeShortStorie,
     countShortStorieLikes,
-    dislikeShortStorie
+    dislikeShortStorie,
+    favoriteShortStorie
 }
