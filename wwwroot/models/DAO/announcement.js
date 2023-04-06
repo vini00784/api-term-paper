@@ -44,7 +44,6 @@ const insertAnnouncement = async (announcement, genresId) => {
 }
 
 const updateAnnouncement = async (announcement, genresId) => {
-    console.log(genresId)
     try {
         let sql = `CALL proc_update_anuncio (
             ${announcement.id},
