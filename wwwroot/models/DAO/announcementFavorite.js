@@ -46,10 +46,22 @@ const countAnnouncementFavorites = async (announcementId) => {
 }
 
 const deleteAnnouncementFavorite = async (announcementFavorite) => {
+    try {
+        let sql = `DELETE FROM tbl_anuncio_favorito WHERE id_anuncio = ${announcementFavorite.id_anuncio} AND id_usuario = ${announcementFavorite.id_usuario}`
 
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
     insertAnnouncementFavorite,
-    countAnnouncementFavorites
+    countAnnouncementFavorites,
+    deleteAnnouncementFavorite
 }
