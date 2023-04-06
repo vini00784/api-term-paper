@@ -55,13 +55,14 @@ const newShortStorie = async (shortStorie) => {
 }
 
 const updateShortStorie = async (shortStorie) => {
-    if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.status == '' || shortStorie.status == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.premium == '' || shortStorie.premium == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
+    if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.status == '' || shortStorie.status == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(shortStorie.titulo.length > 50 || shortStorie.sinopse.length > 200 || shortStorie.capa.length > 500)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const currentDate = new Date().toJSON().slice(0, 10)
         shortStorie.data = currentDate
+        shortStorie.premium = 0
 
         let shortStorieGenresLength = shortStorie.generos.length
         let genresId = ""
@@ -319,6 +320,25 @@ const favoriteShortStorie = async (shortStorieFavorite) => {
     }
 }
 
+const countShortStorieFavorites = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const shortStorieFavorites = await shortStorieFavoriteModel.countShortStorieFavorites(shortStorieId)
+
+        if(shortStorieFavorites) {
+            let favoritesJson = {}
+            
+            favoritesJson = shortStorieFavorites
+
+            if(favoritesJson.id_historia_curta == null || favoritesJson.id_historia_curta == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: favoritesJson }
+        }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -335,5 +355,6 @@ module.exports = {
     likeShortStorie,
     countShortStorieLikes,
     dislikeShortStorie,
-    favoriteShortStorie
+    favoriteShortStorie,
+    countShortStorieFavorites
 }
