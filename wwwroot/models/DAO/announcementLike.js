@@ -37,7 +37,7 @@ const countAnnouncementLikes = async (announcementId) => {
         const rsLikes = await prisma.$queryRawUnsafe(sql)
 
         if(rsLikes.length > 0)
-            return rsLikes
+            return rsLikes[0]
         else
             return false
     } catch (err) {

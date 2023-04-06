@@ -288,7 +288,7 @@ const countAnnouncementLikes = async (announcementId) => {
             if(likesJson.id_anuncio == null || likesJson.id_anuncio == undefined)
                 return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
             else
-                return { status: 200, message: likesJson[0] }
+                return { status: 200, message: likesJson }
         }
     }
 }
