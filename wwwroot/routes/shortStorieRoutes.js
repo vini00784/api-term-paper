@@ -307,4 +307,30 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/count-short-stories-likes/short-storie-id/:shortStorieId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let shortStorieId = req.params.shortStorieId
+
+        if(shortStorieId != ''&& shortStorieId != undefined) {
+            const shortStorieLikes = await shortStorieController.countShortStorieLikes(shortStorieId)
+            console.log(shortStorieLikes)
+
+            if(shortStorieLikes) {
+                statusCode = shortStorieLikes.status
+                message = shortStorieLikes.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

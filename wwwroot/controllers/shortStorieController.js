@@ -271,6 +271,25 @@ const likeShortStorie = async (shortStorieLike) => {
     }
 }
 
+const countShortStorieLikes = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const shortStorieLikes = await shortStorieLikeModel.countShortStorieLikes(shortStorieId)
+
+        if(shortStorieLikes) {
+            let likesJson = {}
+            
+            likesJson = shortStorieLikes
+
+            if(likesJson.id_historia_curta == null || likesJson.id_historia_curta == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: likesJson }
+        }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -284,5 +303,6 @@ module.exports = {
     listShortStoriesByGenres,
     listShortStoriesByGenresName,
     listShortStoriesByTitleName,
-    likeShortStorie
+    likeShortStorie,
+    countShortStorieLikes
 }

@@ -31,7 +31,18 @@ const insertShortStorieLike = async (shortStorieLike) => {
 }
 
 const countShortStorieLikes = async (shortStorieId) => {
-    
+    try {
+        let sql = `SELECT id_historia_curta, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_curtida_historia_curta WHERE id_historia_curta = ${shortStorieId}`
+
+        const rsLikes = await prisma.$queryRawUnsafe(sql)
+
+        if(rsLikes.length > 0)
+            return rsLikes[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const deleteShortStorieLike = async (shortStorieId) => {
@@ -39,5 +50,6 @@ const deleteShortStorieLike = async (shortStorieId) => {
 }
 
 module.exports = {
-    insertShortStorieLike
+    insertShortStorieLike,
+    countShortStorieLikes
 }
