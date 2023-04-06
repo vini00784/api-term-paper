@@ -340,4 +340,8 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
         WHERE LOCATE('romance', tbl_generos.nome)
         ORDER BY tbl_anuncio.id DESC;
 
-SELECT COUNT(id) FROM tbl_anuncio_curtida WHERE id_anuncio = 58;
+SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_anuncio_curtida WHERE id_anuncio = 58;
+
+SELECT * FROM tbl_curtida_historia_curta;
+
+SELECT * FROM tbl_anuncio_curtida;
