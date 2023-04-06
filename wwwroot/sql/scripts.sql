@@ -342,6 +342,47 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
 
 SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_anuncio_curtida WHERE id_anuncio = 58;
 
-SELECT * FROM tbl_curtida_historia_curta;
+SELECT * FROM tbl_favorito_historia_curta;
 
-SELECT * FROM tbl_anuncio_favorito;
+SELECT * FROM tbl_genero_anuncio;
+
+SELECT cast(tbl_generos.id AS DECIMAL) AS id_genero, tbl_generos.nome
+        FROM tbl_genero_anuncio
+     
+        INNER JOIN tbl_generosxwxw
+           ON tbl_generos.id = tbl_genero_anuncio.id_genero
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
+     
+        WHERE tbl_genero_anuncio.id_anuncio = 51;
+        
+CALL proc_update_anuncio (
+            58,
+            'As aventuras de Neymar Júnior', 
+            1, 
+            'https://i.pinimg.com/736x/18/6f/73/186f73bbfb0d406a869bdfa9d8002ba7.jpg', 
+            'Certo dia, Nadine Santos deu a luz a um menino chamado Neymar Júnior, o resto é história...',
+            '2023-04-06',
+            435,
+            25.6,
+            'neymar_junior.pdf',
+            'neymar_junior.epub',
+            'neymar_junior.mobi',
+            14,
+            83,
+            1,
+            '(58, 1)'
+        );
+        
+SELECT * FROM tbl_genero_anuncio;
+
+DESC tbl_quantidade_lidos_historia_curta;
+
+INSERT INTO tbl_quantidade_lidos_historia_curta (id_historia_curta, id_usuario, id)
+                                                    values (
+                                                        13,
+                                                        83,
+                                                        1
+                                                    );
+
+ALTER TABLE tbl_quantidade_lidos_historia_curta MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE;
