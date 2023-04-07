@@ -368,6 +368,25 @@ const markShortStorieAsRead = async (shortStorieRead) => {
     }
 }
 
+const countShortStorieReads = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const shortStorieReads = await shortStorieReadModel.countShortStorieReads(shortStorieId)
+
+        if(shortStorieReads) {
+            let readsJson = {}
+            
+            readsJson = shortStorieReads
+
+            if(readsJson.id_historia_curta == null || readsJson.id_historia_curta == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: readsJson }
+        }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -387,5 +406,6 @@ module.exports = {
     favoriteShortStorie,
     countShortStorieFavorites,
     unfavoriteShortStorie,
-    markShortStorieAsRead
+    markShortStorieAsRead,
+    countShortStorieReads
 }
