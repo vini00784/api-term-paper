@@ -386,3 +386,5 @@ INSERT INTO tbl_quantidade_lidos_historia_curta (id_historia_curta, id_usuario, 
                                                     );
 
 ALTER TABLE tbl_quantidade_lidos_historia_curta MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE;
+
+SELECT * FROM tbl_quantidade_lidos_anuncio;
