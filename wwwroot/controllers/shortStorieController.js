@@ -387,6 +387,19 @@ const countShortStorieReads = async (shortStorieId) => {
     }
 }
 
+const unreadShortStorie = async (shortStorieRead) => {
+    if(shortStorieRead.id_historia_curta == '' || shortStorieRead.id_historia_curta == undefined || shortStorieRead.id_usuario == '' || shortStorieRead.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const unreadShortStorie = await shortStorieReadModel.deleteShortStorieRead(shortStorieRead)
+
+        if(unreadShortStorie)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -407,5 +420,6 @@ module.exports = {
     countShortStorieFavorites,
     unfavoriteShortStorie,
     markShortStorieAsRead,
-    countShortStorieReads
+    countShortStorieReads,
+    unreadShortStorie
 }

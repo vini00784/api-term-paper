@@ -47,10 +47,22 @@ const countShortStorieReads = async (shortStorieId) => {
 }
 
 const deleteShortStorieRead = async (shortStorieRead) => {
-    
+    try {
+        let sql = `DELETE FROM tbl_quantidade_lidos_historia_curta WHERE id_historia_curta = ${shortStorieRead.id_historia_curta} AND id_usuario = ${shortStorieRead.id_usuario}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
     insertShortStorieRead,
-    countShortStorieReads
+    countShortStorieReads,
+    deleteShortStorieRead
 }
