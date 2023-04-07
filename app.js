@@ -41,7 +41,7 @@ app.use(shortStorieRouter)
 // Using routers
 
 app.get('/', (req, res) => {
-    res.status(200).statusMessage({
+    res.status(200).json({
         message: 'TESTE'
     })
 })
