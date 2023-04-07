@@ -31,7 +31,18 @@ const insertAnnouncementRead = async (announcementRead) => {
 }
 
 const countAnnouncementReads = async (announcementId) => {
-    
+    try {
+        let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_lido FROM tbl_quantidade_lidos_anuncio WHERE id_anuncio = ${announcementId}`
+
+        const rsReads = await prisma.$queryRawUnsafe(sql)
+
+        if(rsReads.length > 0)
+            return rsReads[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 const deleteAnnouncementRead = async (announcementRead) => {
@@ -39,5 +50,6 @@ const deleteAnnouncementRead = async (announcementRead) => {
 }
 
 module.exports = {
-    insertAnnouncementRead
+    insertAnnouncementRead,
+    countAnnouncementReads
 }

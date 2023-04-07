@@ -370,6 +370,25 @@ const markAnnouncementAsRead = async (annoucementRead) => {
     }
 }
 
+const countAnnouncementReads = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementReads = await announcementReadModel.countAnnouncementReads(announcementId)
+
+        if(announcementReads) {
+            let readsJson = {}
+
+            readsJson = announcementReads
+
+            if(readsJson.id_anuncio == null || readsJson.id_anuncio == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: readsJson }
+        }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -389,5 +408,6 @@ module.exports = {
     favoriteAnnouncement,
     countAnnouncementFavorites,
     unfavoriteAnnouncement,
-    markAnnouncementAsRead
+    markAnnouncementAsRead,
+    countAnnouncementReads
 }
