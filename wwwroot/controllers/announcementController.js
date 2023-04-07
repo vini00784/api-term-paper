@@ -389,6 +389,19 @@ const countAnnouncementReads = async (announcementId) => {
     }
 }
 
+const unreadAnnouncement = async (announcementRead) => {
+    if(announcementRead.id_anuncio == '' || announcementRead.id_anuncio == undefined || announcementRead.id_usuario == '' || announcementRead.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const unreadAnnouncement = await announcementReadModel.deleteAnnouncementRead(announcementRead)
+
+        if(unreadAnnouncement)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -409,5 +422,6 @@ module.exports = {
     countAnnouncementFavorites,
     unfavoriteAnnouncement,
     markAnnouncementAsRead,
-    countAnnouncementReads
+    countAnnouncementReads,
+    unreadAnnouncement
 }

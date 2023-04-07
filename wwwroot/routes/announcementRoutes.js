@@ -411,7 +411,7 @@ router
         res.status(statusCode).json(message)
     })
 
-    router
+router
     .route('/unfavorite-announcement')
     .delete(jsonParser, async(req, res) => {
         let statusCode
@@ -485,6 +485,33 @@ router
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
+    .route('/unread-announcement')
+    .delete(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let headerContentType = req.headers['content-type']
+
+        if(headerContentType == 'application/json') {
+            let bodyData = req.body
+
+            if(JSON.stringify(bodyData) != '{}') {
+                const unreadedAnnouncement = await announcementController.unreadAnnouncement(bodyData)
+
+                statusCode = unreadedAnnouncement.status
+                message = unreadedAnnouncement.message
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
 
         res.status(statusCode).json(message)
