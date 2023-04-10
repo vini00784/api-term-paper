@@ -3,6 +3,7 @@ const destructureAnnouncementJson = async (json) => {
     const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
     const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
     const { countAnnouncementLikes } = require('../models/DAO/announcementLike.js')
+    const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.JS')
 
     const announcementDataArray = json.map(async announcementItem => {
         const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
@@ -10,6 +11,7 @@ const destructureAnnouncementJson = async (json) => {
             const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
             const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
             const announcementLikesData = await countAnnouncementLikes(announcementItem.id)
+            const announcementFavoritesData = await countAnnouncementFavorites(announcementItem.id)
         
             if(announcementParentalRatingData) {
                 announcementItem.classificacao = announcementParentalRatingData
@@ -25,6 +27,9 @@ const destructureAnnouncementJson = async (json) => {
 
                             if(announcementLikesData)
                                 announcementItem.curtidas = announcementLikesData
+
+                            if(announcementFavoritesData)
+                                announcementItem.favoritos = announcementFavoritesData
                         }
                     }
                 }
