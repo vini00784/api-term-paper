@@ -376,7 +376,7 @@ CALL proc_update_anuncio (
         
 SELECT * FROM tbl_genero_anuncio;
 
-DESC tbl_quantidade_lidos_historia_curta;
+DESC tbl_genero_anuncio;
 
 INSERT INTO tbl_quantidade_lidos_historia_curta (id_historia_curta, id_usuario, id)
                                                     values (
@@ -388,3 +388,10 @@ INSERT INTO tbl_quantidade_lidos_historia_curta (id_historia_curta, id_usuario, 
 ALTER TABLE tbl_quantidade_lidos_historia_curta MODIFY COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE;
 
 SELECT * FROM tbl_quantidade_lidos_anuncio;
+
+INSERT INTO tbl_tipo_denuncia (tipo) values ('Conteúdo inapropriado'),
+                                            ('Violação dos direitos autorais (plágio)');   
+
+INSERT INTO tbl_genero_anuncio (id_anuncio, id_genero) values (57, 1);
+
+SELECT * FROM tbl_tipo_denuncia_denuncia_anuncio;
