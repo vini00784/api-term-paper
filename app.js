@@ -28,6 +28,7 @@ const tagRouter = require('./wwwroot/routes/tagRoutes.js')
 const announcementRouter = require('./wwwroot/routes/announcementRoutes.js')
 const parentalRatingRouter = require('./wwwroot/routes/parentalRatingRoutes.js')
 const shortStorieRouter = require('./wwwroot/routes/shortStorieRoutes.js')
+const complaintsRouter = require('./wwwroot/routes/complaintRoutes.js')
 
 // Using routers
 
@@ -37,6 +38,7 @@ app.use(tagRouter)
 app.use(announcementRouter)
 app.use(parentalRatingRouter)
 app.use(shortStorieRouter)
+app.use(complaintsRouter)
 
 // Using routers
 
