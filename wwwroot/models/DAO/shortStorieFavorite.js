@@ -32,7 +32,7 @@ const insertShortStorieFavorite = async (shortStorieFavorite) => {
 
 const countShortStorieFavorites = async (shortStorieId) => {
     try {
-        let sql = `SELECT id_historia_curta, cast(COUNT(id) AS DECIMAL) as quantidade_curtidas FROM tbl_favorito_historia_curta WHERE id_historia_curta = ${shortStorieId}`
+        let sql = `SELECT id_historia_curta, cast(COUNT(id) AS DECIMAL) as quantidade_favoritos FROM tbl_favorito_historia_curta WHERE id_historia_curta = ${shortStorieId}`
 
         const rsLikes = await prisma.$queryRawUnsafe(sql)
 
