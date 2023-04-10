@@ -334,7 +334,7 @@ router
 
 router
     .route('/dislike-announcement')
-    .delete(jsonParser, async(req, res) => {
+    .post(jsonParser, async(req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
@@ -413,7 +413,7 @@ router
 
 router
     .route('/unfavorite-announcement')
-    .delete(jsonParser, async(req, res) => {
+    .post(jsonParser, async(req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
@@ -492,7 +492,7 @@ router
 
 router
     .route('/unread-announcement')
-    .delete(jsonParser, async(req, res) => {
+    .post(jsonParser, async(req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
