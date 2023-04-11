@@ -102,12 +102,12 @@ const destructureUserJson = async (json) => {
             if(userGenreArrayData) {
                 userItem.generos = userGenreArrayData
 
-                if(userAnnouncementArrayData) {
+                if(userAnnouncementArrayData)
                     userItem.anuncios = userAnnouncementArrayData
     
-                    if(userShortStorieArrayData)
-                        userItem.historias_curtas = userShortStorieArrayData
-                }
+                if(userShortStorieArrayData)
+                    userItem.historias_curtas = userShortStorieArrayData
+                
             }
         }
         return userItem
