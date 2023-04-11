@@ -4,6 +4,7 @@ const destructureAnnouncementJson = async (json) => {
     const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
     const { countAnnouncementLikes } = require('../models/DAO/announcementLike.js')
     const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.JS')
+    const { countAnnouncementReads } = require('../models/DAO/announcementRead.js')
 
     const announcementDataArray = json.map(async announcementItem => {
         const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
@@ -12,6 +13,7 @@ const destructureAnnouncementJson = async (json) => {
             const announcementGenresData = await selectGenreByAnnouncementId(announcementItem.id)
             const announcementLikesData = await countAnnouncementLikes(announcementItem.id)
             const announcementFavoritesData = await countAnnouncementFavorites(announcementItem.id)
+            const announcementReadsData = await countAnnouncementReads(announcementItem.id)
         
             if(announcementParentalRatingData) {
                 announcementItem.classificacao = announcementParentalRatingData
@@ -25,11 +27,14 @@ const destructureAnnouncementJson = async (json) => {
                         if(announcementGenresData) {
                             announcementItem.generos = announcementGenresData
 
-                            if(announcementLikesData)
+                            if(announcementLikesData.quantidade_curtidas > 0)
                                 announcementItem.curtidas = announcementLikesData
 
-                            if(announcementFavoritesData)
+                            if(announcementFavoritesData.quantidade_favoritos > 0)
                                 announcementItem.favoritos = announcementFavoritesData
+
+                            if(announcementReadsData.quantidade_lido > 0)
+                                announcementItem.lidos = announcementReadsData
                         }
                     }
                 }
@@ -47,6 +52,7 @@ const destructureShortStorieJson = async (json) => {
     const { selectGenreByShortStorieId } = require('../models/DAO/genre.js')
     const { countShortStorieLikes } = require('../models/DAO/shortStorieLike.js')
     const { countShortStorieFavorites } = require('../models/DAO/shortStorieFavorite.js')
+    const { countShortStorieReads } = require('../models/DAO/shortStorieRead.js')
 
     const shortStoriesDataArray = json.map(async shortStorieItem => {
         const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
@@ -55,6 +61,7 @@ const destructureShortStorieJson = async (json) => {
         const shortStorieGenresData = await selectGenreByShortStorieId(shortStorieItem.id)
         const shortStorieLikesData = await countShortStorieLikes(shortStorieItem.id)
         const shortStorieFavoritesData = await countShortStorieFavorites(shortStorieItem.id)
+        const shortStorieReadsData = await countShortStorieReads(shortStorieItem.id)
 
         if(shortStorieParentalRatingData) {
             shortStorieItem.classificacao = shortStorieParentalRatingData
@@ -68,11 +75,14 @@ const destructureShortStorieJson = async (json) => {
                     if(shortStorieGenresData) {
                         shortStorieItem.generos = shortStorieGenresData
 
-                        if(shortStorieLikesData)
+                        if(shortStorieLikesData.quantidade_curtidas > 0)
                             shortStorieItem.curtidas = shortStorieLikesData
 
-                        if(shortStorieFavoritesData)
+                        if(shortStorieFavoritesData.quantidade_favoritos > 0)
                             shortStorieItem.favoritos = shortStorieFavoritesData
+                        
+                        if(shortStorieReadsData.quantidade_lidos > 0)
+                            shortStorieItem.lidos = shortStorieReadsData
                     }
                 }
             }
