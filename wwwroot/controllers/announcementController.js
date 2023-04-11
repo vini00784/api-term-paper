@@ -219,22 +219,14 @@ const listAnnouncementsByGenres = async (userId) => {
 
         const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
 
-        let filteredJson = announcementsByGenre.filter((element, index) => {
-            // return announcementsByGenre.indexOf(element) === index
-            console.log(element.id)
-        })
+        let filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id) === parseInt(element.id)
+        ))))
 
-        var clean = arr.filter((arr, index, self) =>
-        index === self.findIndex((t) => (t.save === arr.save && t.State === arr.State)))
-
-        console.log(clean);
-
-        // console.log(filteredJson)
-
-        if(announcementsByGenre) {
+        if(filteredJson) {
             let announcementsJson = {}
 
-            const announcementDataArray = await destructureAnnouncementJson(announcementsByGenre)
+            const announcementDataArray = await destructureAnnouncementJson(filteredJson)
 
             announcementsJson = await Promise.all(announcementDataArray)
             return { status: 200, message: announcementsJson }
