@@ -15,7 +15,7 @@ const insertShortStorieComplaint = async (shortStorieComplaint) => {
     try {
         let sql = `INSERT INTO tbl_denuncia_historia_curta (descricao, id_historia_curta) values (
             '${shortStorieComplaint.descricao}',
-            '${shortStorieComplaint.id_historia_curta}'
+            ${shortStorieComplaint.id_historia_curta}
         )`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -31,8 +31,8 @@ const insertShortStorieComplaint = async (shortStorieComplaint) => {
 
 const insertShortStorieComplaintType = async (shortStorieComplaintType) => {
     try {
-        let sql = `INSERT INTO tbl_tipo_denuncia_denuncia_historia_curta (id_denuncia, id_tipo_denuncia) values (
-            ${shortStorieComplaintType.id_denuncia},
+        let sql = `INSERT INTO tbl_tipo_denuncia_denuncia_historia_curta (id_denuncia_historia_curta, id_tipo_denuncia) values (
+            ${shortStorieComplaintType.id_denuncia_historia_curta},
             ${shortStorieComplaintType.id_tipo_denuncia}
         )`
 
