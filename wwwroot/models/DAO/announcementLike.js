@@ -60,8 +60,24 @@ const deleteAnnouncementLike = async (announcementLike) => {
     }
 }
 
+const verifyAnnouncementLike = async (announcementLike) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_anuncio_curtida WHERE id_anuncio = ${announcementLike.id_anuncio} AND id_usuario = ${announcementLike.id_usuario}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementLike,
     countAnnouncementLikes,
-    deleteAnnouncementLike
+    deleteAnnouncementLike,
+    verifyAnnouncementLike
 }

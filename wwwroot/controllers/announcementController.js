@@ -406,6 +406,19 @@ const unreadAnnouncement = async (announcementRead) => {
     }
 }
 
+const verifyAnnouncementLike = async (announcementLike) => {
+    if(announcementLike.id_anuncio == '' || announcementLike.id_anuncio == undefined || announcementLike.id_usuario == '' || announcementLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedAnnouncementLike = await announcementLikeModel.verifyAnnouncementLike(announcementLike)
+
+        if(verifiedAnnouncementLike)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -427,5 +440,6 @@ module.exports = {
     unfavoriteAnnouncement,
     markAnnouncementAsRead,
     countAnnouncementReads,
-    unreadAnnouncement
+    unreadAnnouncement,
+    verifyAnnouncementLike
 }

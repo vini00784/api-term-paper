@@ -395,3 +395,5 @@ INSERT INTO tbl_tipo_denuncia (tipo) values ('Conteúdo inapropriado'),
 INSERT INTO tbl_genero_anuncio (id_anuncio, id_genero) values (57, 1);
 
 SELECT * FROM tbl_tipo_denuncia_denuncia_anuncio;
+
+SELECT * FROM tbl_anuncio_curtida WHERE id_anuncio = 59 AND id_usuario = 108;
