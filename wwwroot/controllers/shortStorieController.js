@@ -162,18 +162,22 @@ const searchShortStorieById = async (shortStorieId) => {
     }
 }
 
-const listActivatedShortStories = async () => {
-    const activatedShortStoriesData = await shortStorieModel.selectActivatedShortStories()
-    
-    if(activatedShortStoriesData) {
-        let shortStoriesJson = {}
-
-        const shortStoriesDataArray = await destructureShortStorieJson(activatedShortStoriesData)
+const listActivatedShortStories = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const activatedShortStoriesData = await shortStorieModel.selectActivatedShortStories(userId)
         
-        shortStoriesJson = await Promise.all(shortStoriesDataArray)
-        return { status: 200, message: shortStoriesJson }
-    } else
-        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        if(activatedShortStoriesData) {
+            let shortStoriesJson = {}
+    
+            const shortStoriesDataArray = await destructureShortStorieJson(activatedShortStoriesData)
+            
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
 }
 
 const listDesactivatedShortStories = async (userId) => {
