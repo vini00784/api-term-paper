@@ -177,26 +177,33 @@ router
     })
 
 router
-    .route('/activated-announcements')
+    .route('/activated-announcement/user-id/:userId')
     .get(async(req, res) => {
         let statusCode
         let message
+        let userId = req.params.userId
 
-        const activatedAnnouncements = await announcementController.listActivatedAnnouncements()
-
-        if(activatedAnnouncements) {
-            statusCode = activatedAnnouncements.status
-            message = activatedAnnouncements.message
+        if(userId != '' && userId != undefined) {
+            const activatedAnnouncements = await announcementController.listActivatedAnnouncements(userId)
+    
+            if(activatedAnnouncements) {
+                statusCode = activatedAnnouncements.status
+                message = activatedAnnouncements.message
+            } else {
+                statusCode = 404
+                message = MESSAGE_ERROR.NOT_FOUND_DB
+            }
         } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
+
 
         res.status(statusCode).json(message)
     })
 
 router
-    .route('/desactivated-announcements/user-id/:userId')
+    .route('/desactivated-announcement/user-id/:userId')
     .get(async(req, res) => {
         let statusCode
         let message
@@ -518,27 +525,21 @@ router
     })
 
 router
-    .route('/verify-announcement-like')
+    .route('/verify-announcement-like/?')
     .get(jsonParser, async(req, res) => {
         let statusCode
         let message
-        let headerContentType = req.headers['content-type']
+        let announcementID = req.query.announcementID
+        let userID = req.query.userID
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const verifiedAnnouncementLike = await announcementController.verifyAnnouncementLike(bodyData)
-
-                statusCode = verifiedAnnouncementLike.status
-                message = verifiedAnnouncementLike.message
-            } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
-            }
+        if(announcementID != '' || announcementID != undefined || userID != '' || userID != undefined) {
+            const verifiedAnnouncementLike = await announcementController.verifyAnnouncementLike(announcementID, userID)
+    
+            statusCode = verifiedAnnouncementLike.status
+            message = verifiedAnnouncementLike.message
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         res.status(statusCode).json(message)

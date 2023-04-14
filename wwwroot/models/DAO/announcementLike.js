@@ -60,9 +60,9 @@ const deleteAnnouncementLike = async (announcementLike) => {
     }
 }
 
-const verifyAnnouncementLike = async (announcementLike) => {
+const verifyAnnouncementLike = async (announcementID, userID) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_anuncio_curtida WHERE id_anuncio = ${announcementLike.id_anuncio} AND id_usuario = ${announcementLike.id_usuario}`
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_anuncio_curtida WHERE id_anuncio = ${announcementID} AND id_usuario = ${userID}`
 
         const rsResult = await prisma.$queryRawUnsafe(sql)
 

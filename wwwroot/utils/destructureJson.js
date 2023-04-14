@@ -2,7 +2,7 @@ const destructureAnnouncementJson = async (json) => {
     const { selectParentalRatingByAnnouncementId } = require('../models/DAO/parentalRating.js')
     const { selectUserByAnnouncementId, selectPublicationTypeByAnnouncementId } = require ('../models/DAO/announcement.js')
     const { selectGenreByAnnouncementId } = require('../models/DAO/genre.js')
-    const { countAnnouncementLikes } = require('../models/DAO/announcementLike.js')
+    const { countAnnouncementLikes, verifyAnnouncementLike } = require('../models/DAO/announcementLike.js')
     const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.JS')
     const { countAnnouncementReads } = require('../models/DAO/announcementRead.js')
 
