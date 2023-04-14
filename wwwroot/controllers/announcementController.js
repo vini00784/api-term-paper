@@ -164,18 +164,23 @@ const searchAnnouncementById = async (announcementId) => {
     }
 }
 
-const listActivatedAnnouncements = async () => {
-    const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements()
-    
-    if(activatedAnnouncementsData) {
-        let announcementsJson = {}
-
-        const announcementDataArray = await destructureAnnouncementJson(activatedAnnouncementsData)
+const listActivatedAnnouncements = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements(userId)
         
-        announcementsJson = await Promise.all(announcementDataArray)
-        return { status: 200, message: announcementsJson }
-    } else
-        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        if(activatedAnnouncementsData) {
+            let announcementsJson = {}
+    
+            const announcementDataArray = await destructureAnnouncementJson(activatedAnnouncementsData)
+            
+            announcementsJson = await Promise.all(announcementDataArray)
+            return { status: 200, message: announcementsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+
+    }
 }
 
 const listDesactivatedAnnouncements = async (userId) => {
@@ -406,11 +411,11 @@ const unreadAnnouncement = async (announcementRead) => {
     }
 }
 
-const verifyAnnouncementLike = async (announcementLike) => {
-    if(announcementLike.id_anuncio == '' || announcementLike.id_anuncio == undefined || announcementLike.id_usuario == '' || announcementLike.id_usuario == undefined)
+const verifyAnnouncementLike = async (announcementID, userID) => {
+    if(announcementID == '' || announcementID == undefined || userID == '' || userID == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const verifiedAnnouncementLike = await announcementLikeModel.verifyAnnouncementLike(announcementLike)
+        const verifiedAnnouncementLike = await announcementLikeModel.verifyAnnouncementLike(announcementID, userID)
 
         if(verifiedAnnouncementLike)
             return { status: 200, message: true }
