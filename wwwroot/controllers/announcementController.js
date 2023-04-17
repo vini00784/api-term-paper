@@ -21,7 +21,7 @@ const announcementFavoriteModel = require('../models/DAO/announcementFavorite.js
 const announcementReadModel = require('../models/DAO/announcementRead.js')
 
 // Function to destructure announcement json
-const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
+const { destructureAnnouncementJson, verifyAnnouncementLikeFavoriteRead } = require('../utils/destructureJson.js')
 
 const newAnnouncement = async (announcement) => {
     if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined || announcement.epub == '' || announcement.epub == undefined)
@@ -227,18 +227,7 @@ const listAnnouncementsByGenres = async (userId) => {
             parseInt(t.id) === parseInt(element.id)
         ))))
 
-        filteredJson.forEach(async element => {
-            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
-            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
-            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
-
-            if(announcementLikeVerify)
-                element.curtido = announcementLikeVerify.message
-            if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify.message
-            if(announcementReadVerify)
-                element.lido = announcementReadVerify.message
-        })
+        await verifyAnnouncementLikeFavoriteRead(announcementsByGenre, userId)
 
         if(filteredJson) {
             let announcementsJson = {}
@@ -258,18 +247,7 @@ const listAnnouncementsByGenresName = async (genreName, userId) => {
     else {
         const announcementsByGenreName = await announcementModel.selectAnnouncementByGenresName(genreName)
 
-        announcementsByGenreName.forEach(async element => {
-            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
-            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
-            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
-
-            if(announcementLikeVerify)
-                element.curtido = announcementLikeVerify.message
-            if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify.message
-            if(announcementReadVerify)
-                element.lido = announcementReadVerify.message
-        })
+        await verifyAnnouncementLikeFavoriteRead(announcementsByGenreName, userId)
 
         if(announcementsByGenreName) {
             let announcementsJson = {}
@@ -289,18 +267,8 @@ const listAnnouncementsByTitleName = async (announcementTitle, userId) => {
     else {
         const announcementsByTitleName = await announcementModel.selectAnnouncementByTitleName(announcementTitle)
 
-        announcementsByTitleName.forEach(async element => {
-            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
-            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
-            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+        await verifyAnnouncementLikeFavoriteRead(announcementsByTitleName, userId)
 
-            if(announcementLikeVerify)
-                element.curtido = announcementLikeVerify.message
-            if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify.message
-            if(announcementReadVerify)
-                element.lido = announcementReadVerify.message
-        })
         if(announcementsByTitleName) {
             let announcementsJson = {}
 
