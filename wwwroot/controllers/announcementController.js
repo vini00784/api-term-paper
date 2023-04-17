@@ -22,7 +22,6 @@ const announcementReadModel = require('../models/DAO/announcementRead.js')
 
 // Function to destructure announcement json
 const { destructureAnnouncementJson } = require('../utils/destructureJson.js')
-const e = require('express')
 
 const newAnnouncement = async (announcement) => {
     if(announcement.titulo == '' || announcement.titulo == undefined || announcement.volume == '' || announcement.volume == undefined || announcement.capa == '' || announcement.capa == undefined || announcement.sinopse == '' || announcement.sinopse == undefined || announcement.quantidade_paginas == ''|| announcement.quantidade_paginas == undefined || announcement.preco == '' || announcement.preco == undefined || announcement.pdf == '' || announcement.pdf == undefined || announcement.id_classificacao == '' || announcement.id_classificacao == undefined || announcement.id_usuario == '' || announcement.id_usuario == undefined || announcement.id_tipo_publicacao == '' || announcement.id_tipo_publicacao == undefined || announcement.epub == '' || announcement.epub == undefined)
@@ -228,6 +227,19 @@ const listAnnouncementsByGenres = async (userId) => {
             parseInt(t.id) === parseInt(element.id)
         ))))
 
+        filteredJson.forEach(async element => {
+            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
+            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
+            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+
+            if(announcementLikeVerify)
+                element.curtido = announcementLikeVerify.message
+            if(announcementFavoriteVerify)
+                element.favorito = announcementFavoriteVerify
+            if(announcementReadVerify)
+                element.lido = announcementReadVerify
+        })
+
         if(filteredJson) {
             let announcementsJson = {}
 
@@ -240,11 +252,24 @@ const listAnnouncementsByGenres = async (userId) => {
     }
 }
 
-const listAnnouncementsByGenresName = async (genreName) => {
+const listAnnouncementsByGenresName = async (genreName, userId) => {
     if(genreName == '' || genreName == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const announcementsByGenreName = await announcementModel.selectAnnouncementByGenresName(genreName)
+
+        announcementsByGenreName.forEach(async element => {
+            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
+            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
+            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+
+            if(announcementLikeVerify)
+                element.curtido = announcementLikeVerify.message
+            if(announcementFavoriteVerify)
+                element.favorito = announcementFavoriteVerify
+            if(announcementReadVerify)
+                element.lido = announcementReadVerify
+        })
 
         if(announcementsByGenreName) {
             let announcementsJson = {}
@@ -258,12 +283,24 @@ const listAnnouncementsByGenresName = async (genreName) => {
     }
 }
 
-const listAnnouncementsByTitleName = async (announcementTitle) => {
+const listAnnouncementsByTitleName = async (announcementTitle, userId) => {
     if(announcementTitle == '' || announcementTitle == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const announcementsByTitleName = await announcementModel.selectAnnouncementByTitleName(announcementTitle)
 
+        announcementsByTitleName.forEach(async element => {
+            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
+            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
+            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+
+            if(announcementLikeVerify)
+                element.curtido = announcementLikeVerify.message
+            if(announcementFavoriteVerify)
+                element.favorito = announcementFavoriteVerify
+            if(announcementReadVerify)
+                element.lido = announcementReadVerify
+        })
         if(announcementsByTitleName) {
             let announcementsJson = {}
 
@@ -424,6 +461,32 @@ const verifyAnnouncementLike = async (announcementID, userID) => {
     }
 }
 
+const verifyAnnouncementFavorite = async (announcementID, userID) => {
+    if(announcementID == '' || announcementID == undefined || userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedAnnouncementFavorite = await announcementFavoriteModel.verifyAnnouncementFavorite(announcementID, userID)
+
+        if(verifiedAnnouncementFavorite)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
+const verifyAnnouncementRead = async (announcementID, userID) => {
+    if(announcementID == '' || announcementID == undefined || userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedAnnouncementRead = await announcementReadModel.verifyAnnouncementRead(announcementID, userID)
+
+        if(verifiedAnnouncementRead)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -446,5 +509,7 @@ module.exports = {
     markAnnouncementAsRead,
     countAnnouncementReads,
     unreadAnnouncement,
-    verifyAnnouncementLike
+    verifyAnnouncementLike,
+    verifyAnnouncementFavorite,
+    verifyAnnouncementRead
 }
