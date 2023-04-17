@@ -5,8 +5,7 @@ const jwt = require('../../middleware/jwt.js')
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
-const { Router } = require('express')
-const { route } = require('./genreRoutes.js')
+const { verifyAnnouncementLikeUser } = require('../utils/destructureJson.js')
 
 const router = express.Router()
 
@@ -111,13 +110,17 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/announcement/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let id = req.params.announcementId
+        let announcementId = req.query.announcementId
+        let userId = req.query.userId
 
-        if(id != '' && id != undefined) {
-            const announcementData = await announcementController.searchAnnouncementById(id)
+        if(announcementId != '' && announcementId != undefined) {
+            const announcementData = await announcementController.searchAnnouncementById(announcementId)
+            await verifyAnnouncementLikeUser(announcementData, announcementId, userId)
 
             if(announcementData) {
                 statusCode = announcementData.status
@@ -248,13 +251,14 @@ router
     })
 
 router
-    .route('/announcements/genre-name/:genreName') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
+    .route('/announcements/genre-name/?') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
     .get(async(req, res) => {
         let statusCode
         let message
-        let genreName = req.params.genreName
+        let genreName = req.query.genreName
+        let userId = req.query.userId
 
-        const announcementsData = await announcementController.listAnnouncementsByGenresName(genreName)
+        const announcementsData = await announcementController.listAnnouncementsByGenresName(genreName, userId)
 
         if(announcementsData) {
             statusCode = announcementsData.status
@@ -268,13 +272,14 @@ router
     })
 
 router
-    .route('/announcements/announcement-title/:announcementTitle')
+    .route('/announcements/announcement-title/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let announcementTitle = req.params.announcementTitle
+        let announcementTitle = req.query.announcementTitle
+        let userId = req.query.userId
 
-        const announcementsData = await announcementController.listAnnouncementsByTitleName(announcementTitle)
+        const announcementsData = await announcementController.listAnnouncementsByTitleName(announcementTitle, userId)
 
         if(announcementsData) {
             statusCode = announcementsData.status
