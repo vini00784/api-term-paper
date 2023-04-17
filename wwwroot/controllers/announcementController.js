@@ -235,9 +235,9 @@ const listAnnouncementsByGenres = async (userId) => {
             if(announcementLikeVerify)
                 element.curtido = announcementLikeVerify.message
             if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify
+                element.favorito = announcementFavoriteVerify.message
             if(announcementReadVerify)
-                element.lido = announcementReadVerify
+                element.lido = announcementReadVerify.message
         })
 
         if(filteredJson) {
@@ -266,9 +266,9 @@ const listAnnouncementsByGenresName = async (genreName, userId) => {
             if(announcementLikeVerify)
                 element.curtido = announcementLikeVerify.message
             if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify
+                element.favorito = announcementFavoriteVerify.message
             if(announcementReadVerify)
-                element.lido = announcementReadVerify
+                element.lido = announcementReadVerify.message
         })
 
         if(announcementsByGenreName) {
@@ -297,9 +297,9 @@ const listAnnouncementsByTitleName = async (announcementTitle, userId) => {
             if(announcementLikeVerify)
                 element.curtido = announcementLikeVerify.message
             if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify
+                element.favorito = announcementFavoriteVerify.message
             if(announcementReadVerify)
-                element.lido = announcementReadVerify
+                element.lido = announcementReadVerify.message
         })
         if(announcementsByTitleName) {
             let announcementsJson = {}
