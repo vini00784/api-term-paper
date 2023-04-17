@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 const selectAllParentalRatings = async () => {
     try {
-        let sql = 'SELECT cast(id AS decimal) AS id, classificacao, descricao FROM tbl_classificacao_indicativa'
+        let sql = 'SELECT cast(id AS decimal) AS id_classificacao, classificacao, descricao FROM tbl_classificacao_indicativa'
 
         const rsParentalRatings = await prisma.$queryRawUnsafe(sql)
 
