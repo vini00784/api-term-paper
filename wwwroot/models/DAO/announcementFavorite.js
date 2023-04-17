@@ -60,8 +60,24 @@ const deleteAnnouncementFavorite = async (announcementFavorite) => {
     }
 }
 
+const verifyAnnouncementFavorite = async (announcementID, userID) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_anuncio_favorito WHERE id_anuncio = ${announcementID} AND id_usuario = ${userID}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementFavorite,
     countAnnouncementFavorites,
-    deleteAnnouncementFavorite
+    deleteAnnouncementFavorite,
+    verifyAnnouncementFavorite
 }
