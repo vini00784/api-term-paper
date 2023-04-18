@@ -126,12 +126,16 @@ const destructureUserJson = async (json) => {
     return userDataArray
 }
 
-const verifyAnnouncementLikeUser = async (json, announcementId, userId) => {
-    const { verifyAnnouncementLike } = require('../models/DAO/announcementLike.js')
+const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
+    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../models/DAO/announcementLike.js')
     const announcementLikeVerify = await verifyAnnouncementLike(announcementId, userId)
+    const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
+    const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
 
     json.message.forEach(element => {
         element.curtido = announcementLikeVerify
+        element.favorito = announcementFavoriteVerify
+        element.lido = announcementReadVerify
     })
 
     return announcementLikeVerify
@@ -157,6 +161,6 @@ module.exports = {
     destructureAnnouncementJson,
     destructureShortStorieJson,
     destructureUserJson,
-    verifyAnnouncementLikeUser,
+    verifyAnnouncementLikeFavoriteReadById,
     verifyAnnouncementLikeFavoriteRead
 }

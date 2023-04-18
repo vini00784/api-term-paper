@@ -5,7 +5,7 @@ const jwt = require('../../middleware/jwt.js')
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
-const { verifyAnnouncementLikeUser } = require('../utils/destructureJson.js')
+const { verifyAnnouncementLikeFavoriteReadById } = require('../utils/destructureJson.js')
 
 const router = express.Router()
 
@@ -120,7 +120,7 @@ router
 
         if(announcementId != '' && announcementId != undefined) {
             const announcementData = await announcementController.searchAnnouncementById(announcementId)
-            await verifyAnnouncementLikeUser(announcementData, announcementId, userId)
+            await verifyAnnouncementLikeFavoriteReadById(announcementData, announcementId, userId)
 
             if(announcementData) {
                 statusCode = announcementData.status
@@ -524,27 +524,6 @@ router
         } else {
             statusCode = 415
             message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
-        }
-
-        res.status(statusCode).json(message)
-    })
-
-router
-    .route('/verify-announcement-like/?')
-    .get(jsonParser, async(req, res) => {
-        let statusCode
-        let message
-        let announcementID = req.query.announcementID
-        let userID = req.query.userID
-
-        if(announcementID != '' || announcementID != undefined || userID != '' || userID != undefined) {
-            const verifiedAnnouncementLike = await announcementController.verifyAnnouncementLike(announcementID, userID)
-    
-            statusCode = verifiedAnnouncementLike.status
-            message = verifiedAnnouncementLike.message
-        } else {
-            statusCode = 400
-            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         res.status(statusCode).json(message)
