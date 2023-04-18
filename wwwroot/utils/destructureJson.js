@@ -140,8 +140,9 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
 }
 
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
+    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
+
     json.forEach(async element => {
-        const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
         const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
         const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
         const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
@@ -155,10 +156,42 @@ const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
     })
 }
 
+const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId) => {
+    const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead } = require('../controllers/shortStorieController.js')
+    const shortStorieLikeVerify = await verifyShortStorieLike(shortStorieId, userId)
+    const shortStorieFavoriteVerify = await verifyShortStorieFavorite(shortStorieId, userId)
+    const shortStorieReadVerify = await verifyShortStorieRead(shortStorieId, userId)
+
+    json.message.forEach(element => {
+        element.curtido = shortStorieLikeVerify.message
+        element.favorito = shortStorieFavoriteVerify.message
+        element.lido = shortStorieReadVerify.message
+    })
+}
+
+const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
+    const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead } = require('../controllers/shortStorieController.js')
+
+    json.forEach(async element => {
+        const shortStorieLikeVerify = await verifyShortStorieLike(element.id, userId)
+        const shortStorieFavoriteVerify = await verifyShortStorieFavorite(element.id, userId)
+        const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
+
+        if(shortStorieLikeVerify)
+            element.curtido = shortStorieLikeVerify.message
+        if(shortStorieFavoriteVerify)
+            element.favorito = shortStorieFavoriteVerify.message
+        if(shortStorieReadVerify)
+            element.lido = shortStorieReadVerify.message
+    })
+}
+
 module.exports = {
     destructureAnnouncementJson,
     destructureShortStorieJson,
     destructureUserJson,
     verifyAnnouncementLikeFavoriteReadById,
-    verifyAnnouncementLikeFavoriteRead
+    verifyAnnouncementLikeFavoriteRead,
+    verifyShortStorieLikeFavoriteReadById,
+    verifyShortStorieLikeFavoriteRead
 }

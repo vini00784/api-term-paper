@@ -21,7 +21,7 @@ const shortStorieFavoriteModel = require('../models/DAO/shortStorieFavorite.js')
 const shortStorieReadModel = require('../models/DAO/shortStorieRead.js')
 
 // Function to destructure short storie json
-const { destructureShortStorieJson } = require('../utils/destructureJson.js')
+const { destructureShortStorieJson, verifyShortStorieLikeFavoriteRead } = require('../utils/destructureJson.js')
 
 const newShortStorie = async (shortStorie) => {
     if(shortStorie.titulo == '' || shortStorie.titulo == undefined || shortStorie.sinopse == '' || shortStorie.sinopse == undefined || shortStorie.capa == '' || shortStorie.capa == undefined || shortStorie.historia == '' || shortStorie.historia == undefined || shortStorie.id_usuario == '' || shortStorie.id_usuario == undefined || shortStorie.id_tipo_publicacao == '' || shortStorie.id_tipo_publicacao == undefined || shortStorie.id_classificacao == '' || shortStorie.id_classificacao == undefined)
@@ -221,10 +221,16 @@ const listShortStoriesByGenres = async (userId) => {
 
         const shortStoriesByGenre = await shortStorieModel.selectShortStoriesByGenres(genresId)
 
-        if(shortStoriesByGenre) {
+        let filteredJson = shortStoriesByGenre.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id) === parseInt(element.id)
+        ))))
+
+        await verifyShortStorieLikeFavoriteRead(shortStoriesByGenre, userId)
+
+        if(filteredJson) {
             let shortStoriesJson = {}
 
-            const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByGenre)
+            const shortStoriesDataArray = await destructureShortStorieJson(filteredJson)
 
             shortStoriesJson = await Promise.all(shortStoriesDataArray)
             return { status: 200, message: shortStoriesJson }
@@ -233,11 +239,13 @@ const listShortStoriesByGenres = async (userId) => {
     }
 }
 
-const listShortStoriesByGenresName = async (genreName) => {
+const listShortStoriesByGenresName = async (genreName, userId) => {
     if(genreName == '' || genreName == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const shortStoriesByGenreName = await shortStorieModel.selectShortStoriesByGenresName(genreName)
+
+        await verifyShortStorieLikeFavoriteRead(shortStoriesByGenreName, userId)
 
         if(shortStoriesByGenreName) {
             let shortStoriesJson = {}
@@ -251,11 +259,13 @@ const listShortStoriesByGenresName = async (genreName) => {
     }
 }
 
-const listShortStoriesByTitleName = async (shortStorieTitle) => {
+const listShortStoriesByTitleName = async (shortStorieTitle, userId) => {
     if(shortStorieTitle == '' || shortStorieTitle == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const shortStoriesByTitleName = await shortStorieModel.selectShortStorieByTitleName(shortStorieTitle)
+
+        await verifyShortStorieLikeFavoriteRead(shortStoriesByTitleName, userId)
 
         if(shortStoriesByTitleName) {
             let shortStoriesJson = {}
@@ -404,6 +414,45 @@ const unreadShortStorie = async (shortStorieRead) => {
     }
 }
 
+const verifyShortStorieLike = async (shortStorieID, userID) => {
+    if(shortStorieID == '' || shortStorieID == undefined || userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedShortStorieLike = await shortStorieLikeModel.verifyShortStorieLike(shortStorieID, userID)
+
+        if(verifiedShortStorieLike)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
+const verifyShortStorieFavorite = async (shortStorieID, userID) => {
+    if(shortStorieID == '' || shortStorieID == undefined || userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedShortStorieFavorite = await shortStorieFavoriteModel.verifyShortStorieFavorite(shortStorieID, userID)
+
+        if(verifiedShortStorieFavorite)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
+const verifyShortStorieRead = async (shortStorieID, userID) => {
+    if(shortStorieID == '' || shortStorieID == undefined || userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedShortStorieRead = await shortStorieReadModel.verifyShortStorieRead(shortStorieID, userID)
+
+        if(verifiedShortStorieRead)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -425,5 +474,8 @@ module.exports = {
     unfavoriteShortStorie,
     markShortStorieAsRead,
     countShortStorieReads,
-    unreadShortStorie
+    unreadShortStorie,
+    verifyShortStorieLike,
+    verifyShortStorieFavorite,
+    verifyShortStorieRead
 }

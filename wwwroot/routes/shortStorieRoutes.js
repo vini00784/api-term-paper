@@ -5,7 +5,7 @@ const jwt = require('../../middleware/jwt.js')
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
-const { json } = require('express')
+const { verifyShortStorieLikeFavoriteReadById } = require('../utils/destructureJson.js')
 
 const router = express.Router()
 
@@ -110,13 +110,17 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/short-storie/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let id = req.params.shortStorieId
+        let shortStorieId = req.query.shortStorieId
+        let userId = req.query.userId
 
-        if(id != '' && id != undefined) {
-            const shortStorieData = await shortStorieController.searchShortStorieById(id)
+        if(shortStorieId != '' && shortStorieId != undefined) {
+            const shortStorieData = await shortStorieController.searchShortStorieById(shortStorieId)
+            await verifyShortStorieLikeFavoriteReadById(shortStorieData, shortStorieId, userId)
 
             if(shortStorieData) {
                 statusCode = shortStorieData.status
@@ -248,13 +252,14 @@ router
     })
 
 router
-    .route('/short-stories/genre-name/:genreName') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
+    .route('/short-stories/genre-name/?') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
     .get(async(req, res) => {
         let statusCode
         let message
-        let genreName = req.params.genreName
+        let genreName = req.query.genreName
+        let userId = req.query.userId
 
-        const shortStoriesData = await shortStorieController.listShortStoriesByGenresName(genreName)
+        const shortStoriesData = await shortStorieController.listShortStoriesByGenresName(genreName, userId)
 
         if(shortStoriesData) {
             statusCode = shortStoriesData.status
@@ -268,13 +273,14 @@ router
     })
 
 router
-    .route('/short-stories/storie-title/:shortStorieTitle')
+    .route('/short-stories/storie-title/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let shortStorieTitle = req.params.shortStorieTitle
+        let shortStorieTitle = req.query.shortStorieTitle
+        let userId = req.query.userId
 
-        const shortStoriesData = await shortStorieController.listShortStoriesByTitleName(shortStorieTitle)
+        const shortStoriesData = await shortStorieController.listShortStoriesByTitleName(shortStorieTitle, userId)
 
         if(shortStoriesData) {
             statusCode = shortStoriesData.status
