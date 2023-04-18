@@ -127,18 +127,16 @@ const destructureUserJson = async (json) => {
 }
 
 const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
-    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../models/DAO/announcementLike.js')
+    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
     const announcementLikeVerify = await verifyAnnouncementLike(announcementId, userId)
     const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
     const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
 
     json.message.forEach(element => {
-        element.curtido = announcementLikeVerify
-        element.favorito = announcementFavoriteVerify
-        element.lido = announcementReadVerify
+        element.curtido = announcementLikeVerify.message
+        element.favorito = announcementFavoriteVerify.message
+        element.lido = announcementReadVerify.message
     })
-
-    return announcementLikeVerify
 }
 
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
