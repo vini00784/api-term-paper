@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 const selectAllParentalRatings = async () => {
     try {
-        let sql = 'SELECT cast(id AS decimal) AS id_classificacao, classificacao, descricao FROM tbl_classificacao_indicativa'
+        let sql = 'SELECT cast(id AS decimal) AS id_classificacao, classificacao, descricao, icone FROM tbl_classificacao_indicativa'
 
         const rsParentalRatings = await prisma.$queryRawUnsafe(sql)
 
@@ -28,7 +28,7 @@ const selectAllParentalRatings = async () => {
 
 const selectParentalRatingByAnnouncementId = async (announcementId) => {
     try {
-        let sql = `SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao
+        let sql = `SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao, tbl_classificacao_indicativa.icone
         FROM tbl_anuncio
      
         INNER JOIN tbl_classificacao_indicativa
@@ -49,7 +49,7 @@ const selectParentalRatingByAnnouncementId = async (announcementId) => {
 
 const selectParentalRatingByShortStorieId = async (shortStorieId) => {
     try {
-        let sql = `SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao
+        let sql = `SELECT cast(tbl_classificacao_indicativa.id AS DECIMAL) as id_classificacao, tbl_classificacao_indicativa.classificacao, tbl_classificacao_indicativa.descricao, tbl_classificacao_indicativa.icone
         FROM tbl_historia_curta
      
         INNER JOIN tbl_classificacao_indicativa
