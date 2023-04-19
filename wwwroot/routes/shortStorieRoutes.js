@@ -530,4 +530,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/favorited-short-stories/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const favoritedShortStoriesData = await shortStorieController.listFavoritedShortStories(userId)
+
+        if(favoritedShortStoriesData) {
+            statusCode = favoritedShortStoriesData.status
+            message = favoritedShortStoriesData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

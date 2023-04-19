@@ -75,9 +75,33 @@ const verifyShortStorieFavorite = async (shortStorieID, userID) => {
     }
 }
 
+const selectFavoritedShortStories = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        FROM tbl_favorito_historia_curta
+     
+        INNER JOIN tbl_historia_curta
+           ON tbl_historia_curta.id = tbl_favorito_historia_curta.id_historia_curta
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_favorito_historia_curta.id_usuario
+     
+        WHERE tbl_favorito_historia_curta.id_usuario = ${userId}`
+
+        const rsFavoritedShortStories = await prisma.$queryRawUnsafe(sql)
+
+        if(rsFavoritedShortStories.length > 0)
+            return rsFavoritedShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorieFavorite,
     countShortStorieFavorites,
     deleteShortStorieFavorite,
-    verifyShortStorieFavorite
+    verifyShortStorieFavorite,
+    selectFavoritedShortStories
 }
