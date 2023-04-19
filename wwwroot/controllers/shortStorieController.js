@@ -473,6 +473,26 @@ const listFavoritedShortStories = async (userID) => {
     }
 }
 
+const listReadedShortStories = async (userID) => {
+    if(userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const readedShortStoriesData = await shortStorieReadModel.selectReadedShortStories(userID)
+
+        await verifyShortStorieLikeFavoriteRead(readedShortStoriesData, userID)
+
+        if(readedShortStoriesData) {
+            let readedShortStories = {}
+
+            const shortStorieDataArray = await destructureShortStorieJson(readedShortStoriesData)
+
+            readedShortStories = await Promise.all(shortStorieDataArray)
+            return { status: 200, message: readedShortStories }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -498,5 +518,6 @@ module.exports = {
     verifyShortStorieLike,
     verifyShortStorieFavorite,
     verifyShortStorieRead,
-    listFavoritedShortStories
+    listFavoritedShortStories,
+    listReadedShortStories
 }

@@ -550,4 +550,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/readed-short-stories/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const readedShortStoriesData = await shortStorieController.listReadedShortStories(userId)
+
+        if(readedShortStoriesData) {
+            statusCode = readedShortStoriesData.status
+            message = readedShortStoriesData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

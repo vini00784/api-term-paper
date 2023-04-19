@@ -76,9 +76,33 @@ const verifyShortStorieRead = async (shortStorieID, userID) => {
     }
 }
 
+const selectReadedShortStories = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        FROM tbl_quantidade_lidos_historia_curta
+     
+        INNER JOIN tbl_historia_curta
+           ON tbl_historia_curta.id = tbl_quantidade_lidos_historia_curta.id_historia_curta
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_quantidade_lidos_historia_curta.id_usuario
+     
+        WHERE tbl_quantidade_lidos_historia_curta.id_usuario = ${userId}`
+
+        const rsReadedShortStories = await prisma.$queryRawUnsafe(sql)
+
+        if(rsReadedShortStories.length > 0)
+            return rsReadedShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorieRead,
     countShortStorieReads,
     deleteShortStorieRead,
-    verifyShortStorieRead
+    verifyShortStorieRead,
+    selectReadedShortStories
 }
