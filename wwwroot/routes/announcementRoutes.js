@@ -529,4 +529,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/favorited-announcements/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const favoritedAnnouncementsData = await announcementController.listFavoritedAnnouncements(userId)
+
+        if(favoritedAnnouncementsData) {
+            statusCode = favoritedAnnouncementsData.status
+            message = favoritedAnnouncementsData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
