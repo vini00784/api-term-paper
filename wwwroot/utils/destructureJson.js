@@ -27,13 +27,13 @@ const destructureAnnouncementJson = async (json) => {
                         if(announcementGenresData) {
                             announcementItem.generos = announcementGenresData
 
-                            if(announcementLikesData.quantidade_curtidas > 0)
+                            if(announcementLikesData.quantidade_curtidas > 0 || announcementLikesData.quantidade_curtidas == undefined)
                                 announcementItem.curtidas = announcementLikesData
 
-                            if(announcementFavoritesData.quantidade_favoritos > 0)
+                            if(announcementFavoritesData.quantidade_favoritos > 0 || announcementLikesData.quantidade_curtidas == undefined)
                                 announcementItem.favoritos = announcementFavoritesData
 
-                            if(announcementReadsData.quantidade_lido > 0)
+                            if(announcementReadsData.quantidade_lido > 0 || announcementLikesData.quantidade_curtidas == undefined)
                                 announcementItem.lidos = announcementReadsData
                         }
                     }
@@ -165,11 +165,13 @@ const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId)
     const shortStorieFavoriteVerify = await verifyShortStorieFavorite(shortStorieId, userId)
     const shortStorieReadVerify = await verifyShortStorieRead(shortStorieId, userId)
 
-    json.message.forEach(element => {
-        element.curtido = shortStorieLikeVerify.message
-        element.favorito = shortStorieFavoriteVerify.message
-        element.lido = shortStorieReadVerify.message
-    })
+    if(json) {
+        json.message.forEach(element => {
+            element.curtido = shortStorieLikeVerify.message
+            element.favorito = shortStorieFavoriteVerify.message
+            element.lido = shortStorieReadVerify.message
+        })
+    }
 }
 
 const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
