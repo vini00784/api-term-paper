@@ -47,7 +47,6 @@ const updateShortStorie = async (shortStorie, genresId) => {
             '${shortStorie.titulo}',
             '${shortStorie.sinopse}',
             '${shortStorie.capa}',
-            ${shortStorie.status},
             '${shortStorie.historia}',
             '${shortStorie.data}',
             ${shortStorie.premium},
