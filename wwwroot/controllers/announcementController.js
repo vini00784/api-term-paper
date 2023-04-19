@@ -169,6 +169,8 @@ const listActivatedAnnouncements = async (userId) => {
     else {
         const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements(userId)
         
+        await verifyAnnouncementLikeFavoriteRead(activatedAnnouncementsData, userId)
+        
         if(activatedAnnouncementsData) {
             let announcementsJson = {}
     
