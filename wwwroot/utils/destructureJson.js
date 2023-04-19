@@ -142,18 +142,21 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
 
-    json.forEach(async element => {
-        const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
-        const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
-        const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+    if(json) {
+        json.forEach(async element => {
+            const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
+            const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
+            const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+    
+            if(announcementLikeVerify)
+                element.curtido = announcementLikeVerify.message
+            if(announcementFavoriteVerify)
+                element.favorito = announcementFavoriteVerify.message
+            if(announcementReadVerify)
+                element.lido = announcementReadVerify.message
+        })
+    }
 
-        if(announcementLikeVerify)
-            element.curtido = announcementLikeVerify.message
-        if(announcementFavoriteVerify)
-            element.favorito = announcementFavoriteVerify.message
-        if(announcementReadVerify)
-            element.lido = announcementReadVerify.message
-    })
 }
 
 const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId) => {
@@ -172,18 +175,20 @@ const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId)
 const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
     const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead } = require('../controllers/shortStorieController.js')
 
-    json.forEach(async element => {
-        const shortStorieLikeVerify = await verifyShortStorieLike(element.id, userId)
-        const shortStorieFavoriteVerify = await verifyShortStorieFavorite(element.id, userId)
-        const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
-
-        if(shortStorieLikeVerify)
-            element.curtido = shortStorieLikeVerify.message
-        if(shortStorieFavoriteVerify)
-            element.favorito = shortStorieFavoriteVerify.message
-        if(shortStorieReadVerify)
-            element.lido = shortStorieReadVerify.message
-    })
+    if(json) {
+        json.forEach(async element => {
+            const shortStorieLikeVerify = await verifyShortStorieLike(element.id, userId)
+            const shortStorieFavoriteVerify = await verifyShortStorieFavorite(element.id, userId)
+            const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
+    
+            if(shortStorieLikeVerify)
+                element.curtido = shortStorieLikeVerify.message
+            if(shortStorieFavoriteVerify)
+                element.favorito = shortStorieFavoriteVerify.message
+            if(shortStorieReadVerify)
+                element.lido = shortStorieReadVerify.message
+        })
+    }
 }
 
 module.exports = {
