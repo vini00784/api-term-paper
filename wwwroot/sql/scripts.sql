@@ -397,3 +397,43 @@ INSERT INTO tbl_genero_anuncio (id_anuncio, id_genero) values (57, 1);
 SELECT * FROM tbl_tipo_denuncia_denuncia_anuncio;
 
 SELECT * FROM tbl_anuncio_curtida WHERE id_anuncio = 59 AND id_usuario = 108;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+   FROM tbl_anuncio_favorito
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_anuncio_favorito.id_anuncio
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_anuncio_favorito.id_usuario
+
+   WHERE tbl_anuncio_favorito.id_usuario = 88;
+
+SELECT cast(COUNT(id) AS DECIMAL) as quantidade_favoritos
+   FROM tbl_anuncio_favorito
+
+   WHERE tbl_anuncio_favorito.id_usuario = 88;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM tbl_quantidade_lidos_anuncio
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_quantidade_lidos_anuncio.id_anuncio
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_quantidade_lidos_anuncio.id_usuario
+     
+        WHERE tbl_quantidade_lidos_anuncio.id_usuario = 88;
+
+SELECT cast(COUNT(id) AS DECIMAL) as quantidade_favoritos
+   FROM tbl_quantidade_lidos_anuncio
+
+   WHERE id_usuario = 88;
+
+SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        FROM tbl_favorito_historia_curta
+     
+        INNER JOIN tbl_historia_curta
+           ON tbl_historia_curta.id = tbl_favorito_historia_curta.id_historia_curta
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_favorito_historia_curta.id_usuario
+     
+        WHERE tbl_favorito_historia_curta.id_usuario = 88;
