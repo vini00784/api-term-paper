@@ -477,6 +477,26 @@ const listFavoritedAnnouncements = async (userID) => {
     }
 }
 
+const listReadedAnnouncements = async (userID) => {
+    if(userID == '' || userID == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const readedAnnouncementsData = await announcementReadModel.selectReadedAnnouncements(userID)
+
+        await verifyAnnouncementLikeFavoriteRead(readedAnnouncementsData, userID)
+
+        if(readedAnnouncementsData) {
+            let readedAnnouncements = {}
+
+            const announcementDataArray = await destructureAnnouncementJson(readedAnnouncementsData)
+
+            readedAnnouncements = await Promise.all(announcementDataArray)
+            return { status: 200, message: readedAnnouncements }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -502,5 +522,6 @@ module.exports = {
     verifyAnnouncementLike,
     verifyAnnouncementFavorite,
     verifyAnnouncementRead,
-    listFavoritedAnnouncements
+    listFavoritedAnnouncements,
+    listReadedAnnouncements
 }

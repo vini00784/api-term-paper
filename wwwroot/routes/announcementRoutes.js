@@ -549,4 +549,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/readed-announcements/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const readedAnnouncementsData = await announcementController.listReadedAnnouncements(userId)
+
+        if(readedAnnouncementsData) {
+            statusCode = readedAnnouncementsData.status
+            message = readedAnnouncementsData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

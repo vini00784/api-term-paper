@@ -75,9 +75,33 @@ const verifyAnnouncementRead = async (announcementID, userID) => {
     }
 }
 
+const selectReadedAnnouncements = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM tbl_quantidade_lidos_anuncio
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_quantidade_lidos_anuncio.id_anuncio
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_quantidade_lidos_anuncio.id_usuario
+     
+        WHERE tbl_quantidade_lidos_anuncio.id_usuario = ${userId}`
+
+        const rsReadedAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsReadedAnnouncements.length > 0)
+            return rsReadedAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementRead,
     countAnnouncementReads,
     deleteAnnouncementRead,
-    verifyAnnouncementRead
+    verifyAnnouncementRead,
+    selectReadedAnnouncements
 }
