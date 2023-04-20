@@ -11,10 +11,19 @@ const { PrismaClient } = require('@prisma/client')
 // Instance of the PrismaClient class
 const prisma = new PrismaClient()
 
-const insertBuyWithoutCart = async (announcement, genresId) => {
+const insertBuyWithoutCart = async (buy) => {
     try {
-        
+        let sql = `CALL proc_buy_now (${buy.id_anuncio}, ${buy.id_usuario})`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
     } catch (err) {
         console.log(err)
     }
 }
+
+module.exports = { insertBuyWithoutCart }
