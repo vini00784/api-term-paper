@@ -39,7 +39,24 @@ const putAnnouncementInCart = async (cart) => {
     }
 }
 
+const listCartItems = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const cartItems = await buyModel.selectCartItems(userId)
+
+        if(cartItems) {
+            let cartItemsJson = {}
+            cartItemsJson = cartItems
+
+            return { status: 200, message: cartItemsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
-    putAnnouncementInCart
+    putAnnouncementInCart,
+    listCartItems
  }

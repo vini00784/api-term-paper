@@ -61,4 +61,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/list-cart-items/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        if(userId != '' && userId != undefined) {
+            const cartItems = await buyController.listCartItems(userId)
+
+            statusCode = cartItems.status
+            message = cartItems.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

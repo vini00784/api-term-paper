@@ -42,7 +42,29 @@ const insertAnnouncementInCart = async (cart) => {
     }
 }
 
+const selectCartItems = async (userId) => {
+    try {
+        let sql = `SELECT tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
+        FROM tbl_carrinho
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_carrinho.id_anuncio
+        
+        WHERE tbl_carrinho.id_usuario = ${userId}`
+
+        const rsCartItems = await prisma.$queryRawUnsafe(sql)
+
+        if(rsCartItems.length > 0)
+            return rsCartItems
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     insertBuyWithoutCart,
-    insertAnnouncementInCart
+    insertAnnouncementInCart,
+    selectCartItems
  }
