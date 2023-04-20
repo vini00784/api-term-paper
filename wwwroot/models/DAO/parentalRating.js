@@ -6,7 +6,8 @@
 */
 
 // Instance of the PrismaClient class
-const {prisma} = require('../../libs/prisma.js')
+const prisma = require('../../libs/prisma.js')
+
 const selectAllParentalRatings = async () => {
     try {
         let sql = 'SELECT cast(id AS decimal) AS id_classificacao, classificacao, descricao, icone FROM tbl_classificacao_indicativa'

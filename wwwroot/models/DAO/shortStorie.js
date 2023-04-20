@@ -6,7 +6,8 @@
 */
 
 // Instance of the PrismaClient class
-const {prisma} = require('../../libs/prisma.js')
+const prisma = require('../../libs/prisma.js')
+
 const insertShortStorie = async (shortStorie, genresId) => {
     try {
         let sql = `CALL proc_insert_historia_curta (

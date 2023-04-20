@@ -6,7 +6,8 @@
 */
 
 // Instance of the PrismaClient class
-const {prisma} = require('../../libs/prisma.js')
+const prisma = require('../../libs/prisma.js')
+
 const selectAllGenres = async () => {
     try {
         let sql = 'SELECT cast(id AS decimal) as id_genero, nome as nome_genero FROM tbl_generos ORDER BY nome ASC'

@@ -6,7 +6,7 @@
 */
 
 // Instance of the PrismaClient class
-const { prisma } = require('../../libs/prisma.js')
+const prisma = require('../../libs/prisma.js')
 
 const insertShortStorieComplaint = async (shortStorieComplaint) => {
     try {

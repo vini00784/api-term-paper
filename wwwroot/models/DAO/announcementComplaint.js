@@ -6,7 +6,8 @@
 */
 
 // Instance of the PrismaClient class
-const {prisma} = require('../../libs/prisma.js')
+const prisma = require('../../libs/prisma.js')
+
 const insertAnnouncementComplaint = async (announcementComplaint) => {
     try {
         let sql = `INSERT INTO tbl_denuncia_anuncio (descricao, id_anuncio) values (
