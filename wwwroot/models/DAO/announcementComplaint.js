@@ -5,12 +5,8 @@
     Versão:       1.0
 */
 
-// Import from the PrismaClient class, which is responsible for interactions with the Database
-const { PrismaClient } = require('@prisma/client')
-
 // Instance of the PrismaClient class
-const prisma = new PrismaClient()
-
+const {prisma} = require('../../libs/prisma.js')
 const insertAnnouncementComplaint = async (announcementComplaint) => {
     try {
         let sql = `INSERT INTO tbl_denuncia_anuncio (descricao, id_anuncio) values (

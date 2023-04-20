@@ -6,10 +6,7 @@
 */
 
 // Import from the PrismaClient class, which is responsible for interactions with the Database
-const { PrismaClient } = require('@prisma/client')
-
-// Instance of the PrismaClient class
-const prisma = new PrismaClient()
+const prisma = require('../../libs/prisma.js')
 
 const insertUserComplaint = async (userComplaint) => {
     try {

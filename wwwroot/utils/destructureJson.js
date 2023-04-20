@@ -30,10 +30,10 @@ const destructureAnnouncementJson = async (json) => {
                             if(announcementLikesData.quantidade_curtidas > 0 || announcementLikesData.quantidade_curtidas == undefined)
                                 announcementItem.curtidas = announcementLikesData
 
-                            if(announcementFavoritesData.quantidade_favoritos > 0 || announcementLikesData.quantidade_curtidas == undefined)
+                            if(announcementFavoritesData.quantidade_favoritos > 0 || announcementFavoritesData.quantidade_favoritos == undefined)
                                 announcementItem.favoritos = announcementFavoritesData
 
-                            if(announcementReadsData.quantidade_lido > 0 || announcementLikesData.quantidade_curtidas == undefined)
+                            if(announcementReadsData.quantidade_lido > 0 || announcementReadsData.quantidade_lido == undefined)
                                 announcementItem.lidos = announcementReadsData
                         }
                     }
