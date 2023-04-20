@@ -437,3 +437,15 @@ SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, 
            ON tbl_usuario.id = tbl_favorito_historia_curta.id_usuario
      
         WHERE tbl_favorito_historia_curta.id_usuario = 88;
+
+SELECT tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
+   FROM tbl_carrinho
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_carrinho.id_anuncio
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_carrinho.id_usuario
+   
+   WHERE tbl_carrinho.id_anuncio = 51 AND tbl_carrinho.id_usuario = 110;
+
+SELECT * FROM tbl_carrinho
