@@ -23,4 +23,26 @@ const insertBuyWithoutCart = async (buy) => {
     }
 }
 
-module.exports = { insertBuyWithoutCart }
+const insertAnnouncementInCart = async (cart) => {
+    try {
+        let sql = `INSERT INTO tbl_carrinho (id_anuncio, id_usuario, status) values (
+            ${cart.id_anuncio},
+            ${cart.id_usuario},
+            ${cart.status}
+        )`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+module.exports = { 
+    insertBuyWithoutCart,
+    insertAnnouncementInCart
+ }
