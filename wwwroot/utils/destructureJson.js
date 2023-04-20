@@ -97,13 +97,15 @@ const destructureShortStorieJson = async (json) => {
 const destructureUserJson = async (json) => {
     const { selectGenreByUserId } = require('../models/DAO/genre.js')
     const { selectTagByUserId } = require('../models/DAO/tag.js')
-    const { selectAnnouncementByUserId } = require('../models/DAO/announcement.js')
+    const { selectAnnouncementAtiveByUserId } = require('../models/DAO/announcement.js')
+    const { selectAnnouncementDeactivateByUserId } = require('../models/DAO/announcement.js')
     const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
 
     const userDataArray = json.map(async userItem => {
         const userTagArrayData = await selectTagByUserId(userItem.id)
         const userGenreArrayData = await selectGenreByUserId(userItem.id)
-        const userAnnouncementArrayData = await selectAnnouncementByUserId(userItem.id)
+        const userAnnouncementAtiveArrayData = await selectAnnouncementAtiveByUserId(userItem.id)
+        const userAnnouncementDeactivateArrayData = await selectAnnouncementDeactivateByUserId(userItem.id)
         const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
 
         if(userTagArrayData) {
@@ -112,8 +114,11 @@ const destructureUserJson = async (json) => {
             if(userGenreArrayData) {
                 userItem.generos = userGenreArrayData
 
-                if(userAnnouncementArrayData)
-                    userItem.anuncios = userAnnouncementArrayData
+                if(userAnnouncementAtiveArrayData)
+                    userItem.anuncios_ativos = userAnnouncementAtiveArrayData
+
+                if(userAnnouncementDeactivateArrayData)
+                    userItem.anuncios_desativados = userAnnouncementDeactivateArrayData
     
                 if(userShortStorieArrayData)
                     userItem.historias_curtas = userShortStorieArrayData

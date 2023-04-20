@@ -124,6 +124,52 @@ const selectAnnouncementByUserId = async (userId) => {
     }
 }
 
+// Seleciona todos os anúncios ativos referidos a um certo usuário
+const selectAnnouncementAtiveByUserId = async (userId) => {
+    try {
+        let sql = `SELECT tbl_anuncio.id, tbl_anuncio.titulo
+        
+        FROM tbl_anuncio
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_anuncio.id_usuario
+         
+        WHERE tbl_anuncio.id_usuario = ${userId} AND tbl_anuncio.status = true`
+
+        const rsAnnouncement = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncement.length > 0)
+            return rsAnnouncement
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+// Seleciona todos os anúncios desativados referidos a um certo usuário
+const selectAnnouncementDeactivateByUserId = async (userId) => {
+    try {
+        let sql = `SELECT tbl_anuncio.id, tbl_anuncio.titulo
+        
+        FROM tbl_anuncio
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_anuncio.id_usuario
+         
+        WHERE tbl_anuncio.id_usuario = ${userId} AND tbl_anuncio.status = false`
+
+        const rsAnnouncement = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncement.length > 0)
+            return rsAnnouncement
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 // Seleciona apenas o usuário vinculado a tal anúncio
 const selectUserByAnnouncementId = async (announcementId) => {
     try {
@@ -329,6 +375,8 @@ module.exports = {
     deleteAnnouncement,
     selectAllAnnouncements,
     selectAnnouncementByUserId,
+    selectAnnouncementAtiveByUserId,
+    selectAnnouncementDeactivateByUserId,
     selectUserByAnnouncementId,
     selectPublicationTypeByAnnouncementId,
     desactivateAnnouncement,
