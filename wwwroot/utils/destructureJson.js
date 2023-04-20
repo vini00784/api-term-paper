@@ -132,11 +132,13 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
     const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
     const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
 
-    json.message.forEach(element => {
-        element.curtido = announcementLikeVerify.message
-        element.favorito = announcementFavoriteVerify.message
-        element.lido = announcementReadVerify.message
-    })
+    if(json) {
+        json.message.forEach(element => {
+            element.curtido = announcementLikeVerify.message
+            element.favorito = announcementFavoriteVerify.message
+            element.lido = announcementReadVerify.message
+        })
+    }
 }
 
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
