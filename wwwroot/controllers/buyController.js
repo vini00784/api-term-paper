@@ -68,9 +68,23 @@ const deleteCartItem = async (announcementId, userId) => {
     }
 }
 
+const confirmBuy = async (cart) => {
+    if(cart.id_carrinho == '' || cart.id_carrinho == undefined || cart.id_usuario == '' || cart.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const confirmedBuy = await buyModel.confirmBuy(cart)
+
+        if(confirmedBuy)
+            return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
+        else
+            return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
     putAnnouncementInCart,
     listCartItems,
-    deleteCartItem
+    deleteCartItem,
+    confirmBuy
  }
