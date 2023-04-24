@@ -63,8 +63,24 @@ const selectCartItems = async (userId) => {
     }
 }
 
+const deleteCartItem = async (announcementId, userId) => {
+    try {
+        let sql = `DELETE FROM tbl_carrinho WHERE id_anuncio = ${announcementId} AND id_usuario = ${userId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     insertBuyWithoutCart,
     insertAnnouncementInCart,
-    selectCartItems
+    selectCartItems,
+    deleteCartItem
  }

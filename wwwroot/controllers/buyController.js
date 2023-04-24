@@ -55,8 +55,22 @@ const listCartItems = async (userId) => {
     }
 }
 
+const deleteCartItem = async (announcementId, userId) => {
+    if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const deletedCartItem = await buyModel.deleteCartItem(announcementId, userId)
+
+        if(deletedCartItem)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
     putAnnouncementInCart,
-    listCartItems
+    listCartItems,
+    deleteCartItem
  }

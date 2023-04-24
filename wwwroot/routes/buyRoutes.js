@@ -81,4 +81,25 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/delete-cart-item/?')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let announcementId = req.query.announcementId
+        let userId = req.query.userId
+
+        if(announcementId != '' && announcementId != undefined && userId != '' && userId != undefined) {
+            const deletedCartItem = await buyController.deleteCartItem(announcementId, userId)
+
+            statusCode = deletedCartItem.status
+            message = deletedCartItem.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
