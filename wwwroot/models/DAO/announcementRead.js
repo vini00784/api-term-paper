@@ -29,7 +29,7 @@ const insertAnnouncementRead = async (announcementRead) => {
 
 const countAnnouncementReads = async (announcementId) => {
     try {
-        let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_lido FROM tbl_quantidade_lidos_anuncio WHERE id_anuncio = ${announcementId}`
+        let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) as quantidade_lidos FROM tbl_quantidade_lidos_anuncio WHERE id_anuncio = ${announcementId}`
 
         const rsReads = await prisma.$queryRawUnsafe(sql)
 
