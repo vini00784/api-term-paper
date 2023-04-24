@@ -44,7 +44,7 @@ const insertAnnouncementInCart = async (cart) => {
 
 const selectCartItems = async (userId) => {
     try {
-        let sql = `SELECT tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
         FROM tbl_carrinho
      
         INNER JOIN tbl_anuncio
