@@ -111,11 +111,35 @@ const confirmBuy = async (cart) => {
     }
 }
 
+const updateCartStatus = async (cartId) => {
+    try {
+        let sql = `UPDATE tbl_carrinho SET status = true WHERE id = ${cartId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+// const insertBoughtBook = async () => {
+//     try {
+        
+//     } catch (err) {
+//         console.log(err)
+//     }
+// }
+
 module.exports = { 
     insertBuyWithoutCart,
     insertAnnouncementInCart,
     selectCartItems,
     deleteCartItem,
     verifyCartItem,
-    confirmBuy
+    confirmBuy,
+    updateCartStatus
  }
