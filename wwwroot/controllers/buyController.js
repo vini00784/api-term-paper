@@ -68,6 +68,19 @@ const deleteCartItem = async (announcementId, userId) => {
     }
 }
 
+const verifyCartItem = async (announcementId, userId) => {
+    if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedCartItem = await buyModel.verifyCartItem(announcementId, userId)
+
+        if(verifiedCartItem)
+            return { status: 200, message: true }
+        else
+            return {status: 404, message: false}
+    }
+}
+
 const confirmBuy = async (cart) => {
     if(cart.id_carrinho == '' || cart.id_carrinho == undefined || cart.id_usuario == '' || cart.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -86,5 +99,6 @@ module.exports = {
     putAnnouncementInCart,
     listCartItems,
     deleteCartItem,
+    verifyCartItem,
     confirmBuy
  }

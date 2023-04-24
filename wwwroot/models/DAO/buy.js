@@ -78,6 +78,21 @@ const deleteCartItem = async (announcementId, userId) => {
     }
 }
 
+const verifyCartItem = async (announcementId, userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_anuncio = ${announcementId} AND id_usuario = ${userId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const confirmBuy = async (cart) => {
     try {
         let sql = `INSERT INTO tbl_compra (id_carrinho, id_usuario) values (
@@ -101,5 +116,6 @@ module.exports = {
     insertAnnouncementInCart,
     selectCartItems,
     deleteCartItem,
+    verifyCartItem,
     confirmBuy
  }
