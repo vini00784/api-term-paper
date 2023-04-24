@@ -5,7 +5,7 @@ const jwt = require('../../middleware/jwt.js')
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
-const { verifyAnnouncementLikeFavoriteReadById } = require('../utils/destructureJson.js')
+const { verifyAnnouncementLikeFavoriteReadById, verifyAnnouncementUserCartById } = require('../utils/destructureJson.js')
 
 const router = express.Router()
 
@@ -121,6 +121,7 @@ router
         if(announcementId != '' && announcementId != undefined) {
             const announcementData = await announcementController.searchAnnouncementById(announcementId)
             await verifyAnnouncementLikeFavoriteReadById(announcementData, announcementId, userId)
+            await verifyAnnouncementUserCartById(announcementData, announcementId, userId)
 
             if(announcementData) {
                 statusCode = announcementData.status
