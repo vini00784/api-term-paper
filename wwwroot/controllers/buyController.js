@@ -85,12 +85,24 @@ const confirmBuy = async (cart) => {
     if(cart.id_carrinho == '' || cart.id_carrinho == undefined || cart.id_usuario == '' || cart.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const confirmedBuy = await buyModel.confirmBuy(cart)
-
+        let userCartArrayLength = cart.id_carrinho.length
+        
+        let confirmBuyJson = {}
+        confirmBuyJson.id_usuario = cart.id_usuario
+        let confirmedBuy
+        for(let i = 0; i < userCartArrayLength; i++) {
+            confirmBuyJson.id_carrinho = cart.id_carrinho[i].id
+            confirmedBuy = await buyModel.confirmBuy(confirmBuyJson)
+            await buyModel.updateCartStatus(cart.id_carrinho[i].id)
+            console.log(cart.id_carrinho[i].id);
+        }
+            
         if(confirmedBuy)
             return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
         else
             return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        
+
     }
 }
 
