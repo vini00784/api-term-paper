@@ -94,7 +94,7 @@ const confirmBuy = async (cart) => {
             confirmBuyJson.id_carrinho = cart.id_carrinho[i].id
             confirmedBuy = await buyModel.confirmBuy(confirmBuyJson)
             await buyModel.updateCartStatus(cart.id_carrinho[i].id)
-            console.log(cart.id_carrinho[i].id);
+            // console.log(cart.id_carrinho[i].id);
         }
             
         if(confirmedBuy)

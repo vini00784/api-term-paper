@@ -126,13 +126,13 @@ const updateCartStatus = async (cartId) => {
     }
 }
 
-// const insertBoughtBook = async () => {
-//     try {
+const insertBoughtBook = async () => {
+    try {
         
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 module.exports = { 
     insertBuyWithoutCart,
