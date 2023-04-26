@@ -207,6 +207,52 @@ const selectShortStorieByUserId = async (shortStorieId) => {
     }
 }
 
+// Seleciona todas as histórias curtas ativas referidas a um certo usuário
+const selectShortStoriesActiveByUserId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT tbl_historia_curta.id, tbl_historia_curta.titulo
+        
+        FROM tbl_historia_curta
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_historia_curta.id_usuario
+         
+        WHERE tbl_historia_curta.id_usuario = ${shortStorieId} AND tbl_historia_curta.status = true`
+
+        const rsShortStorie = await prisma.$queryRawUnsafe(sql)
+
+        if(rsShortStorie.length > 0)
+            return rsShortStorie
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+// Seleciona todas as histórias curtas desativadas referidas a um certo usuário
+const selectShortStoriesDeactiveByUserId = async (shortStorieId) => {
+    try {
+        let sql = `SELECT tbl_historia_curta.id, tbl_historia_curta.titulo
+        
+        FROM tbl_historia_curta
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_historia_curta.id_usuario
+         
+        WHERE tbl_historia_curta.id_usuario = ${shortStorieId} AND tbl_historia_curta.status = false`
+
+        const rsShortStorie = await prisma.$queryRawUnsafe(sql)
+
+        if(rsShortStorie.length > 0)
+            return rsShortStorie
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const selectActivatedShortStories = async (userId) => {
     try {
         let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
@@ -329,6 +375,8 @@ module.exports = {
     selectPublicationTypeByShortStorieId,
     selectShortStorieById,
     selectShortStorieByUserId,
+    selectShortStoriesActiveByUserId,
+    selectShortStoriesDeactiveByUserId,
     selectActivatedShortStories,
     selectDesactivatedShortStories,
     selectShortStoriesByGenres,

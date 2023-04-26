@@ -99,14 +99,16 @@ const destructureUserJson = async (json) => {
     const { selectTagByUserId } = require('../models/DAO/tag.js')
     const { selectAnnouncementAtiveByUserId } = require('../models/DAO/announcement.js')
     const { selectAnnouncementDeactivateByUserId } = require('../models/DAO/announcement.js')
-    const { selectShortStorieByUserId } = require('../models/DAO/shortStorie.js')
+    const { selectShortStoriesActiveByUserId } = require('../models/DAO/shortStorie.js')
+    const { selectShortStoriesDeactiveByUserId } = require('../models/DAO/shortStorie.js')
 
     const userDataArray = json.map(async userItem => {
         const userTagArrayData = await selectTagByUserId(userItem.id)
         const userGenreArrayData = await selectGenreByUserId(userItem.id)
         const userAnnouncementAtiveArrayData = await selectAnnouncementAtiveByUserId(userItem.id)
         const userAnnouncementDeactivateArrayData = await selectAnnouncementDeactivateByUserId(userItem.id)
-        const userShortStorieArrayData = await selectShortStorieByUserId(userItem.id)
+        const userShortStorieActiveArrayData = await selectShortStoriesActiveByUserId(userItem.id)
+        const userShortStorieDeactiveArrayData = await selectShortStoriesDeactiveByUserId(userItem.id)
 
         if(userTagArrayData) {
             userItem.tags = userTagArrayData
@@ -119,10 +121,12 @@ const destructureUserJson = async (json) => {
 
                 if(userAnnouncementDeactivateArrayData)
                     userItem.anuncios_desativados = userAnnouncementDeactivateArrayData
-    
-                if(userShortStorieArrayData)
-                    userItem.historias_curtas = userShortStorieArrayData
-                
+        
+                if(userShortStorieActiveArrayData)
+                    userItem.historias_curtas_ativas = userShortStorieActiveArrayData
+
+                if(userShortStorieDeactiveArrayData)
+                userItem.historias_curtas_desativadas = userShortStorieDeactiveArrayData                
             }
         }
         return userItem
