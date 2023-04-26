@@ -451,4 +451,7 @@ SELECT tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
 SELECT * FROM tbl_compra;
 SELECT * FROM tbl_carrinho;
 SELECT * FROM tbl_carrinho WHERE id_usuario = 110;
-UPDATE tbl_carrinho SET status = false WHERE id = 27
+UPDATE tbl_carrinho SET status = false WHERE id = 5;
+DELETE FROM tbl_compra WHERE id = 16;
+SELECT * FROM tbl_livros_comprados;
+DELETE FROM tbl_livros_comprados WHERE id = 5
