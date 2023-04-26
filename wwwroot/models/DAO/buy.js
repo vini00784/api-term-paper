@@ -44,13 +44,14 @@ const insertAnnouncementInCart = async (cart) => {
 
 const selectCartItems = async (userId) => {
     try {
-        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco,
+        cast(tbl_carrinho.id AS DECIMAL) AS id_carrinho
         FROM tbl_carrinho
      
         INNER JOIN tbl_anuncio
            ON tbl_anuncio.id = tbl_carrinho.id_anuncio
         
-        WHERE tbl_carrinho.id_usuario = ${userId}`
+        WHERE tbl_carrinho.id_usuario = ${userId} AND tbl_carrinho.status = false`
 
         const rsCartItems = await prisma.$queryRawUnsafe(sql)
 
