@@ -97,10 +97,27 @@ const confirmBuy = async (cart) => {
             // console.log(cart.id_carrinho[i].id);
         }
             
-        if(confirmedBuy)
-            return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
+        if(confirmedBuy) {
+            let boughtBookJson = {}
+            boughtBookJson.id_usuario = cart.id_usuario
+
+            let insertBoughtBook
+
+            const cartItems = await buyModel.selectCartItems(cart.id_usuario)
+
+            for (let i = 0; i < cartItems.length; i++) {
+                boughtBookJson.id_anuncio = cartItems[i].id_anuncio
+                insertBoughtBook = await buyModel.insertBoughtBook(boughtBookJson)
+                console.log(boughtBookJson)
+            }
+
+            if(insertBoughtBook)
+                return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
+            else 
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
         else
-            return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         
 
     }

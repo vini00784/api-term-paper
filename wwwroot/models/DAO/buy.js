@@ -126,9 +126,19 @@ const updateCartStatus = async (cartId) => {
     }
 }
 
-const insertBoughtBook = async () => {
+const insertBoughtBook = async (boughtBook) => {
     try {
-        
+        let sql = `INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio) values (
+            ${boughtBook.id_usuario},
+            ${boughtBook.id_anuncio}
+        )`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
     } catch (err) {
         console.log(err)
     }
@@ -141,5 +151,6 @@ module.exports = {
     deleteCartItem,
     verifyCartItem,
     confirmBuy,
-    updateCartStatus
+    updateCartStatus,
+    insertBoughtBook
  }
