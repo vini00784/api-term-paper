@@ -600,7 +600,6 @@ router
             message = MESSAGE_ERROR.REQUIRED_ID
         }
 
-
         res.status(statusCode).json(message)
     })
 
