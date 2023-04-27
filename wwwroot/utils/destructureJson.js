@@ -204,29 +204,29 @@ const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
     }
 }
 
-const verifyAnnouncementUserCartById = async (json, announcementId, userId) => {
-    const { verifyCartItem } = require('../controllers/buyController.js')
-    const announcementCartVerify = await verifyCartItem(announcementId, userId)
+// const verifyAnnouncementUserCartById = async (json, announcementId, userId) => {
+//     const { verifyCartItem } = require('../controllers/buyController.js')
+//     const announcementCartVerify = await verifyCartItem(announcementId, userId)
 
-    if(json) {
-        json.message.forEach(element => {
-            element.carrinho = announcementCartVerify.message
-        })
-    }
-}
+//     if(json) {
+//         json.message.forEach(element => {
+//             element.carrinho = announcementCartVerify.message
+//         })
+//     }
+// }
 
-const verifyAnnouncementUserCart = async (json, userId) => {
-    const { verifyCartItem } = require('../controllers/buyController.js')
+// const verifyAnnouncementUserCart = async (json, userId) => {
+//     const { verifyCartItem } = require('../controllers/buyController.js')
 
-    if(json) {
-        json.forEach(async element => {
-            const announcementCartVerify = await verifyCartItem(element.id, userId)
+//     if(json) {
+//         json.forEach(async element => {
+//             const announcementCartVerify = await verifyCartItem(element.id, userId)
 
-            if(announcementCartVerify)
-                element.carrinho = announcementCartVerify.message
-        })
-    }
-}
+//             if(announcementCartVerify)
+//                 element.carrinho = announcementCartVerify.message
+//         })
+//     }
+// }
 
 module.exports = {
     destructureAnnouncementJson,
@@ -235,7 +235,7 @@ module.exports = {
     verifyAnnouncementLikeFavoriteReadById,
     verifyAnnouncementLikeFavoriteRead,
     verifyShortStorieLikeFavoriteReadById,
-    verifyShortStorieLikeFavoriteRead,
-    verifyAnnouncementUserCartById,
-    verifyAnnouncementUserCart
+    verifyShortStorieLikeFavoriteRead
+    // verifyAnnouncementUserCartById,
+    // verifyAnnouncementUserCart
 }

@@ -170,7 +170,7 @@ const listActivatedAnnouncements = async (userId) => {
         const activatedAnnouncementsData = await announcementModel.selectActivatedAnnouncements(userId)
         
         await verifyAnnouncementLikeFavoriteRead(activatedAnnouncementsData, userId)
-        await verifyAnnouncementUserCart(activatedAnnouncementsData, userId)
+        // await verifyAnnouncementUserCart(activatedAnnouncementsData, userId)
         
         if(activatedAnnouncementsData) {
             let announcementsJson = {}
@@ -231,7 +231,7 @@ const listAnnouncementsByGenres = async (userId) => {
         ))))
 
         await verifyAnnouncementLikeFavoriteRead(announcementsByGenre, userId)
-        await verifyAnnouncementUserCart(announcementsByGenre, userId)
+        // await verifyAnnouncementUserCart(announcementsByGenre, userId)
 
         if(filteredJson) {
             let announcementsJson = {}
@@ -252,7 +252,7 @@ const listAnnouncementsByGenresName = async (genreName, userId) => {
         const announcementsByGenreName = await announcementModel.selectAnnouncementByGenresName(genreName)
 
         await verifyAnnouncementLikeFavoriteRead(announcementsByGenreName, userId)
-        await verifyAnnouncementUserCart(announcementsByGenreName, userId)
+        // await verifyAnnouncementUserCart(announcementsByGenreName, userId)
 
         if(announcementsByGenreName) {
             let announcementsJson = {}
@@ -273,7 +273,7 @@ const listAnnouncementsByTitleName = async (announcementTitle, userId) => {
         const announcementsByTitleName = await announcementModel.selectAnnouncementByTitleName(announcementTitle)
 
         await verifyAnnouncementLikeFavoriteRead(announcementsByTitleName, userId)
-        await verifyAnnouncementUserCart(announcementsByTitleName, userId)
+        // await verifyAnnouncementUserCart(announcementsByTitleName, userId)
 
         if(announcementsByTitleName) {
             let announcementsJson = {}
@@ -468,7 +468,7 @@ const listFavoritedAnnouncements = async (userID) => {
         const favoritedAnnouncementsData = await announcementFavoriteModel.selectFavoritedAnnouncements(userID)
 
         await verifyAnnouncementLikeFavoriteRead(favoritedAnnouncementsData, userID)
-        await verifyAnnouncementUserCart(favoritedAnnouncementsData, userID)
+        // await verifyAnnouncementUserCart(favoritedAnnouncementsData, userID)
 
         if(favoritedAnnouncementsData) {
             let favoritedAnnouncements = {}
@@ -489,7 +489,7 @@ const listReadedAnnouncements = async (userID) => {
         const readedAnnouncementsData = await announcementReadModel.selectReadedAnnouncements(userID)
 
         await verifyAnnouncementLikeFavoriteRead(readedAnnouncementsData, userID)
-        await verifyAnnouncementUserCart(readedAnnouncementsData, userID)
+        // await verifyAnnouncementUserCart(readedAnnouncementsData, userID)
 
         if(readedAnnouncementsData) {
             let readedAnnouncements = {}
@@ -502,6 +502,37 @@ const listReadedAnnouncements = async (userID) => {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
     }
 }
+
+// const listAnnouncementsByGenreName = async (genres) => {
+//     console.log(genres)
+//    if(genres) {
+//        let genresNamesLength = genres.length
+//        let genresNames = ""
+   
+//        for(let i = 0; i < genresNamesLength; i++) {
+//            if(genresNamesLength == 1)
+//                genresNames += `${genres.nome_genero[0]}`
+//            else if(i == genresNamesLength - 1)
+//                genresNames += `${genres.nome_genero[i]}`
+//            else
+//                genresNames += `${genres.nome_genero[i]}, `
+//        }
+   
+//        const announcementsByGenresName = await announcementModel.selectAnnouncementByGenreName(genresNames)
+   
+//        if(announcementsByGenresName) {
+//            let announcementsJson = {}
+   
+//            const announcementsDataArray = await destructureAnnouncementJson(announcementsByGenresName)
+   
+//            announcementsJson = await Promise.all(announcementsDataArray)
+//            return { status: 200, message: announcementsJson }
+//        } else
+//            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+//    } else {
+//         return { status: 400, message: "rola" }
+//     }
+// }
 
 module.exports = {
     newAnnouncement,
@@ -530,4 +561,5 @@ module.exports = {
     verifyAnnouncementRead,
     listFavoritedAnnouncements,
     listReadedAnnouncements
+    // listAnnouncementsByGenreName
 }
