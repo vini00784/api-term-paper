@@ -503,7 +503,7 @@ const listReadedAnnouncements = async (userID) => {
     }
 }
 
-const listAnnouncementsByGenreName = async (genres) => {
+const listAnnouncementsByGenreName = async (genres, userId) => {
     if(genres) {
         let genresNamesLength = genres.nome_genero.length
         let genresNames = ""
@@ -524,6 +524,8 @@ const listAnnouncementsByGenreName = async (genres) => {
         let filteredJson = announcementsByGenresName.filter((element, index, self) => index === self.findIndex((t => (
             parseInt(t.id) === parseInt(element.id)
         ))))
+
+        await verifyAnnouncementLikeFavoriteRead(announcementsByGenresName, userId)
    
         if(filteredJson) {
             let announcementsJson = {}

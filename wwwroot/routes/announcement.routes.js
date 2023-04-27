@@ -571,28 +571,35 @@ router
     })
 
 router
-    .route('/announcements/genres-names')
+    .route('/announcements/genres-names/:userId')
     .post(jsonParser, async(req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
+        let userId= req.params.userId
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const announcementsByGenresName = await announcementController.listAnnouncementsByGenreName(bodyData)
-
-                statusCode = announcementsByGenresName.status
-                message = announcementsByGenresName.message
+        if(userId != '' && userId != undefined) {
+            if(headerContentType == 'application/json') {
+                let bodyData = req.body
+    
+                if(JSON.stringify(bodyData) != '{}') {
+                    const announcementsByGenresName = await announcementController.listAnnouncementsByGenreName(bodyData, userId)
+    
+                    statusCode = announcementsByGenresName.status
+                    message = announcementsByGenresName.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.EMPTY_BODY
+                }
             } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
+                statusCode = 415
+                message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
             }
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
+
 
         res.status(statusCode).json(message)
     })
