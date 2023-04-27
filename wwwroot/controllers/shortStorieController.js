@@ -493,6 +493,43 @@ const listReadedShortStories = async (userID) => {
     }
 }
 
+const listShortStoriesByGenreName = async (genres, userId) => {
+    if(genres) {
+        let genresNamesLength = genres.nome_genero.length
+        let genresNames = ""
+   
+        for(let i = 0; i < genresNamesLength; i++) {
+            if(genresNamesLength == 1) {
+                genresNames += `'${genres.nome_genero[0].nome}'`
+            }
+            else if(i == genresNamesLength - 1) {
+                genresNames += `'${genres.nome_genero[i].nome}'`
+            }
+            else
+                genresNames += `'${genres.nome_genero[i].nome}', `
+        }
+   
+        const shortStoriesByGenresName = await shortStorieModel.selectShortStorieByGenreName(genresNames)
+
+        let filteredJson = shortStoriesByGenresName.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id) === parseInt(element.id)
+        ))))
+
+        await verifyShortStorieLikeFavoriteRead(shortStoriesByGenresName, userId)
+   
+        if(filteredJson) {
+            let shortStoriesJson = {}
+   
+            const shortStorieDataArray = await destructureShortStorieJson(filteredJson)
+   
+            shortStoriesJson = await Promise.all(shortStorieDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    } else
+        return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -519,5 +556,6 @@ module.exports = {
     verifyShortStorieFavorite,
     verifyShortStorieRead,
     listFavoritedShortStories,
-    listReadedShortStories
+    listReadedShortStories,
+    listShortStoriesByGenreName
 }
