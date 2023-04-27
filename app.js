@@ -22,14 +22,14 @@ app.use((req, res, next) => {
 })
 
 // Importing of routers
-const genreRouter = require('./wwwroot/routes/genreRoutes.js')
-const userRouter = require('./wwwroot/routes/userRoutes.js')
-const tagRouter = require('./wwwroot/routes/tagRoutes.js')
-const announcementRouter = require('./wwwroot/routes/announcementRoutes.js')
-const parentalRatingRouter = require('./wwwroot/routes/parentalRatingRoutes.js')
-const shortStorieRouter = require('./wwwroot/routes/shortStorieRoutes.js')
-const complaintsRouter = require('./wwwroot/routes/complaintRoutes.js')
-const buyRouter = require('./wwwroot/routes/buyRoutes.js')
+const genreRouter = require('./wwwroot/routes/genre.routes.js')
+const userRouter = require('./wwwroot/routes/user.routes.js')
+const tagRouter = require('./wwwroot/routes/tag.routes.js')
+const announcementRouter = require('./wwwroot/routes/announcement.routes.js')
+const parentalRatingRouter = require('./wwwroot/routes/parentalRating.routes.js')
+const shortStorieRouter = require('./wwwroot/routes/shortStorie.routes.js')
+const complaintsRouter = require('./wwwroot/routes/complaint.routes.js')
+const buyRouter = require('./wwwroot/routes/buy.routes.js')
 
 // Using routers
 
