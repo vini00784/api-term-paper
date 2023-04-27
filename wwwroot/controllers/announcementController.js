@@ -503,36 +503,40 @@ const listReadedAnnouncements = async (userID) => {
     }
 }
 
-// const listAnnouncementsByGenreName = async (genres) => {
-//     console.log(genres)
-//    if(genres) {
-//        let genresNamesLength = genres.length
-//        let genresNames = ""
+const listAnnouncementsByGenreName = async (genres) => {
+    if(genres) {
+        let genresNamesLength = genres.nome_genero.length
+        let genresNames = ""
    
-//        for(let i = 0; i < genresNamesLength; i++) {
-//            if(genresNamesLength == 1)
-//                genresNames += `${genres.nome_genero[0]}`
-//            else if(i == genresNamesLength - 1)
-//                genresNames += `${genres.nome_genero[i]}`
-//            else
-//                genresNames += `${genres.nome_genero[i]}, `
-//        }
+        for(let i = 0; i < genresNamesLength; i++) {
+            if(genresNamesLength == 1) {
+                genresNames += `'${genres.nome_genero[0].nome}'`
+            }
+            else if(i == genresNamesLength - 1) {
+                genresNames += `'${genres.nome_genero[i].nome}'`
+            }
+            else
+                genresNames += `'${genres.nome_genero[i].nome}', `
+        }
    
-//        const announcementsByGenresName = await announcementModel.selectAnnouncementByGenreName(genresNames)
+        const announcementsByGenresName = await announcementModel.selectAnnouncementByGenreName(genresNames)
+
+        let filteredJson = announcementsByGenresName.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id) === parseInt(element.id)
+        ))))
    
-//        if(announcementsByGenresName) {
-//            let announcementsJson = {}
+        if(filteredJson) {
+            let announcementsJson = {}
    
-//            const announcementsDataArray = await destructureAnnouncementJson(announcementsByGenresName)
+            const announcementsDataArray = await destructureAnnouncementJson(filteredJson)
    
-//            announcementsJson = await Promise.all(announcementsDataArray)
-//            return { status: 200, message: announcementsJson }
-//        } else
-//            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
-//    } else {
-//         return { status: 400, message: "rola" }
-//     }
-// }
+            announcementsJson = await Promise.all(announcementsDataArray)
+            return { status: 200, message: announcementsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    } else
+        return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
+}
 
 module.exports = {
     newAnnouncement,
@@ -560,6 +564,6 @@ module.exports = {
     verifyAnnouncementFavorite,
     verifyAnnouncementRead,
     listFavoritedAnnouncements,
-    listReadedAnnouncements
-    // listAnnouncementsByGenreName
+    listReadedAnnouncements,
+    listAnnouncementsByGenreName
 }
