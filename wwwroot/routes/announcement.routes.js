@@ -603,4 +603,26 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/announcements/price/?')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let minimumValue = req.query.minimumValue
+        let maximumValue = req.query.maximumValue
+        let value = req.query.value
+
+        const announcementsByPrice = await announcementController.listAnnouncementsByPrice(minimumValue, maximumValue, value)
+
+        if(announcementsByPrice) {
+            statusCode = announcementsByPrice.status
+            message = announcementsByPrice.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

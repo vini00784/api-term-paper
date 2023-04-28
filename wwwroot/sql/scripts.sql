@@ -467,4 +467,9 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
            ON tbl_usuario.id = tbl_anuncio.id_usuario
      
         WHERE tbl_generos.nome in('Terror', 'Romance') AND tbl_anuncio.status = true
-        ORDER BY tbl_anuncio.id DESC
+        ORDER BY tbl_anuncio.id DESC;
+
+SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi 
+   FROM tbl_anuncio 
+   WHERE preco BETWEEN 0 AND 20
+   ORDER BY id DESC;
