@@ -540,6 +540,46 @@ const listAnnouncementsByGenreName = async (genres, userId) => {
         return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
 }
 
+const listAnnouncementsByPrice = async (minimumValue, maximumValue, value) => {
+    let sqlScript = ""
+
+    if(minimumValue == '' || minimumValue == undefined) {
+        minimumValue = 0
+        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
+    }
+    else if (maximumValue == '' || maximumValue == undefined)
+        sqlScript = `preco >= ${value}`
+    else
+        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
+    
+    const announcementsByPrice = await announcementModel.selectAnnouncementsByPrice(sqlScript)
+
+    if(announcementsByPrice) {
+        let announcementsJson = {}
+
+        const announcementDataArray = await destructureAnnouncementJson(announcementsByPrice)
+
+        announcementsJson = await Promise.all(announcementDataArray)
+        return { status: 200, message: announcementsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
+const setSqlScript = async (minimumValue, maximumValue, value) => {
+    let sqlScript = ""
+
+    if(minimumValue == '' || minimumValue == undefined) {
+        minimumValue = 0
+        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
+    }
+    else if (maximumValue == '' || maximumValue == undefined)
+        sqlScript = `preco >= ${value}`
+    else
+        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
+
+    return sqlScript
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -567,5 +607,6 @@ module.exports = {
     verifyAnnouncementRead,
     listFavoritedAnnouncements,
     listReadedAnnouncements,
-    listAnnouncementsByGenreName
+    listAnnouncementsByGenreName,
+    listAnnouncementsByPrice
 }

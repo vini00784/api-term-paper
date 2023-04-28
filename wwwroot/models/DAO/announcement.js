@@ -395,6 +395,24 @@ const selectAnnouncementByGenreName = async (genreNames) => { // Esse será usad
     }
 }
 
+const selectAnnouncementsByPrice = async (sqlScript) => {
+    console.log(sqlScript)
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi 
+        FROM tbl_anuncio
+        WHERE ${sqlScript}`
+
+        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncements.length > 0)
+            return rsAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
@@ -413,5 +431,6 @@ module.exports = {
     selectAnnouncementsByGenres,
     selectAnnouncementByGenresName,
     selectAnnouncementByTitleName,
-    selectAnnouncementByGenreName
+    selectAnnouncementByGenreName,
+    selectAnnouncementsByPrice
 }
