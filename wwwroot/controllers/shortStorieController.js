@@ -212,7 +212,7 @@ const listShortStoriesByGenres = async (userId) => {
 
         for(let i = 0; i < userGenresLength; i++) {
             if(userGenresLength == 1)
-                genresId += userGenres.message.genres.id_genero[0]
+                genresId += userGenres.message.genres[0].id_genero
             else if (i == userGenresLength - 1)
                 genresId += userGenres.message.genres[i].id_genero
             else
