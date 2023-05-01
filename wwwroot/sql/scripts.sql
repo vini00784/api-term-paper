@@ -473,3 +473,25 @@ SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse
    FROM tbl_anuncio 
    WHERE preco BETWEEN 0 AND 20
    ORDER BY id DESC;
+DESC tbl_carrinho;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi,
+        cast(tbl_carrinho.id AS DECIMAL) AS id_carrinho
+        FROM tbl_carrinho
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_carrinho.id_anuncio
+        
+        WHERE tbl_carrinho.id_usuario = 88 AND tbl_carrinho.status = false;
+
+SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho ORDER BY id DESC LIMIT 1;
+
+SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_usuario = 88 AND status = FALSE ORDER BY id DESC LIMIT 1;
+SELECT * FROM tbl_compra WHERE id_carrinho = 9;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) AS id
+   FROM tbl_compra
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_compra.id_anuncio
+   WHERE tbl_compra.id_carrinho = 9

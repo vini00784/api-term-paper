@@ -24,18 +24,46 @@ const newBuyWithoutCart = async (buy) => {
     }
 }
 
-const putAnnouncementInCart = async (cart) => {
-    if(cart.id_anuncio == '' || cart.id_anuncio == undefined || cart.id_usuario == '' || cart.id_usuario == undefined)
+const createCart = async (cart) => {
+    if(cart.id_usuario == '' || cart.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        cart.status = 0
+        const verifyUserCart = await verifyCart(cart.id_usuario)
 
-        const newAnnouncementInCart = await buyModel.insertAnnouncementInCart(cart)
+        if(!verifyUserCart) {
+            cart.status = 0
+    
+            const newAnnouncementInCart = await buyModel.insertCart(cart)
+    
+            if(newAnnouncementInCart)
+                return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+            else
+                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        } else
+            return { status: 400, message: MESSAGE_ERROR.ALREADY_EXISTS_CART }
+    }
+}
 
-        if(newAnnouncementInCart)
-            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-        else
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+const insertItemCart = async (cart, userId) => {
+    if(cart.id_anuncio == '' || cart.id_anuncio == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const lastUserCart = await buyModel.selectLastCart(userId)
+        cart.id_carrinho = lastUserCart
+        let userCartArrayLength = cart.id_anuncio.length
+        
+        let cartsItem = {}
+        cartsItem.id_carrinho = lastUserCart
+        let confirmedBuy
+        for(let i = 0; i < userCartArrayLength; i++) {
+            cartsItem.id_anuncio = cart.id_anuncio[i].id
+            confirmedBuy = await buyModel.insertItemInCart(cartsItem)
+        }
+
+        if(confirmedBuy)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_CART_ITEM }
+        else 
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
 }
 
@@ -68,66 +96,61 @@ const deleteCartItem = async (announcementId, userId) => {
     }
 }
 
-const verifyCartItem = async (announcementId, userId) => {
-    if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
+const verifyCart = async (userId) => {
+    if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const verifiedCartItem = await buyModel.verifyCartItem(announcementId, userId)
+        const verifiedCartItem = await buyModel.verifyCart(userId)
 
         if(verifiedCartItem)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 
-const confirmBuy = async (cart) => {
-    if(cart.id_carrinho == '' || cart.id_carrinho == undefined || cart.id_usuario == '' || cart.id_usuario == undefined)
+const confirmBuy = async (userId) => {
+    if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        let userCartArrayLength = cart.id_carrinho.length
+        const lastUserCart = await buyModel.selectLastCart(userId)
+
+        if(lastUserCart) {
+            const announcementsIds = await buyModel.selectItemsIdsFromCart(lastUserCart)
+
+            if(announcementsIds) {
+                const announcementsIdsLength = announcementsIds.length
         
-        let confirmBuyJson = {}
-        confirmBuyJson.id_usuario = cart.id_usuario
-        let confirmedBuy
-        for(let i = 0; i < userCartArrayLength; i++) {
-            confirmBuyJson.id_carrinho = cart.id_carrinho[i].id
-            confirmedBuy = await buyModel.confirmBuy(confirmBuyJson)
-            await buyModel.updateCartStatus(cart.id_carrinho[i].id)
-            // console.log(cart.id_carrinho[i].id);
-        }
-            
-        if(confirmedBuy) {
-            let boughtBookJson = {}
-            boughtBookJson.id_usuario = cart.id_usuario
-
-            let insertBoughtBook
-
-            const cartItems = await buyModel.selectCartItems(cart.id_usuario)
-
-            for (let i = 0; i < cartItems.length; i++) {
-                boughtBookJson.id_anuncio = cartItems[i].id_anuncio
-                insertBoughtBook = await buyModel.insertBoughtBook(boughtBookJson)
-                console.log(boughtBookJson)
-            }
-
-            if(insertBoughtBook)
-                return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
-            else 
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-        }
-        else
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+                let confirmedBuy
+                let boughtBookJson = {}
+                boughtBookJson.id_usuario = userId
         
+                for(let i = 0; i < announcementsIdsLength; i++) {
+                    boughtBookJson.id_anuncio = announcementsIds[i].id
+                    confirmedBuy = await buyModel.confirmBuy(boughtBookJson)
+                }
+        
+                if(confirmedBuy) {
+                    await buyModel.updateCartStatus(lastUserCart)
+                    return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
+                } else
+                    return { status: 400, message: '' }
+        
+            } else
+                return { status: 400, message: MESSAGE_ERROR.EMPTY_CART }
+        } else {
+            return { status: 400, message: MESSAGE_ERROR.ANY_ACTIVE_CART }
+        }
 
     }
 }
 
 module.exports = { 
     newBuyWithoutCart,
-    putAnnouncementInCart,
+    createCart,
+    insertItemCart,
     listCartItems,
     deleteCartItem,
-    verifyCartItem,
+    verifyCart,
     confirmBuy
  }

@@ -23,12 +23,29 @@ const insertBuyWithoutCart = async (buy) => {
     }
 }
 
-const insertAnnouncementInCart = async (cart) => {
+const insertCart = async (cart) => {
     try {
-        let sql = `INSERT INTO tbl_carrinho (id_anuncio, id_usuario, status) values (
-            ${cart.id_anuncio},
+        let sql = `INSERT INTO tbl_carrinho (id_usuario, status) values (
             ${cart.id_usuario},
             ${cart.status}
+        )`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const insertItemInCart = async (cart) => {
+    try {
+        let sql = `INSERT INTO tbl_compra (id_carrinho, id_anuncio) values (
+            ${cart.id_carrinho},
+            ${cart.id_anuncio}
         )`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -79,9 +96,9 @@ const deleteCartItem = async (announcementId, userId) => {
     }
 }
 
-const verifyCartItem = async (announcementId, userId) => {
+const verifyCart = async (userId) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_anuncio = ${announcementId} AND id_usuario = ${userId}`
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_usuario = ${userId} AND status = false ORDER BY id DESC LIMIT 1`
 
         const rsResult = await prisma.$queryRawUnsafe(sql)
 
@@ -94,11 +111,26 @@ const verifyCartItem = async (announcementId, userId) => {
     }
 }
 
+const selectLastCart = async (userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_usuario = ${userId} AND status = false ORDER BY id DESC LIMIT 1`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return rsResult[0].id
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const confirmBuy = async (cart) => {
     try {
-        let sql = `INSERT INTO tbl_compra (id_carrinho, id_usuario) values (
-            ${cart.id_carrinho},
-            ${cart.id_usuario}
+        let sql = `INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio) values (
+            ${cart.id_usuario},
+            ${cart.id_anuncio}
         )`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -127,31 +159,35 @@ const updateCartStatus = async (cartId) => {
     }
 }
 
-const insertBoughtBook = async (boughtBook) => {
+const selectItemsIdsFromCart = async (cartId) => {
     try {
-        let sql = `INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio) values (
-            ${boughtBook.id_usuario},
-            ${boughtBook.id_anuncio}
-        )`
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id
+        FROM tbl_compra
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_compra.id_anuncio
+        WHERE tbl_compra.id_carrinho = ${cartId}`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const rsIds = await prisma.$queryRawUnsafe(sql)
 
-        if(result)
-            return true
+        if(rsIds.length > 0)
+            return rsIds
         else
             return false
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
 module.exports = { 
     insertBuyWithoutCart,
-    insertAnnouncementInCart,
+    insertCart,
+    insertItemInCart,
     selectCartItems,
     deleteCartItem,
-    verifyCartItem,
+    verifyCart,
+    selectLastCart,
     confirmBuy,
     updateCartStatus,
-    insertBoughtBook
+    selectItemsIdsFromCart
  }

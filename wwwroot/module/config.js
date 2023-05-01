@@ -16,7 +16,10 @@ const MESSAGE_ERROR = {
     EXCEEDED_CHARACTERS: 'Número de caracteres excedido!',
     INVALID_USER: 'Falha na autenticação',
     INVALID_USERNAME: 'Esse UserName já foi cadastrado anteriormente!',
-    INVALID_UPDATE_USERNAME: 'Escolha um UserName diferente do anterior!'
+    INVALID_UPDATE_USERNAME: 'Escolha um UserName diferente do anterior!',
+    ALREADY_EXISTS_CART: 'Você já possui um carrinho ativo!',
+    EMPTY_CART: 'Não há itens no carrinho',
+    ANY_ACTIVE_CART: 'Você não possui nenhum carrinho ativo!'
 }
 
 const MESSAGE_SUCCESS = {
@@ -26,7 +29,8 @@ const MESSAGE_SUCCESS = {
     JWT_CREATED: 'Web Token criado com sucesso!',
     DESACTIVATE_ITEM: 'Item desativado com sucesso!',
     ACTIVATE_ITEM: 'Item ativado com sucesso!',
-    BUY_SUCCESS: 'Compra feita com sucesso'
+    BUY_SUCCESS: 'Compra feita com sucesso',
+    INSERT_CART_ITEM: 'Anúncio inserido no carrinho!'
 }
 
 module.exports = {

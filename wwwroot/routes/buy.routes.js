@@ -35,7 +35,7 @@ router
     })
 
 router
-    .route('/put-in-cart')
+    .route('/create-cart')
     .post(jsonParser, async(req, res) => {
         let statusCode
         let message
@@ -45,10 +45,38 @@ router
             let bodyData = req.body
 
             if(JSON.stringify(bodyData) != '{}') {
-                const newAnnouncementInCart = await buyController.putAnnouncementInCart(bodyData)
+                const newAnnouncementInCart = await buyController.createCart(bodyData)
 
                 statusCode = newAnnouncementInCart.status
                 message = newAnnouncementInCart.message
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
+    .route('/new-cart-item/user-id/:userId')
+    .post(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+        let headerContentType = req.headers['content-type']
+
+        if(headerContentType == 'application/json') {
+            let bodyData = req.body
+
+            if(JSON.stringify(bodyData) != '{}') {
+                const newCartItem = await buyController.insertItemCart(bodyData, userId)
+
+                statusCode = newCartItem.status
+                message = newCartItem.message
             } else {
                 statusCode = 400
                 message = MESSAGE_ERROR.EMPTY_BODY
@@ -103,28 +131,16 @@ router
     })
 
 router
-    .route('/confirm-buy')
+    .route('/confirm-buy/user-id/:userId')
     .post(jsonParser, async(req, res) => {
         let statusCode
         let message
-        let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
+        
+        const confirmedBuy = await buyController.confirmBuy(userId)
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const confirmedBuy = await buyController.confirmBuy(bodyData)
-
-                statusCode = confirmedBuy.status
-                message = confirmedBuy.message
-            } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
-            }
-        } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
-        }
+        statusCode = confirmedBuy.status
+        message = confirmedBuy.message
 
         res.status(statusCode).json(message)
     })
