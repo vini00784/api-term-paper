@@ -67,7 +67,7 @@ const insertItemCart = async (cart, userId) => {
             else 
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         } else {
-            await createCart(userId)
+            await createCart({id_usuario:userId})
             lastUserCart = await buyModel.selectLastCart(userId)
 
             cart.id_carrinho = lastUserCart
