@@ -489,7 +489,7 @@ SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho ORDER BY id DESC LIMIT 1;
 SELECT cast(id AS DECIMAL) AS id FROM tbl_carrinho WHERE id_usuario = 88 AND status = FALSE ORDER BY id DESC LIMIT 1;
 SELECT * FROM tbl_compra WHERE id_carrinho = 9;
 
-SELECT cast(tbl_anuncio.id AS DECIMAL) AS id
+SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
    FROM tbl_compra
 
    INNER JOIN tbl_anuncio
