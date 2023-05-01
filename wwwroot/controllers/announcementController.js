@@ -210,36 +210,40 @@ const listAnnouncementsByGenres = async (userId) => {
         const { listGenreByUserId } = require('./genreController.js')
 
         const userGenres = await listGenreByUserId(userId)
+        let userGenresLength = 0
 
-        const userGenresLength = userGenres.message.genres.length
+        if(userGenres.status == 200) {
+            userGenresLength = userGenres.message.genres.length
 
-        let genresId = ""
+            let genresId = ""
 
-        for(let i = 0; i < userGenresLength; i++) {
-            if(userGenresLength == 1)
-                genresId += userGenres.message.genres[0].id_genero
-            else if (i == userGenresLength - 1)
-                genresId += userGenres.message.genres[i].id_genero
-            else
-                genresId += `${userGenres.message.genres[i].id_genero}, `
-        }
+            for(let i = 0; i < userGenresLength; i++) {
+                if(userGenresLength == 1)
+                    genresId += userGenres.message.genres[0].id_genero
+                else if (i == userGenresLength - 1)
+                    genresId += userGenres.message.genres[i].id_genero
+                else
+                    genresId += `${userGenres.message.genres[i].id_genero}, `
+            }
 
-        const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
+            const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
 
-        let filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
-            parseInt(t.id) === parseInt(element.id)
-        ))))
+            let filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
+                parseInt(t.id) === parseInt(element.id)
+            ))))
 
-        await verifyAnnouncementLikeFavoriteRead(announcementsByGenre, userId)
-        // await verifyAnnouncementUserCart(announcementsByGenre, userId)
+            await verifyAnnouncementLikeFavoriteRead(announcementsByGenre, userId)
+            // await verifyAnnouncementUserCart(announcementsByGenre, userId)
 
-        if(filteredJson) {
-            let announcementsJson = {}
+            if(filteredJson) {
+                let announcementsJson = {}
 
-            const announcementDataArray = await destructureAnnouncementJson(filteredJson)
+                const announcementDataArray = await destructureAnnouncementJson(filteredJson)
 
-            announcementsJson = await Promise.all(announcementDataArray)
-            return { status: 200, message: announcementsJson }
+                announcementsJson = await Promise.all(announcementDataArray)
+                return { status: 200, message: announcementsJson }
+            } else
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
     }
