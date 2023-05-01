@@ -10,6 +10,7 @@
     "prisma": "^4.10.1"
   },
   "scripts": {
-    "start": "npm i && npx prisma generate && nodemon ./app.js"
+    "start": "npm i && npx prisma generate && nodemon ./app.js",
+    "nodemon": "nodemon ./app.js"
   }
 }

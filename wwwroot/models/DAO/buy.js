@@ -10,7 +10,7 @@ const prisma = require('../../libs/prisma.js')
 
 const insertBuyWithoutCart = async (buy) => {
     try {
-        let sql = `CALL proc_buy_now (${buy.id_anuncio}, ${buy.id_usuario})`
+        let sql = `CALL proc_buy_now (${buy.id_usuario}, ${buy.id_anuncio})`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
