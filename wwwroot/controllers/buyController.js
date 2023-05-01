@@ -48,22 +48,44 @@ const insertItemCart = async (cart, userId) => {
     if(cart.id_anuncio == '' || cart.id_anuncio == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const lastUserCart = await buyModel.selectLastCart(userId)
-        cart.id_carrinho = lastUserCart
-        let userCartArrayLength = cart.id_anuncio.length
-        
-        let cartsItem = {}
-        cartsItem.id_carrinho = lastUserCart
-        let confirmedBuy
-        for(let i = 0; i < userCartArrayLength; i++) {
-            cartsItem.id_anuncio = cart.id_anuncio[i].id
-            confirmedBuy = await buyModel.insertItemInCart(cartsItem)
-        }
+        let lastUserCart = await buyModel.selectLastCart(userId)
 
-        if(confirmedBuy)
-            return { status: 200, message: MESSAGE_SUCCESS.INSERT_CART_ITEM }
-        else 
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        if(lastUserCart) {
+            cart.id_carrinho = lastUserCart
+            let userCartArrayLength = cart.id_anuncio.length
+            
+            let cartsItem = {}
+            cartsItem.id_carrinho = lastUserCart
+            let confirmedBuy
+            for(let i = 0; i < userCartArrayLength; i++) {
+                cartsItem.id_anuncio = cart.id_anuncio[i].id
+                confirmedBuy = await buyModel.insertItemInCart(cartsItem)
+            }
+    
+            if(confirmedBuy)
+                return { status: 200, message: MESSAGE_SUCCESS.INSERT_CART_ITEM }
+            else 
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        } else {
+            await createCart(userId)
+            lastUserCart = await buyModel.selectLastCart(userId)
+
+            cart.id_carrinho = lastUserCart
+            let userCartArrayLength = cart.id_anuncio.length
+            
+            let cartsItem = {}
+            cartsItem.id_carrinho = lastUserCart
+            let confirmedBuy
+            for(let i = 0; i < userCartArrayLength; i++) {
+                cartsItem.id_anuncio = cart.id_anuncio[i].id
+                confirmedBuy = await buyModel.insertItemInCart(cartsItem)
+            }
+    
+            if(confirmedBuy)
+                return { status: 200, message: MESSAGE_SUCCESS.INSERT_CART_ITEM }
+            else 
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
     }
 }
 
