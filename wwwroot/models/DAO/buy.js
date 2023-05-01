@@ -79,6 +79,27 @@ const selectCartItems = async (cartId) => {
     }
 }
 
+const totalPriceCart = async (cartId) => {
+    try {
+        let sql = `SELECT SUM(cast(tbl_anuncio.preco AS DECIMAL)) as total
+        FROM tbl_compra
+
+        INNER JOIN tbl_anuncio
+            ON tbl_anuncio.id = tbl_compra.id_anuncio
+
+        WHERE tbl_compra.id_carrinho = ${cartId}`
+
+        const rsTotalPrice = await prisma.$queryRawUnsafe(sql)
+
+        if(rsTotalPrice.length > 0)
+            return rsTotalPrice[0].total
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const deleteCartItem = async (announcementId, userId) => {
     try {
         let sql = `DELETE FROM tbl_carrinho WHERE id_anuncio = ${announcementId} AND id_usuario = ${userId}`
@@ -187,5 +208,6 @@ module.exports = {
     selectLastCart,
     confirmBuy,
     updateCartStatus,
-    selectItemsIdsFromCart
+    selectItemsIdsFromCart,
+    totalPriceCart
  }

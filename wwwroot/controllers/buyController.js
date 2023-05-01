@@ -95,10 +95,12 @@ const listCartItems = async (userId) => {
     else {
         const lastUserCart = await buyModel.selectLastCart(userId)
         const cartItems = await buyModel.selectCartItems(lastUserCart)
+        const totalPrice = await buyModel.totalPriceCart(lastUserCart)
 
         if(cartItems) {
             let cartItemsJson = {}
-            cartItemsJson = cartItems
+            cartItemsJson.items = cartItems
+            cartItemsJson.total = parseFloat(totalPrice)
 
             return { status: 200, message: cartItemsJson }
         } else
