@@ -93,7 +93,8 @@ const listCartItems = async (userId) => {
     if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const cartItems = await buyModel.selectCartItems(userId)
+        const lastUserCart = await buyModel.selectLastCart(userId)
+        const cartItems = await buyModel.selectCartItems(lastUserCart)
 
         if(cartItems) {
             let cartItemsJson = {}

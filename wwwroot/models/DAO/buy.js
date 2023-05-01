@@ -59,16 +59,14 @@ const insertItemInCart = async (cart) => {
     }
 }
 
-const selectCartItems = async (userId) => {
+const selectCartItems = async (cartId) => {
     try {
-        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi,
-        cast(tbl_carrinho.id AS DECIMAL) AS id_carrinho
-        FROM tbl_carrinho
-     
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM tbl_compra
+
         INNER JOIN tbl_anuncio
-           ON tbl_anuncio.id = tbl_carrinho.id_anuncio
-        
-        WHERE tbl_carrinho.id_usuario = ${userId} AND tbl_carrinho.status = false`
+            ON tbl_anuncio.id = tbl_compra.id_anuncio
+        WHERE tbl_compra.id_carrinho = ${cartId}`
 
         const rsCartItems = await prisma.$queryRawUnsafe(sql)
 
