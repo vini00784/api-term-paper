@@ -35,17 +35,18 @@ router
     })
 
 router
-    .route('/create-cart')
+    .route('/create-cart/user-id/:userId')
     .post(jsonParser, async(req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
 
         if(headerContentType == 'application/json') {
             let bodyData = req.body
 
             if(JSON.stringify(bodyData) != '{}') {
-                const newAnnouncementInCart = await buyController.createCart(bodyData)
+                const newAnnouncementInCart = await buyController.createCart(bodyData, userId)
 
                 statusCode = newAnnouncementInCart.status
                 message = newAnnouncementInCart.message

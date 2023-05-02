@@ -24,11 +24,11 @@ const newBuyWithoutCart = async (buy) => {
     }
 }
 
-const createCart = async (cart) => {
-    if(cart.id_usuario == '' || cart.id_usuario == undefined)
+const createCart = async (cart, userId) => {
+    if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const verifyUserCart = await verifyCart(cart.id_usuario)
+        const verifyUserCart = await verifyCart(userId)
 
         if(!verifyUserCart) {
             cart.status = 0
