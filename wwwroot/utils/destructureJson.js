@@ -137,34 +137,37 @@ const destructureUserJson = async (json) => {
 
 const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
+    const { verifyUserBuy } = require('../controllers/buyController.js')
     const announcementLikeVerify = await verifyAnnouncementLike(announcementId, userId)
     const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
     const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
+    const announcementBuyVerify = await verifyUserBuy(announcementId, userId)
 
     if(json) {
         json.message.forEach(element => {
             element.curtido = announcementLikeVerify
             element.favorito = announcementFavoriteVerify
             element.lido = announcementReadVerify
+            element.comprado = announcementBuyVerify
         })
     }
 }
 
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
+    const { verifyUserBuy } = require('../controllers/buyController.js')
 
     if(json) {
         json.forEach(async element => {
             const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
             const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
             const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
+            const announcementBuyVerify = await verifyUserBuy(element.id, userId)
     
-            if(announcementLikeVerify)
-                element.curtido = announcementLikeVerify
-            if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify
-            if(announcementReadVerify)
-                element.lido = announcementReadVerify
+            element.curtido = announcementLikeVerify
+            element.favorito = announcementFavoriteVerify
+            element.lido = announcementReadVerify
+            element.comprado = announcementBuyVerify
         })
     }
 
@@ -193,13 +196,10 @@ const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
             const shortStorieLikeVerify = await verifyShortStorieLike(element.id, userId)
             const shortStorieFavoriteVerify = await verifyShortStorieFavorite(element.id, userId)
             const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
-    
-            if(shortStorieLikeVerify)
-                element.curtido = shortStorieLikeVerify
-            if(shortStorieFavoriteVerify)
-                element.favorito = shortStorieFavoriteVerify
-            if(shortStorieReadVerify)
-                element.lido = shortStorieReadVerify
+
+            element.curtido = shortStorieLikeVerify
+            element.favorito = shortStorieFavoriteVerify
+            element.lido = shortStorieReadVerify
         })
     }
 }

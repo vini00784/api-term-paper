@@ -245,6 +245,19 @@ const confirmBuyFun = async (userId) => {
         return { status: 400, message: MESSAGE_ERROR.EMPTY_CART }
 }
 
+const verifyUserBuy = async (announcementID, userId) => {
+    if(announcementID == '' || announcementID == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedUserBuy = await buyModel.verifyUserBuy(announcementID, userId)
+
+        if(verifiedUserBuy)
+            return true
+        else
+            return false
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
     createCart,
@@ -252,5 +265,6 @@ module.exports = {
     listCartItems,
     deleteCartItem,
     verifyCart,
-    confirmBuy
+    confirmBuy,
+    verifyUserBuy
  }
