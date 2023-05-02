@@ -421,9 +421,9 @@ const verifyShortStorieLike = async (shortStorieID, userID) => {
         const verifiedShortStorieLike = await shortStorieLikeModel.verifyShortStorieLike(shortStorieID, userID)
 
         if(verifiedShortStorieLike)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 
@@ -434,9 +434,9 @@ const verifyShortStorieFavorite = async (shortStorieID, userID) => {
         const verifiedShortStorieFavorite = await shortStorieFavoriteModel.verifyShortStorieFavorite(shortStorieID, userID)
 
         if(verifiedShortStorieFavorite)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 
@@ -447,9 +447,9 @@ const verifyShortStorieRead = async (shortStorieID, userID) => {
         const verifiedShortStorieRead = await shortStorieReadModel.verifyShortStorieRead(shortStorieID, userID)
 
         if(verifiedShortStorieRead)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 

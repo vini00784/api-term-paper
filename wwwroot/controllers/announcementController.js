@@ -433,9 +433,9 @@ const verifyAnnouncementLike = async (announcementID, userID) => {
         const verifiedAnnouncementLike = await announcementLikeModel.verifyAnnouncementLike(announcementID, userID)
 
         if(verifiedAnnouncementLike)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 
@@ -446,9 +446,9 @@ const verifyAnnouncementFavorite = async (announcementID, userID) => {
         const verifiedAnnouncementFavorite = await announcementFavoriteModel.verifyAnnouncementFavorite(announcementID, userID)
 
         if(verifiedAnnouncementFavorite)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 
@@ -459,9 +459,9 @@ const verifyAnnouncementRead = async (announcementID, userID) => {
         const verifiedAnnouncementRead = await announcementReadModel.verifyAnnouncementRead(announcementID, userID)
 
         if(verifiedAnnouncementRead)
-            return { status: 200, message: true }
+            return true
         else
-            return {status: 404, message: false}
+            return false
     }
 }
 

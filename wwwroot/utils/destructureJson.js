@@ -143,9 +143,9 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
 
     if(json) {
         json.message.forEach(element => {
-            element.curtido = announcementLikeVerify.message
-            element.favorito = announcementFavoriteVerify.message
-            element.lido = announcementReadVerify.message
+            element.curtido = announcementLikeVerify
+            element.favorito = announcementFavoriteVerify
+            element.lido = announcementReadVerify
         })
     }
 }
@@ -160,11 +160,11 @@ const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
             const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
     
             if(announcementLikeVerify)
-                element.curtido = announcementLikeVerify.message
+                element.curtido = announcementLikeVerify
             if(announcementFavoriteVerify)
-                element.favorito = announcementFavoriteVerify.message
+                element.favorito = announcementFavoriteVerify
             if(announcementReadVerify)
-                element.lido = announcementReadVerify.message
+                element.lido = announcementReadVerify
         })
     }
 
@@ -178,9 +178,9 @@ const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId)
 
     if(json) {
         json.message.forEach(element => {
-            element.curtido = shortStorieLikeVerify.message
-            element.favorito = shortStorieFavoriteVerify.message
-            element.lido = shortStorieReadVerify.message
+            element.curtido = shortStorieLikeVerify
+            element.favorito = shortStorieFavoriteVerify
+            element.lido = shortStorieReadVerify
         })
     }
 }
@@ -195,11 +195,11 @@ const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
             const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
     
             if(shortStorieLikeVerify)
-                element.curtido = shortStorieLikeVerify.message
+                element.curtido = shortStorieLikeVerify
             if(shortStorieFavoriteVerify)
-                element.favorito = shortStorieFavoriteVerify.message
+                element.favorito = shortStorieFavoriteVerify
             if(shortStorieReadVerify)
-                element.lido = shortStorieReadVerify.message
+                element.lido = shortStorieReadVerify
         })
     }
 }
