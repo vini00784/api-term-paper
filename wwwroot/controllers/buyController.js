@@ -261,6 +261,19 @@ const verifyUserBuy = async (announcementID, userId) => {
     }
 }
 
+const verifyUserCart = async (announcementID, userId) => {
+    if(announcementID == '' || announcementID == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedUserBuy = await buyModel.verifyUserCart(announcementID, userId)
+
+        if(verifiedUserBuy)
+            return true
+        else
+            return false
+    }
+}
+
 const countAnnouncementPurchases = async (announcementId) => {
     if(announcementId == '' || announcementId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
@@ -312,6 +325,7 @@ module.exports = {
     verifyCart,
     confirmBuy,
     verifyUserBuy,
+    verifyUserCart,
     countAnnouncementPurchases,
     listPurchasedAnnouncements
  }

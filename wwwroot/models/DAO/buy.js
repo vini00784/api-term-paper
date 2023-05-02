@@ -213,6 +213,30 @@ const verifyUserBuy = async (announcementID, userID) => {
     }
 }
 
+const verifyUserCart = async (announcementID, userID) => {
+    try {
+        let sql = `SELECT cast(tbl_compra.id_anuncio AS DECIMAL) AS id
+        FROM tbl_carrinho
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_carrinho.id_usuario
+
+        INNER JOIN tbl_compra
+            ON tbl_carrinho.id = tbl_compra.id_carrinho
+
+        WHERE tbl_compra.id_anuncio = ${announcementID} AND tbl_carrinho.id_usuario = ${userID} AND tbl_carrinho.status = 0`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 const countAnnouncementPurchases = async (announcementId) => {
     try {
         let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) AS quantidade_compras FROM tbl_livros_comprados WHERE id_anuncio = ${announcementId}`
@@ -264,6 +288,7 @@ module.exports = {
     selectItemsIdsFromCart,
     totalPriceCart,
     verifyUserBuy,
+    verifyUserCart,
     countAnnouncementPurchases,
     selectPurchasedAnnouncements
  }

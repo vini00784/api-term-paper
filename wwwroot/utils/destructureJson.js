@@ -142,11 +142,12 @@ const destructureUserJson = async (json) => {
 
 const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
-    const { verifyUserBuy } = require('../controllers/buyController.js')
+    const { verifyUserBuy, verifyUserCart } = require('../controllers/buyController.js')
     const announcementLikeVerify = await verifyAnnouncementLike(announcementId, userId)
     const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
     const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
     const announcementBuyVerify = await verifyUserBuy(announcementId, userId)
+    const announcementCartVerify = await verifyUserCart(announcementId, userId)
 
     if(json) {
         json.message.forEach(element => {
@@ -154,13 +155,14 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
             element.favorito = announcementFavoriteVerify
             element.lido = announcementReadVerify
             element.comprado = announcementBuyVerify
+            element.carrinho = announcementCartVerify
         })
     }
 }
 
 const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
-    const { verifyUserBuy } = require('../controllers/buyController.js')
+    const { verifyUserBuy, verifyUserCart } = require('../controllers/buyController.js')
 
     if(json) {
         json.forEach(async element => {
@@ -168,11 +170,13 @@ const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
             const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
             const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
             const announcementBuyVerify = await verifyUserBuy(element.id, userId)
+            const announcementCartVerify = await verifyUserCart(element.id, userId)
     
             element.curtido = announcementLikeVerify
             element.favorito = announcementFavoriteVerify
             element.lido = announcementReadVerify
             element.comprado = announcementBuyVerify
+            element.carrinho = announcementCartVerify
         })
     }
 
