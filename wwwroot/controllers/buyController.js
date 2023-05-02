@@ -32,6 +32,7 @@ const createCart = async (cart, userId) => {
 
         if(!verifyUserCart) {
             cart.status = 0
+            cart.id_usuario = userId
     
             const newAnnouncementInCart = await buyModel.insertCart(cart)
     
@@ -67,24 +68,12 @@ const insertItemCart = async (cart, userId) => {
             else 
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         } else {
-            await createCart({id_usuario:userId})
-            lastUserCart = await buyModel.selectLastCart(userId)
+            const confirmedBuy = await insertItemCartFun(cart, userId)
 
-            cart.id_carrinho = lastUserCart
-            let userCartArrayLength = cart.id_anuncio.length
-            
-            let cartsItem = {}
-            cartsItem.id_carrinho = lastUserCart
-            let confirmedBuy
-            for(let i = 0; i < userCartArrayLength; i++) {
-                cartsItem.id_anuncio = cart.id_anuncio[i].id
-                confirmedBuy = await buyModel.insertItemInCart(cartsItem)
-            }
-    
             if(confirmedBuy)
                 return { status: 200, message: MESSAGE_SUCCESS.INSERT_CART_ITEM }
-            else 
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            else
+                return { status: 400, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
     }
 }
@@ -94,17 +83,24 @@ const listCartItems = async (userId) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const lastUserCart = await buyModel.selectLastCart(userId)
-        const cartItems = await buyModel.selectCartItems(lastUserCart)
-        const totalPrice = await buyModel.totalPriceCart(lastUserCart)
 
-        if(cartItems) {
-            let cartItemsJson = {}
-            cartItemsJson.items = cartItems
-            cartItemsJson.total = parseFloat(totalPrice)
+        if(lastUserCart) {
+            const cartItems = await buyModel.selectCartItems(lastUserCart)
+            const totalPrice = await buyModel.totalPriceCart(lastUserCart)
+    
+            if(cartItems) {
+                let cartItemsJson = {}
+                cartItemsJson.items = cartItems
+                cartItemsJson.total = parseFloat(totalPrice)
+    
+                return { status: 200, message: cartItemsJson }
+            } else
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        } else {
+            const cartItems = await listCartItemsFun(userId)
 
-            return { status: 200, message: cartItemsJson }
-        } else
-            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            return { status: cartItems.status, message: cartItems.message }
+        }
     }
 }
 
@@ -164,10 +160,89 @@ const confirmBuy = async (userId) => {
             } else
                 return { status: 400, message: MESSAGE_ERROR.EMPTY_CART }
         } else {
-            return { status: 400, message: MESSAGE_ERROR.ANY_ACTIVE_CART }
+            const confirmedBuy = await confirmBuyFun(userId)
+
+            return { status: confirmedBuy.status, message: confirmedBuy.message }
         }
 
     }
+}
+
+const insertItemCartFun = async (cart, userId) => {
+    await createCart(cart, userId)
+    let lastUserCart = await buyModel.selectLastCart(userId)
+
+    cart.id_carrinho = lastUserCart
+    let userCartArrayLength = cart.id_anuncio.length
+            
+    let cartsItem = {}
+    cartsItem.id_carrinho = lastUserCart
+    let confirmedBuy
+    for(let i = 0; i < userCartArrayLength; i++) {
+        cartsItem.id_anuncio = cart.id_anuncio[i].id
+        confirmedBuy = await buyModel.insertItemInCart(cartsItem)
+    }
+    
+    if(confirmedBuy)
+        return true
+    else 
+        return false
+}
+
+const listCartItemsFun = async (userId) => {
+    await createCart(
+        {
+            id_usuario: userId,
+            status: 0
+        }, 
+        userId
+    )
+    const lastUserCart = await buyModel.selectLastCart(userId)
+    const cartItems = await buyModel.selectCartItems(lastUserCart)
+    const totalPrice = await buyModel.totalPriceCart(lastUserCart)
+    
+    if(cartItems) {
+        let cartItemsJson = {}
+        cartItemsJson.items = cartItems
+        cartItemsJson.total = parseFloat(totalPrice)
+    
+        return { status: 200, message: cartItemsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
+const confirmBuyFun = async (userId) => {
+    await createCart(
+        {
+            id_usuario: userId,
+            status: 0
+        }, 
+        userId
+    )
+
+    const lastUserCart = await buyModel.selectLastCart(userId)
+    const announcementsIds = await buyModel.selectItemsIdsFromCart(lastUserCart)
+
+    if(announcementsIds) {
+        const announcementsIdsLength = announcementsIds.length
+        
+        let confirmedBuy
+        let boughtBookJson = {}
+        boughtBookJson.id_usuario = userId
+        
+        for(let i = 0; i < announcementsIdsLength; i++) {
+            boughtBookJson.id_anuncio = announcementsIds[i].id
+            confirmedBuy = await buyModel.confirmBuy(boughtBookJson)
+        }
+        
+        if(confirmedBuy) {
+            await buyModel.updateCartStatus(lastUserCart)
+            return { status: 200, message: MESSAGE_SUCCESS.BUY_SUCCESS }
+        } else
+            return { status: 400, message: '' }
+        
+    } else
+        return { status: 400, message: MESSAGE_ERROR.EMPTY_CART }
 }
 
 module.exports = { 
