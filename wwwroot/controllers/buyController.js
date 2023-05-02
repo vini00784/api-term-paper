@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Buy model
 const buyModel = require('../models/DAO/buy.js')
 
+// Function to destructure announcement json
+const { destructureAnnouncementJson, verifyAnnouncementLikeFavoriteRead} = require('../utils/destructureJson.js')
+
 const newBuyWithoutCart = async (buy) => {
     if(buy.id_anuncio == '' || buy.id_anuncio == undefined || buy.id_usuario == '' || buy.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -276,6 +279,30 @@ const countAnnouncementPurchases = async (announcementId) => {
     }
 }
 
+const listPurchasedAnnouncements = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const purchasedAnnouncementsData = await buyModel.selectPurchasedAnnouncements(userId)
+
+        let filteredJson = purchasedAnnouncementsData.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id) === parseInt(element.id)
+        ))))
+
+        await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
+
+        if(filteredJson) {
+            let purchasedAnnouncements = {}
+
+            const announcementDataArray = await destructureAnnouncementJson(filteredJson)
+
+            purchasedAnnouncements = await Promise.all(announcementDataArray)
+            return { status: 200, message: purchasedAnnouncements }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
     createCart,
@@ -285,5 +312,6 @@ module.exports = {
     verifyCart,
     confirmBuy,
     verifyUserBuy,
-    countAnnouncementPurchases
+    countAnnouncementPurchases,
+    listPurchasedAnnouncements
  }

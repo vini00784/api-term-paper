@@ -146,4 +146,24 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/purchased-announcements/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const purchasedAnnouncements = await buyController.listPurchasedAnnouncements(userId)
+
+        if(purchasedAnnouncements) {
+            statusCode = purchasedAnnouncements.status
+            message = purchasedAnnouncements.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

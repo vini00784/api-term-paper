@@ -228,6 +228,29 @@ const countAnnouncementPurchases = async (announcementId) => {
     }
 }
 
+const selectPurchasedAnnouncements = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM tbl_livros_comprados
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_livros_comprados.id_usuario
+     
+        WHERE tbl_livros_comprados.id_usuario = ${userId}`
+
+        const rsPurchasedAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsPurchasedAnnouncements.length > 0)
+            return rsPurchasedAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     insertBuyWithoutCart,
     insertCart,
@@ -241,5 +264,6 @@ module.exports = {
     selectItemsIdsFromCart,
     totalPriceCart,
     verifyUserBuy,
-    countAnnouncementPurchases
+    countAnnouncementPurchases,
+    selectPurchasedAnnouncements
  }
