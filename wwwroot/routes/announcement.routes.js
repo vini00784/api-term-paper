@@ -604,23 +604,21 @@ router
     })
 
 router
-    .route('/announcements/price/?')
-    .get(async(req, res) => {
+    .route('/filter-announcements/?')
+    .post(jsonParser, async(req, res) => {
         let statusCode
         let message
-        let minimumValue = req.query.minimumValue
-        let maximumValue = req.query.maximumValue
-        let value = req.query.value
-
-        const announcementsByPrice = await announcementController.listAnnouncementsByPrice(minimumValue, maximumValue, value)
-
-        if(announcementsByPrice) {
-            statusCode = announcementsByPrice.status
-            message = announcementsByPrice.message
-        } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
-        }
+        let headerContentType = req.headers['content-type']
+        let minValue = req.query.minValue
+        let maxValue = req.query.maxValue
+        
+        let bodyData = req.body
+        // console.log(bodyData);
+            
+        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue)
+    
+        statusCode = announcementsByGenresPrice.status
+        message = announcementsByGenresPrice.message
 
         res.status(statusCode).json(message)
     })

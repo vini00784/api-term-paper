@@ -395,17 +395,41 @@ const selectAnnouncementByGenreName = async (genreNames) => { // Esse será usad
     }
 }
 
-const selectAnnouncementsByPrice = async (sqlScript) => {
-    console.log(sqlScript)
+// Seleciona todos os anúncios referidos a determinados parametros de filtros
+const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi 
-        FROM tbl_anuncio
-        WHERE ${sqlScript}`
+        let sqlFrom = "tbl_anuncio"
+        let sqlWhere = "tbl_anuncio.status = true"
 
-        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
+        if (genresNames != "") {
+            sqlFrom = `tbl_genero_anuncio
+     
+            INNER JOIN tbl_anuncio
+               ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
+            INNER JOIN tbl_generos
+               ON tbl_generos.id = tbl_genero_anuncio.id_genero
+            INNER JOIN tbl_usuario
+               ON tbl_usuario.id = tbl_anuncio.id_usuario`
 
-        if(rsAnnouncements.length > 0)
-            return rsAnnouncements
+            sqlWhere += ` AND tbl_generos.nome in(${genresNames})`
+        }
+
+        if (minPrice != "")
+            sqlWhere += ` AND tbl_anuncio.preco >= ${minPrice}`
+
+        if (maxPrice != "")
+            sqlWhere += ` AND tbl_anuncio.preco <= ${maxPrice}`
+
+        let sqlBase = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        FROM ${sqlFrom}
+     
+        WHERE ${sqlWhere}
+        ORDER BY tbl_anuncio.id DESC`
+
+        const rsAnnouncement = await prisma.$queryRawUnsafe(sqlBase)
+
+        if(rsAnnouncement.length > 0)
+            return rsAnnouncement
         else
             return false
     } catch (err) {
@@ -432,5 +456,5 @@ module.exports = {
     selectAnnouncementByGenresName,
     selectAnnouncementByTitleName,
     selectAnnouncementByGenreName,
-    selectAnnouncementsByPrice
+    selectAnnouncementsByFilters
 }

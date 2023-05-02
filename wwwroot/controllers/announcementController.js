@@ -544,44 +544,36 @@ const listAnnouncementsByGenreName = async (genres, userId) => {
         return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
 }
 
-const listAnnouncementsByPrice = async (minimumValue, maximumValue, value) => {
-    let sqlScript = ""
-
-    if(minimumValue == '' || minimumValue == undefined) {
-        minimumValue = 0
-        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
+const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice) => {
+    let genresNamesLength = genres?.nome_genero?.length
+    let genresNames = ""
+   
+    for(let i = 0; i < genresNamesLength; i++) {
+        if(genresNamesLength == 1) {
+            genresNames += `'${genres.nome_genero[0].nome}'`
+        }
+        else if(i == genresNamesLength - 1) {
+            genresNames += `'${genres.nome_genero[i].nome}'`
+        }
+        else
+            genresNames += `'${genres.nome_genero[i].nome}', `
     }
-    else if (maximumValue == '' || maximumValue == undefined)
-        sqlScript = `preco >= ${value}`
-    else
-        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
-    
-    const announcementsByPrice = await announcementModel.selectAnnouncementsByPrice(sqlScript)
+   
+    const announcementsByGenresPrice = await announcementModel.selectAnnouncementsByFilters(genresNames, minPrice, maxPrice)
 
-    if(announcementsByPrice) {
+    // let filteredJson = announcementsByGenresPrice.filter((element, index, self) => index === self.findIndex((t => (
+    //     parseInt(t.id) === parseInt(element.id)
+    // ))))
+
+    if(announcementsByGenresPrice) {
         let announcementsJson = {}
 
-        const announcementDataArray = await destructureAnnouncementJson(announcementsByPrice)
+        const announcementsDataArray = await destructureAnnouncementJson(announcementsByGenresPrice)
 
-        announcementsJson = await Promise.all(announcementDataArray)
+        announcementsJson = await Promise.all(announcementsDataArray)
         return { status: 200, message: announcementsJson }
     } else
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
-}
-
-const setSqlScript = async (minimumValue, maximumValue, value) => {
-    let sqlScript = ""
-
-    if(minimumValue == '' || minimumValue == undefined) {
-        minimumValue = 0
-        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
-    }
-    else if (maximumValue == '' || maximumValue == undefined)
-        sqlScript = `preco >= ${value}`
-    else
-        sqlScript = `preco BETWEEN ${minimumValue} AND ${maximumValue}`
-
-    return sqlScript
 }
 
 module.exports = {
@@ -612,5 +604,5 @@ module.exports = {
     listFavoritedAnnouncements,
     listReadedAnnouncements,
     listAnnouncementsByGenreName,
-    listAnnouncementsByPrice
+    filterAnnouncementsByGenresPrice
 }
