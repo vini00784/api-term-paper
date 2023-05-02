@@ -494,4 +494,16 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_an
 
    INNER JOIN tbl_anuncio
       ON tbl_anuncio.id = tbl_compra.id_anuncio
-   WHERE tbl_compra.id_carrinho = 9
+   WHERE tbl_compra.id_carrinho = 9;
+
+DESC tbl_livros_comprados;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+   FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_livros_comprados.id_usuario
+
+   WHERE tbl_livros_comprados.id_usuario = 88
