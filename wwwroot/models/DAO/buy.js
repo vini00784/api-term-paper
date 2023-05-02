@@ -213,6 +213,21 @@ const verifyUserBuy = async (announcementID, userID) => {
     }
 }
 
+const countAnnouncementPurchases = async (announcementId) => {
+    try {
+        let sql = `SELECT id_anuncio, cast(COUNT(id) AS DECIMAL) AS quantidade_compras FROM tbl_livros_comprados WHERE id_anuncio = ${announcementId}`
+
+        const rsPurchases = await prisma.$queryRawUnsafe(sql)
+
+        if(rsPurchases.length > 0)
+            return rsPurchases[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     insertBuyWithoutCart,
     insertCart,
@@ -225,5 +240,6 @@ module.exports = {
     updateCartStatus,
     selectItemsIdsFromCart,
     totalPriceCart,
-    verifyUserBuy
+    verifyUserBuy,
+    countAnnouncementPurchases
  }

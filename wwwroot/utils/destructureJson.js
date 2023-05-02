@@ -5,6 +5,7 @@ const destructureAnnouncementJson = async (json) => {
     const { countAnnouncementLikes, verifyAnnouncementLike } = require('../models/DAO/announcementLike.js')
     const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.js')
     const { countAnnouncementReads } = require('../models/DAO/announcementRead.js')
+    const { countAnnouncementPurchases } = require('../models/DAO/buy.js')
 
     const announcementDataArray = json.map(async announcementItem => {
         const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
@@ -14,6 +15,7 @@ const destructureAnnouncementJson = async (json) => {
             const announcementLikesData = await countAnnouncementLikes(announcementItem.id)
             const announcementFavoritesData = await countAnnouncementFavorites(announcementItem.id)
             const announcementReadsData = await countAnnouncementReads(announcementItem.id)
+            const announcementPurchasesData = await countAnnouncementPurchases(announcementItem.id)
         
             if(announcementParentalRatingData) {
                 announcementItem.classificacao = announcementParentalRatingData
@@ -35,6 +37,9 @@ const destructureAnnouncementJson = async (json) => {
 
                             if(announcementReadsData.quantidade_lido > 0 || announcementReadsData.quantidade_lido == undefined)
                                 announcementItem.lidos = announcementReadsData
+
+                            if(announcementPurchasesData.quantidade_compras > 0 || announcementPurchasesData.quantidade_compras == undefined)
+                                announcementItem.compras = announcementPurchasesData
                         }
                     }
                 }

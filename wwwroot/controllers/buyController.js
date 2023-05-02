@@ -258,6 +258,24 @@ const verifyUserBuy = async (announcementID, userId) => {
     }
 }
 
+const countAnnouncementPurchases = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementPurchases = await buyModel.countAnnouncementPurchases(announcementId)
+
+        if(announcementPurchases) {
+            let purchasesJson = {}
+            purchasesJson = announcementPurchases
+
+            if(purchasesJson.id_anuncio == null || purchasesJson.id_anuncio == undefined)
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            else
+                return { status: 200, message: purchasesJson }
+        }
+    }
+}
+
 module.exports = { 
     newBuyWithoutCart,
     createCart,
@@ -266,5 +284,6 @@ module.exports = {
     deleteCartItem,
     verifyCart,
     confirmBuy,
-    verifyUserBuy
+    verifyUserBuy,
+    countAnnouncementPurchases
  }
