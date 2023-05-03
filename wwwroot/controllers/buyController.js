@@ -111,7 +111,8 @@ const deleteCartItem = async (announcementId, userId) => {
     if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const deletedCartItem = await buyModel.deleteCartItem(announcementId, userId)
+        const lastUserCart = await buyModel.selectLastCart(userId)
+        const deletedCartItem = await buyModel.deleteCartItem(announcementId, lastUserCart)
 
         if(deletedCartItem)
             return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}

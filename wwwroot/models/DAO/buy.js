@@ -100,9 +100,9 @@ const totalPriceCart = async (cartId) => {
     }
 }
 
-const deleteCartItem = async (announcementId, userId) => {
+const deleteCartItem = async (announcementId, cartId) => {
     try {
-        let sql = `DELETE FROM tbl_carrinho WHERE id_anuncio = ${announcementId} AND id_usuario = ${userId}`
+        let sql = `DELETE FROM tbl_compra WHERE id_anuncio = ${announcementId} AND id_carrinho = ${cartId}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
