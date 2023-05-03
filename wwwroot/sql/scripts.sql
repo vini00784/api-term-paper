@@ -527,3 +527,22 @@ SELECT FORMAT(SUM(tbl_anuncio.preco), 2) AS total
             ON tbl_anuncio.id = tbl_compra.id_anuncio
 
         WHERE tbl_compra.id_carrinho = 24;
+SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+   FROM tbl_seguidor_seguidores
+
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_seguidor_seguidores.id_segue
+
+   WHERE id_seguidor = 83;
+
+-- O script acima traz os seguidores de tal usuário
+
+SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+   FROM tbl_seguidor_seguidores
+
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+
+   WHERE id_segue = 88;
+
+-- O script acima traz os usuários que tal usuário está seguindo
