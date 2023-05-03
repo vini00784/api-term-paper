@@ -30,6 +30,7 @@ const parentalRatingRouter = require('./wwwroot/routes/parentalRating.routes.js'
 const shortStorieRouter = require('./wwwroot/routes/shortStorie.routes.js')
 const complaintsRouter = require('./wwwroot/routes/complaint.routes.js')
 const buyRouter = require('./wwwroot/routes/buy.routes.js')
+const followerRouter = require('./wwwroot/routes/follower.routes.js')
 
 // Using routers
 
@@ -41,6 +42,7 @@ app.use(parentalRatingRouter)
 app.use(shortStorieRouter)
 app.use(complaintsRouter)
 app.use(buyRouter)
+app.use(followerRouter)
 
 // Using routers
 
