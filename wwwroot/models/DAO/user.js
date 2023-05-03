@@ -102,7 +102,7 @@ const deleteUser = async (id) => {
 
 const selectUserByUsername = async (userName) => {
     try {
-        let sql = `SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario WHERE user_name = '${userName}'`
+        let sql = `SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario WHERE user_name = '${userName}' OR nome = '${userName}'`
 
         const rsUserByUsername = await prisma.$queryRawUnsafe(sql)
 
@@ -183,6 +183,21 @@ const selectLastId = async () => {
 
         if(rsLastId)
             return rsLastId[0].id
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectUserByName = async () => {
+    try {
+        let sql = ``
+
+        const rsUsers = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUsers.length > 0)
+            return rsUsers
         else
             return false
     } catch (err) {
