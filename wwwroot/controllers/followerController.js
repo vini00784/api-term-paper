@@ -24,6 +24,20 @@ const followUser = async (follow) => {
     }
 }
 
+const unfollowUser = async (followerId, followedId) => {
+    if(followerId == ''|| followerId == undefined || followedId == '' || followedId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const removeFollow = await followerModel.deleteFollow(followerId, followedId)
+
+        if(removeFollow)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = { 
-    followUser
+    followUser,
+    unfollowUser
 }

@@ -34,4 +34,20 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/unfollow-user/?')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let followerId = req.query.followerId
+        let followedId = req.query.followedId
+
+        const unfollowUser = await followerController.unfollowUser(followerId, followedId)
+
+        statusCode = unfollowUser.status
+        message = unfollowUser.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
