@@ -157,7 +157,7 @@ const selectUserByUsername = async (userName) => {
 
             const userDataArray = await destructureUserJson(userByUsername)
 
-            userByUsernameJson.user = await Promise.all(userDataArray)
+            userByUsernameJson = await Promise.all(userDataArray)
             return {status: 200, message: userByUsernameJson}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
