@@ -81,13 +81,13 @@ const selectCartItems = async (cartId) => {
 
 const totalPriceCart = async (cartId) => {
     try {
-        let sql = `SELECT SUM(cast(tbl_anuncio.preco AS DECIMAL)) as total
+        let sql = `SELECT FORMAT(SUM(tbl_anuncio.preco), 2) AS total
         FROM tbl_compra
 
         INNER JOIN tbl_anuncio
             ON tbl_anuncio.id = tbl_compra.id_anuncio
 
-        WHERE tbl_compra.id_carrinho = ${cartId}`
+        WHERE tbl_compra.id_carrinho = ${cartId};`
 
         const rsTotalPrice = await prisma.$queryRawUnsafe(sql)
 
