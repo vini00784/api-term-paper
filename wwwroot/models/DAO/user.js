@@ -102,7 +102,15 @@ const deleteUser = async (id) => {
 
 const selectUserByUsername = async (userName) => {
     try {
-        let sql = `SELECT cast(id AS decimal) AS id, user_name, nome, data_nascimento, foto, biografia, email, premium FROM tbl_usuario WHERE user_name = '${userName}' OR nome = '${userName}'`
+        let sql = `SELECT cast(tbl_usuario.id AS decimal) AS id, tbl_usuario.user_name, tbl_usuario.nome, tbl_usuario.data_nascimento, tbl_usuario.foto, tbl_usuario.biografia, tbl_usuario.email, tbl_usuario.premium
+        FROM tbl_usuario_tag
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+        INNER JOIN tbl_tag
+           ON tbl_tag.id = tbl_usuario_tag.id_tag
+     
+        WHERE (tbl_usuario.user_name = '${userName}' OR tbl_usuario.nome = '${userName}') AND tbl_tag.tag = 'Autor'`
 
         const rsUserByUsername = await prisma.$queryRawUnsafe(sql)
 
