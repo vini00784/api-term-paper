@@ -58,8 +58,27 @@ const listUserFollowers = async (userId) => {
     }
 }
 
+const listFollowingUsers = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const followingUsers = await followerModel.selectFollowingUsers(userId)
+
+        if(followingUsers) {
+            let followingJson = {}
+
+            const userDataArray = await destructureUserJson(followingUsers)
+
+            followingJson = await Promise.all(userDataArray)
+            return {status: 200, message: followingJson}
+        } else
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+    }
+}
+
 module.exports = { 
     followUser,
     unfollowUser,
-    listUserFollowers
+    listUserFollowers,
+    listFollowingUsers
 }

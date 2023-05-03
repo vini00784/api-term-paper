@@ -65,4 +65,19 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/following/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const followingUsers = await followerController.listFollowingUsers(userId)
+
+        statusCode = followingUsers.status
+        message = followingUsers.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
