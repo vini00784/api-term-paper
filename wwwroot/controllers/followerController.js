@@ -11,6 +11,9 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Follower model
 const followerModel = require('../models/DAO/followers.js')
 
+// Function to destructure announcement json
+const { destructureUserJson } = require('../utils/destructureJson.js')
+
 const followUser = async (follow) => {
     if(follow.id_segue == ''|| follow.id_segue == undefined || follow.id_seguindo == '' || follow.id_seguindo == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -37,7 +40,26 @@ const unfollowUser = async (followerId, followedId) => {
     }
 }
 
+const listUserFollowers = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const userFollowers = await followerModel.selectUserFollowers(userId)
+
+        if(userFollowers) {
+            let followersJson = {}
+
+            const userDataArray = await destructureUserJson(userFollowers)
+
+            followersJson = await Promise.all(userDataArray)
+            return {status: 200, message: followersJson}
+        } else
+            return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
+    }
+}
+
 module.exports = { 
     followUser,
-    unfollowUser
+    unfollowUser,
+    listUserFollowers
 }

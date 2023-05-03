@@ -41,7 +41,29 @@ const deleteFollow = async (followerId, followedId) => {
     }
 }
 
+const selectUserFollowers = async (userId) => { // EndPoint to get user followers
+    try {
+        let sql = `SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+        FROM tbl_seguidor_seguidores
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_seguidor_seguidores.id_segue
+     
+        WHERE id_seguidor = ${userId}`
+
+        const rsFollowers = await prisma.$queryRawUnsafe(sql)
+
+        if(rsFollowers.length > 0)
+            return rsFollowers
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertFollower,
-    deleteFollow
+    deleteFollow,
+    selectUserFollowers
 }
