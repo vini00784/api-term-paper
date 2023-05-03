@@ -519,3 +519,11 @@ SELECT cast(tbl_usuario.id AS decimal) AS id, tbl_usuario.user_name, tbl_usuario
       ON tbl_tag.id = tbl_usuario_tag.id_tag
 
    WHERE (tbl_usuario.user_name = 'Teste Front' OR tbl_usuario.nome = 'Teste Front') AND tbl_tag.tag = 'Autor';
+
+SELECT FORMAT(SUM(tbl_anuncio.preco), 2) AS total
+        FROM tbl_compra
+
+        INNER JOIN tbl_anuncio
+            ON tbl_anuncio.id = tbl_compra.id_anuncio
+
+        WHERE tbl_compra.id_carrinho = 24;
