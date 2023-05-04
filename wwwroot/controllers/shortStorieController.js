@@ -198,7 +198,7 @@ const listDesactivatedShortStories = async (userId) => {
     }
 }
 
-const listShortStoriesByGenres = async (userId) => {
+const listShortStoriesByGenresUser = async (userId) => {
     if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
@@ -232,6 +232,38 @@ const listShortStoriesByGenres = async (userId) => {
 
             const shortStoriesDataArray = await destructureShortStorieJson(filteredJson)
 
+            shortStoriesJson = await Promise.all(shortStoriesDataArray)
+            return { status: 200, message: shortStoriesJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
+const listShortStoriesByGenres = async (genres, userId) => {
+    if(genres == '' || genres == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        let genresIdLength = genres?.generos?.length
+        let genresId = ""
+       
+        for(let i = 0; i < genresIdLength; i++) {
+            if(genresIdLength == 1)
+                genresId += genres.generos[0].id
+            else if (i == genresIdLength - 1)
+                genresId += genres.generos[i].id
+            else
+                genresId += `${genres.generos[i].id}, `
+        }
+
+        const shortStoriesByGenresID = await shortStorieModel.selectShortStoriesByGenres(genresId)
+
+        await verifyShortStorieLikeFavoriteRead(shortStoriesByGenresID, userId)
+
+        if(shortStoriesByGenresID) {
+            let shortStoriesJson = {}
+
+            const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesByGenresID)
+            
             shortStoriesJson = await Promise.all(shortStoriesDataArray)
             return { status: 200, message: shortStoriesJson }
         } else
@@ -540,6 +572,7 @@ module.exports = {
     searchShortStorieById,
     listActivatedShortStories,
     listDesactivatedShortStories,
+    listShortStoriesByGenresUser,
     listShortStoriesByGenres,
     listShortStoriesByGenresName,
     listShortStoriesByTitleName,

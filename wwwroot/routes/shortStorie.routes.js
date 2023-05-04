@@ -238,7 +238,7 @@ router
         let message
         let userId = req.params.userId
 
-        const shortStoriesData = await shortStorieController.listShortStoriesByGenres(userId)
+        const shortStoriesData = await shortStorieController.listShortStoriesByGenresUser(userId)
 
         if(shortStoriesData) {
             statusCode = shortStoriesData.status
@@ -246,6 +246,45 @@ router
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
+    .route('/short-stories-by-genres/user-id/:userId') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
+    .post(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+        let headerContentType = req.headers['content-type']
+        
+        if(headerContentType == 'application/json') {
+            let bodyData = req.body
+
+            if(JSON.stringify(bodyData) != '{}') {
+
+                if(userId != '' && userId != undefined) {
+                    const shortStoriesData = await shortStorieController.listShortStoriesByGenres(bodyData, userId)
+            
+                    if(shortStoriesData) {
+                        statusCode = shortStoriesData.status
+                        message = shortStoriesData.message
+                    } else {
+                        statusCode = 400
+                        message = MESSAGE_ERROR.NOT_FOUND_DB
+                    }
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
 
         res.status(statusCode).json(message)
