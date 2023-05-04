@@ -43,7 +43,7 @@ const deleteFollow = async (followerId, followedId) => {
 
 const selectUserFollowers = async (userId) => { // EndPoint to get user followers
     try {
-        let sql = `SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+        let sql = `SELECT tbl_usuario.id, tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
         FROM tbl_seguidor_seguidores
      
         INNER JOIN tbl_usuario
@@ -64,7 +64,7 @@ const selectUserFollowers = async (userId) => { // EndPoint to get user follower
 
 const selectFollowingUsers = async (userId) => {
     try {
-        let sql = `SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+        let sql = `SELECT tbl_usuario.id, tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
         FROM tbl_seguidor_seguidores
      
         INNER JOIN tbl_usuario
