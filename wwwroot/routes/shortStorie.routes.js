@@ -291,7 +291,7 @@ router
     })
 
 router
-    .route('/short-stories/genre-name/?') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
+    .route('/short-stories/genre-name/?')
     .get(async(req, res) => {
         let statusCode
         let message
