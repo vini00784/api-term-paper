@@ -58,7 +58,7 @@ const selectUserFollowers = async (userId) => { // EndPoint to get user follower
         else
             return false
     } catch (err) {
-        // console.log(err)
+        console.log(err)
     }
 }
 
