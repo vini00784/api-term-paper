@@ -147,7 +147,6 @@ const verifyUserFollow = async (json, userId) => {
         json.forEach(async element => {
             const userFollowVerify = await verifyUserFollow(userId, element.id)
             element.seguindo = userFollowVerify
-            console.log(element)
         })
     }
 }
