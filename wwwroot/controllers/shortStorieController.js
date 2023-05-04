@@ -243,19 +243,21 @@ const listShortStoriesByGenres = async (genres, userId) => {
     if(genres == '' || genres == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        let genresIdLength = genres?.generos?.length
-        let genresId = ""
+        let genresNamesLength = genres?.nome_genero?.length
+        let genresNames = ""
        
-        for(let i = 0; i < genresIdLength; i++) {
-            if(genresIdLength == 1)
-                genresId += genres.generos[0].id
-            else if (i == genresIdLength - 1)
-                genresId += genres.generos[i].id
+        for(let i = 0; i < genresNamesLength; i++) {
+            if(genresNamesLength == 1) {
+                genresNames += `'${genres.nome_genero[0].nome}'`
+            }
+            else if(i == genresNamesLength - 1) {
+                genresNames += `'${genres.nome_genero[i].nome}'`
+            }
             else
-                genresId += `${genres.generos[i].id}, `
+                genresNames += `'${genres.nome_genero[i].nome}', `
         }
 
-        const shortStoriesByGenresID = await shortStorieModel.selectShortStoriesByGenres(genresId)
+        const shortStoriesByGenresID = await shortStorieModel.selectShortStoriesByGenres(genresNames)
 
         await verifyShortStorieLikeFavoriteRead(shortStoriesByGenresID, userId)
 
