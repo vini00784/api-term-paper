@@ -49,7 +49,7 @@ const selectUserFollowers = async (userId) => { // EndPoint to get user follower
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_seguidor_seguidores.id_segue
      
-        WHERE id_seguidor = ${userId}`
+        WHERE tbl_seguidor_seguidores.id_seguidor = ${userId}`
 
         const rsFollowers = await prisma.$queryRawUnsafe(sql)
 
@@ -58,7 +58,7 @@ const selectUserFollowers = async (userId) => { // EndPoint to get user follower
         else
             return false
     } catch (err) {
-        console.log(err)
+        // console.log(err)
     }
 }
 
@@ -70,7 +70,7 @@ const selectFollowingUsers = async (userId) => {
         INNER JOIN tbl_usuario
            ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
      
-        WHERE id_segue = ${userId}`
+        WHERE tbl_seguidor_seguidores.id_segue = ${userId}`
 
         const rsFollowingUsers = await prisma.$queryRawUnsafe(sql)
 
