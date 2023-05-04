@@ -608,14 +608,13 @@ router
     .post(jsonParser, async(req, res) => {
         let statusCode
         let message
-        let headerContentType = req.headers['content-type']
         let minValue = req.query.minValue
         let maxValue = req.query.maxValue
+        let userId = req.query.userId
         
         let bodyData = req.body
-        // console.log(bodyData);
             
-        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue)
+        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue, userId)
     
         statusCode = announcementsByGenresPrice.status
         message = announcementsByGenresPrice.message
