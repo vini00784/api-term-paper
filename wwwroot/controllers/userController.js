@@ -18,7 +18,7 @@ const userTagModel = require('../models/DAO/userTag.js')
 const userGenreModel = require('../models/DAO/userGenre.js')
 
 // Function to destructure announcement json
-const { destructureUserJson } = require('../utils/destructureJson.js')
+const { destructureUserJson, verifyUserFollow } = require('../utils/destructureJson.js')
 
 const newUser = async (user) => {
     if(user.user_name == '' || user.user_name == undefined || user.nome == '' || user.nome == undefined || user.data_nascimento == ''|| user.data_nascimento == undefined || user.email == '' || user.email == undefined || user.uid == ''|| user.uid == undefined)
@@ -148,9 +148,11 @@ const deleteUser = async (id) => {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
 }
 
-const selectUserByUsername = async (userName) => {
-    if(userName != '' && userName != undefined) {
+const selectUserByUsername = async (userName, userId) => {
+    if(userName != '' && userName != undefined || userId != '' && userId != undefined) {
         const userByUsername = await userModel.selectUserByUsername(userName)
+
+        await verifyUserFollow(userByUsername, userId)
 
         if(userByUsername) {
             let userByUsernameJson = {}

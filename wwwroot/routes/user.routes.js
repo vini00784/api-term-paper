@@ -76,14 +76,20 @@ router // Route to register a new user
     })
 
 router // Route to get user by ID, update user and delete user
-    .route('/user/id/:userId')
+    .route('/user/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let id = req.params.userId
+        let searchUser = req.query.searchUser
+        let currentUser = req.query.currentUser
     
-        if(id != '' && id != undefined) {
-            const userData = await userController.searchUserByID(id)
+        if(searchUser != '' && searchUser != undefined) {
+            const userData = await userController.searchUserByID(searchUser)
+
+            const { verifyUserFollow } = require('../models/DAO/followers.js')
+
+            const userFollowVerify = await verifyUserFollow(currentUser, searchUser)
+            userData.message.seguindo = userFollowVerify
     
             if(userData) {
                 statusCode = userData.status
@@ -209,15 +215,16 @@ router // Route to make user login
 })
 
 router // Route to get user by userName
-    .route('/user/user-name/:username')
+    .route('/user/user-name/?')
     .get(async(req, res) => {
         let statusCode
         let message
 
-        let userName = req.params.username
+        let userName = req.query.username
+        let userId = req.query.userId
 
-        if(userName != '' && userName != undefined) {
-            const userByUsernameData = await userController.selectUserByUsername(userName)
+        if(userName != '' && userName != undefined || userId != '' && userId != undefined) {
+            const userByUsernameData = await userController.selectUserByUsername(userName, userId)
 
             if(userByUsernameData) {
                 statusCode = userByUsernameData.status

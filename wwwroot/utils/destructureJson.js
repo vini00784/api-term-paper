@@ -140,6 +140,18 @@ const destructureUserJson = async (json) => {
     return userDataArray
 }
 
+const verifyUserFollow = async (json, userId) => {
+    const { verifyUserFollow } = require('../models/DAO/followers.js')
+
+    if (json) {
+        json.forEach(async element => {
+            const userFollowVerify = await verifyUserFollow(userId, element.id)
+            element.seguindo = userFollowVerify
+            console.log(element)
+        })
+    }
+}
+
 const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
     const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
     const { verifyUserBuy, verifyUserCart } = require('../controllers/buyController.js')
@@ -241,6 +253,7 @@ module.exports = {
     destructureAnnouncementJson,
     destructureShortStorieJson,
     destructureUserJson,
+    verifyUserFollow,
     verifyAnnouncementLikeFavoriteReadById,
     verifyAnnouncementLikeFavoriteRead,
     verifyShortStorieLikeFavoriteReadById,
