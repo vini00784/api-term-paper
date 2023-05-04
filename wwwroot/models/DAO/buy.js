@@ -224,7 +224,7 @@ const verifyUserCart = async (announcementID, userID) => {
         INNER JOIN tbl_compra
             ON tbl_carrinho.id = tbl_compra.id_carrinho
 
-        WHERE tbl_compra.id_anuncio = ${announcementID} AND tbl_carrinho.id_usuario = ${userID} AND tbl_carrinho.status = 0`
+        WHERE tbl_compra.id_anuncio = ${announcementID} AND tbl_carrinho.id_usuario = ${userID} AND tbl_carrinho.status = false`
 
         const rsResult = await prisma.$queryRawUnsafe(sql)
 
