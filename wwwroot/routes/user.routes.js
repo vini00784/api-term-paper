@@ -106,6 +106,8 @@ router // Route to get user by ID, update user and delete user
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/user/id/:userId')
     .put(jsonParser, async(req, res) => {
         let statusCode
         let message
