@@ -20,6 +20,9 @@ const shortStorieFavoriteModel = require('../models/DAO/shortStorieFavorite.js')
 // Short storie read model
 const shortStorieReadModel = require('../models/DAO/shortStorieRead.js')
 
+// Short storie comment model
+const shortStorieCommentModel = require('../models/DAO/shortStorieComment.js')
+
 // Function to destructure short storie json
 const { destructureShortStorieJson, verifyShortStorieLikeFavoriteRead } = require('../utils/destructureJson.js')
 
@@ -564,6 +567,25 @@ const listShortStoriesByGenreName = async (genres, userId) => {
         return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
 }
 
+const newShortStorieComment = async (comment) => {
+    if(comment.resenha == ''|| comment.resenha == undefined || comment.spoiler == ''|| comment.spoiler == undefined || comment.titulo == ''|| comment.titulo == undefined || comment.id_usuario == '' || comment.id_usuario == undefined || comment.id_historia_curta == '' || comment.id_historia_curta == undefined || comment.avaliacao == '' || comment.avaliacao == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else if(comment.resenha.length > 2000)
+        return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
+    else {
+        const currentDate = new Date().toJSON().slice(0, 10)
+        comment.data = currentDate
+        comment.status = 1
+
+        const resultNewShortStorieComment = await shortStorieCommentModel.insertShortStorieComment(comment)
+
+        if(resultNewShortStorieComment)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 200, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -592,5 +614,6 @@ module.exports = {
     verifyShortStorieRead,
     listFavoritedShortStories,
     listReadedShortStories,
-    listShortStoriesByGenreName
+    listShortStoriesByGenreName,
+    newShortStorieComment
 }
