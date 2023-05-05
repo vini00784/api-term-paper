@@ -13,10 +13,11 @@ const announcementComplaintModel = require('../models/DAO/announcementComplaint.
 const shortStorieComplaintModel = require('../models/DAO/shortStorieComplaint.js')
 const userComplaintModel = require('../models/DAO/userComplaint.js')
 
-const newAnnouncementComplaint = async (announcementComplaint) => {
+const newAnnouncementComplaint = async (announcementComplaint, userId) => {
     if(announcementComplaint.descricao == '' || announcementComplaint.descricao == undefined || announcementComplaint.id_anuncio == '' || announcementComplaint.id_anuncio == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
+        announcementComplaint.id_denunciador = userId
         const newAnnouncementComplaint = await announcementComplaintModel.insertAnnouncementComplaint(announcementComplaint)
 
         if(newAnnouncementComplaint) {
@@ -50,10 +51,11 @@ const newAnnouncementComplaint = async (announcementComplaint) => {
     }
 }
 
-const newShortStorieComplaint = async (shortStorieComplaint) => {
+const newShortStorieComplaint = async (shortStorieComplaint, userId) => {
     if(shortStorieComplaint.descricao == '' || shortStorieComplaint.descricao == undefined || shortStorieComplaint.id_historia_curta == '' || shortStorieComplaint.id_historia_curta == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
+        shortStorieComplaint.id_denunciador = userId
         const newShortStorieComplaint = await shortStorieComplaintModel.insertShortStorieComplaint(shortStorieComplaint)
 
         if(newShortStorieComplaint) {
@@ -86,10 +88,11 @@ const newShortStorieComplaint = async (shortStorieComplaint) => {
     }
 }
 
-const newUserComplaint = async (userComplaint) => {
+const newUserComplaint = async (userComplaint, userId) => {
     if(userComplaint.descricao == '' || userComplaint.descricao == undefined || userComplaint.id_usuario == '' || userComplaint.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
+        userComplaint.id_denunciador = userId
         const newUserComplaint = await userComplaintModel.insertUserComplaint(userComplaint)
 
         if(newUserComplaint) {

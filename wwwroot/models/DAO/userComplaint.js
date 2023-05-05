@@ -10,9 +10,10 @@ const prisma = require('../../libs/prisma.js')
 
 const insertUserComplaint = async (userComplaint) => {
     try {
-        let sql = `INSERT INTO tbl_denuncia_usuario (descricao, id_usuario) values (
+        let sql = `INSERT INTO tbl_denuncia_usuario (descricao, id_usuario, id_denunciador) values (
             '${userComplaint.descricao}',
-            ${userComplaint.id_usuario}
+            ${userComplaint.id_usuario},
+            '${userComplaint.id_denunciador}'
         )`
 
         const result = await prisma.$executeRawUnsafe(sql)

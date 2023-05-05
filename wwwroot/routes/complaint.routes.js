@@ -9,81 +9,99 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 const router = express.Router()
 
 router
-    .route('/report-announcement')
+    .route('/report-announcement/:userId')
     .post(jsonParser, async (req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const newAnnouncementComplaint = await complaintsController.newAnnouncementComplaint(bodyData)
-
-                statusCode = newAnnouncementComplaint.status
-                message = newAnnouncementComplaint.message
+        if(userId != '' && userId != undefined) {
+            if(headerContentType == 'application/json') {
+                let bodyData = req.body
+    
+                if(JSON.stringify(bodyData) != '{}') {
+                    const newAnnouncementComplaint = await complaintsController.newAnnouncementComplaint(bodyData, userId)
+    
+                    statusCode = newAnnouncementComplaint.status
+                    message = newAnnouncementComplaint.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.EMPTY_BODY
+                }
             } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
+                statusCode = 415
+                message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
             }
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
         res.status(statusCode).json(message)
     })
 
 router
-    .route('/report-short-storie')
+    .route('/report-short-storie/:userId')
     .post(jsonParser, async (req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const newShortStorieComplaint = await complaintsController.newShortStorieComplaint(bodyData)
-
-                statusCode = newShortStorieComplaint.status
-                message = newShortStorieComplaint.message
+        if(userId != '' && userId != undefined) {
+            if(headerContentType == 'application/json') {
+                let bodyData = req.body
+    
+                if(JSON.stringify(bodyData) != '{}') {
+                    const newShortStorieComplaint = await complaintsController.newShortStorieComplaint(bodyData, userId)
+    
+                    statusCode = newShortStorieComplaint.status
+                    message = newShortStorieComplaint.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.EMPTY_BODY
+                }
             } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
+                statusCode = 415
+                message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
             }
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
         res.status(statusCode).json(message)
     })
 
 router
-    .route('/report-user')
+    .route('/report-user/:userId')
     .post(jsonParser, async (req, res) => {
         let statusCode
         let message
         let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
 
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const newUserComplaint = await complaintsController.newUserComplaint(bodyData)
-
-                statusCode = newUserComplaint.status
-                message = newUserComplaint.message
+        if(userId != '' && userId != undefined) {
+            if(headerContentType == 'application/json') {
+                let bodyData = req.body
+    
+                if(JSON.stringify(bodyData) != '{}') {
+                    const newUserComplaint = await complaintsController.newUserComplaint(bodyData, userId)
+    
+                    statusCode = newUserComplaint.status
+                    message = newUserComplaint.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.EMPTY_BODY
+                }
             } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
+                statusCode = 415
+                message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
             }
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
         res.status(statusCode).json(message)
