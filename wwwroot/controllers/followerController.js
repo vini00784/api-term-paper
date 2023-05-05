@@ -41,7 +41,7 @@ const unfollowUser = async (followerId, followedId) => {
     }
 }
 
-const listUserFollowers = async (userId) => {
+const listUserFollowers = async (userId, currentUserId) => {
     if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
@@ -52,7 +52,7 @@ const listUserFollowers = async (userId) => {
             
             const userDataArray = userFollowers.map(async element => {
                 const follwersGenres = await selectGenreByUserId(element.id)
-                const userFollowVerify = await verifyUserFollow(userId, element.id)
+                const userFollowVerify = await verifyUserFollow(currentUserId, element.id)
 
                 element.generos = follwersGenres
                 element.seguindo = userFollowVerify
@@ -67,7 +67,7 @@ const listUserFollowers = async (userId) => {
     }
 }
 
-const listFollowingUsers = async (userId) => {
+const listFollowingUsers = async (userId, currentUserId) => {
     if(userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
@@ -78,7 +78,7 @@ const listFollowingUsers = async (userId) => {
 
             const userDataArray = followingUsers.map(async element => {
                 const followingGenres = await selectGenreByUserId(element.id)
-                const userFollowVerify = await verifyUserFollow(userId, element.id)
+                const userFollowVerify = await verifyUserFollow(currentUserId, element.id)
 
                 element.generos = followingGenres
                 element.seguindo = userFollowVerify

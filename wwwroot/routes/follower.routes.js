@@ -51,13 +51,14 @@ router
     })
 
 router
-    .route('/followers/user-id/:userId')
+    .route('/followers/user-id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let userId = req.params.userId
+        let userId = req.query.userId
+        let currentUser = req.query.currentUser
 
-        const userFollowers = await followerController.listUserFollowers(userId)
+        const userFollowers = await followerController.listUserFollowers(userId, currentUser)
 
         statusCode = userFollowers.status
         message = userFollowers.message
@@ -66,13 +67,14 @@ router
     })
 
 router
-    .route('/following/user-id/:userId')
+    .route('/following/user-id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let userId = req.params.userId
+        let userId = req.query.userId
+        let currentUser = req.query.currentUser
 
-        const followingUsers = await followerController.listFollowingUsers(userId)
+        const followingUsers = await followerController.listFollowingUsers(userId, currentUser)
 
         statusCode = followingUsers.status
         message = followingUsers.message
