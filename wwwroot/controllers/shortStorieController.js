@@ -219,7 +219,7 @@ const listShortStoriesByGenresUser = async (userId) => {
                 genresId += `${userGenres.message.genres[i].id_genero}, `
         }
 
-        const shortStoriesByGenre = await shortStorieModel.selectShortStoriesByGenres(genresId)
+        const shortStoriesByGenre = await shortStorieModel.selectShortStoriesByGenresUser(genresId)
 
         let filteredJson = shortStoriesByGenre.filter((element, index, self) => index === self.findIndex((t => (
             parseInt(t.id) === parseInt(element.id)
