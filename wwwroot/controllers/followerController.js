@@ -11,8 +11,8 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Follower model
 const followerModel = require('../models/DAO/followers.js')
 
-// Function to destructure announcement json
-const { destructureUserJson } = require('../utils/destructureJson.js')
+// Function to select user genres
+const { selectGenreByUserId } = require('../models/DAO/genre.js')
 
 const followUser = async (follow) => {
     if(follow.id_segue == ''|| follow.id_segue == undefined || follow.id_seguindo == '' || follow.id_seguindo == undefined)
@@ -49,7 +49,14 @@ const listUserFollowers = async (userId) => {
         if(userFollowers) {
             let followersJson = {}
             
-            followersJson = userFollowers
+            const userDataArray = userFollowers.map(async element => {
+                const follwersGenres = await selectGenreByUserId(element.id)
+                element.generos = follwersGenres
+
+                return element
+            })
+            
+            followersJson = await Promise.all(userDataArray)
             return {status: 200, message: followersJson}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
@@ -65,7 +72,14 @@ const listFollowingUsers = async (userId) => {
         if(followingUsers) {
             let followingJson = {}
 
-            followingJson = followingUsers
+            const userDataArray = followingUsers.map(async element => {
+                const followingGenres = await selectGenreByUserId(element.id)
+                element.generos = followingGenres
+
+                return element
+            })
+
+            followingJson = await Promise.all(userDataArray)
             return {status: 200, message: followingJson}
         } else
             return {status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB}
