@@ -582,9 +582,9 @@ const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, user
 }
 
 const newAnnouncementComment = async (comment) => {
-    if(comment.resenha == ''|| comment.resenha == undefined || comment.spoiler == ''|| comment.spoiler == undefined || comment.id_usuario == '' || comment.id_usuario == undefined || comment.id_anuncio == '' || comment.id_anuncio == undefined || comment.avaliacao == '' || comment.avaliacao == undefined)
+    if(comment.resenha == ''|| comment.resenha == undefined || comment.spoiler == ''|| comment.spoiler == undefined || comment.id_usuario == '' || comment.id_usuario == undefined || comment.id_anuncio == '' || comment.id_anuncio == undefined || comment.avaliacao == '' || comment.avaliacao == undefined || comment.titulo == '' || comment.titulo == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else if(comment.resenha.length > 2000)
+    else if(comment.resenha.length > 2000 || comment.titulo.length > 80)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
         const currentDate = new Date().toJSON().slice(0, 10)

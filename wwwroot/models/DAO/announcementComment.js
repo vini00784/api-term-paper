@@ -18,7 +18,8 @@ const insertAnnouncementComment = async (comment) => {
             ${comment.id_usuario},
             ${comment.id_anuncio},
             ${comment.status},
-            ${comment.avaliacao}
+            ${comment.avaliacao},
+            '${comment.titulo}'
         )`
         
         const result = await prisma.$queryRawUnsafe(sql)
