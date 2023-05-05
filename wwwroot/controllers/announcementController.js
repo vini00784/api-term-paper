@@ -20,6 +20,9 @@ const announcementFavoriteModel = require('../models/DAO/announcementFavorite.js
 // Announcement read model
 const announcementReadModel = require('../models/DAO/announcementRead.js')
 
+// Announcement comment model
+const announcementCommentModel = require('../models/DAO/announcementComment.js')
+
 // Function to destructure announcement json
 const { destructureAnnouncementJson, verifyAnnouncementLikeFavoriteRead, verifyAnnouncementUserCart } = require('../utils/destructureJson.js')
 
@@ -578,6 +581,25 @@ const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, user
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
+const newAnnouncementComment = async (comment) => {
+    if(comment.resenha == ''|| comment.resenha == undefined || comment.spoiler == ''|| comment.spoiler == undefined || comment.id_usuario == '' || comment.id_usuario == undefined || comment.id_anuncio == '' || comment.id_anuncio == undefined || comment.avaliacao == '' || comment.avaliacao == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else if(comment.resenha.length > 2000)
+        return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
+    else {
+        const currentDate = new Date().toJSON().slice(0, 10)
+        comment.data = currentDate
+        comment.status = 1
+
+        const resultNewAnnouncementComment = await announcementCommentModel.insertAnnouncementComment(comment)
+
+        if(resultNewAnnouncementComment)
+            return { status: 200, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 200, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -606,5 +628,6 @@ module.exports = {
     listFavoritedAnnouncements,
     listReadedAnnouncements,
     listAnnouncementsByGenreName,
-    filterAnnouncementsByGenresPrice
+    filterAnnouncementsByGenresPrice,
+    newAnnouncementComment
 }
