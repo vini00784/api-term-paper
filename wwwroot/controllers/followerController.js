@@ -13,6 +13,7 @@ const followerModel = require('../models/DAO/followers.js')
 
 // Function to select user genres
 const { selectGenreByUserId } = require('../models/DAO/genre.js')
+const { verifyUserFollow } = require('../models/DAO/followers.js')
 
 const followUser = async (follow) => {
     if(follow.id_segue == ''|| follow.id_segue == undefined || follow.id_seguindo == '' || follow.id_seguindo == undefined)
@@ -51,7 +52,10 @@ const listUserFollowers = async (userId) => {
             
             const userDataArray = userFollowers.map(async element => {
                 const follwersGenres = await selectGenreByUserId(element.id)
+                const userFollowVerify = await verifyUserFollow(userId, element.id)
+
                 element.generos = follwersGenres
+                element.seguindo = userFollowVerify
 
                 return element
             })
@@ -74,7 +78,10 @@ const listFollowingUsers = async (userId) => {
 
             const userDataArray = followingUsers.map(async element => {
                 const followingGenres = await selectGenreByUserId(element.id)
+                const userFollowVerify = await verifyUserFollow(userId, element.id)
+
                 element.generos = followingGenres
+                element.seguindo = userFollowVerify
 
                 return element
             })
