@@ -74,9 +74,25 @@ const deleteAnnouncementComplaint = async (announcementComplaintId) => {
     }
 }
 
+const selectAllComplaintTypes = async () => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id, tipo FROM tbl_tipo_denuncia`
+
+        const rsComplaintTypes = await prisma.$queryRawUnsafe(sql)
+
+        if(rsComplaintTypes.length > 0)
+            return rsComplaintTypes
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementComplaint,
     insertAnnouncementComplaintType,
     selectLastAnnouncementComplaintId,
-    deleteAnnouncementComplaint
+    deleteAnnouncementComplaint,
+    selectAllComplaintTypes
 }

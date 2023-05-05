@@ -89,4 +89,18 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/complaint-types')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+
+        const complaintTypes = await complaintsController.listAllComplaintTypes()
+
+        statusCode = complaintTypes.status
+        message = complaintTypes.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

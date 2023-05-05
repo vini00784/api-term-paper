@@ -122,8 +122,21 @@ const newUserComplaint = async (userComplaint) => {
     }
 }
 
+const listAllComplaintTypes = async () => {
+    const complaintTypesData = await announcementComplaintModel.selectAllComplaintTypes()
+
+    if(complaintTypesData) {
+        let complaintTypesJson = {}
+
+        complaintTypesJson = complaintTypesData
+        return { status: 200, message: complaintTypesJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 module.exports = {
     newAnnouncementComplaint,
     newShortStorieComplaint,
-    newUserComplaint
+    newUserComplaint,
+    listAllComplaintTypes
 }
