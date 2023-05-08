@@ -33,6 +33,22 @@ const insertAnnouncementComment = async (comment) => {
     }
 }
 
+const deleteAnnouncementComment = async (commentId) => {
+    try {
+        let sql = `CALL proc_delete_comentario_anuncio(${commentId})`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
-    insertAnnouncementComment
+    insertAnnouncementComment,
+    deleteAnnouncementComment
 }

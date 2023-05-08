@@ -600,6 +600,19 @@ const newAnnouncementComment = async (comment) => {
     }
 }
 
+const deleteAnnouncementComment = async (commentId) => {
+    if(commentId == '' || commentId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const deletedComment = await announcementCommentModel.deleteAnnouncementComment(commentId)
+
+        if(deletedComment)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -629,5 +642,6 @@ module.exports = {
     listReadedAnnouncements,
     listAnnouncementsByGenreName,
     filterAnnouncementsByGenresPrice,
-    newAnnouncementComment
+    newAnnouncementComment,
+    deleteAnnouncementComment
 }
