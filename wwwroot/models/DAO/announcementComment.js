@@ -65,8 +65,27 @@ const selectAnnouncementComments = async (announcementId) => {
     }
 }
 
+const insertAnnouncementCommentLike = async (commentLike) => {
+    try {
+        let sql = `INSERT INTO tbl_comentario_curtida (id_comentario, id_usuario) values (
+            ${commentLike.id_comentario},
+            ${commentLike.id_usuario}
+        )`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementComment,
     deleteAnnouncementComment,
-    selectAnnouncementComments
+    selectAnnouncementComments,
+    insertAnnouncementCommentLike
 }

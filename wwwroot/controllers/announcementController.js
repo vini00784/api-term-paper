@@ -628,6 +628,19 @@ const listAnnouncementComments = async (announcementId) => {
     }
 }
 
+const likeAnnouncementComment = async (commentLike) => {
+    if(commentLike.id_comentario == '' || commentLike.id_comentario == undefined || commentLike.id_usuario == '' || commentLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const likeComment = await announcementCommentModel.insertAnnouncementCommentLike(commentLike)
+
+        if(likeComment)
+            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -659,5 +672,6 @@ module.exports = {
     filterAnnouncementsByGenresPrice,
     newAnnouncementComment,
     deleteAnnouncementComment,
-    listAnnouncementComments
+    listAnnouncementComments,
+    likeAnnouncementComment
 }
