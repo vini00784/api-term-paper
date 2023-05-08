@@ -92,4 +92,19 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/announcement-comments/id/:announcementId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let announcementId = req.params.announcementId
+
+        const announcementComments = await announcementController.listAnnouncementComments(announcementId)
+
+        statusCode = announcementComments.status
+        message = announcementComments.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

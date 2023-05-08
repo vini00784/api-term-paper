@@ -613,6 +613,21 @@ const deleteAnnouncementComment = async (commentId) => {
     }
 }
 
+const listAnnouncementComments = async (announcementId) => {
+    if(announcementId == '' || announcementId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const announcementCommentsData = await announcementCommentModel.selectAnnouncementComments(announcementId)
+
+        if(announcementCommentsData) {
+            let commentsJson = {}
+            commentsJson = announcementCommentsData
+            return { status: 200, message: commentsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -643,5 +658,6 @@ module.exports = {
     listAnnouncementsByGenreName,
     filterAnnouncementsByGenresPrice,
     newAnnouncementComment,
-    deleteAnnouncementComment
+    deleteAnnouncementComment,
+    listAnnouncementComments
 }

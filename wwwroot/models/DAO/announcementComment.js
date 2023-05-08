@@ -48,7 +48,25 @@ const deleteAnnouncementComment = async (commentId) => {
     }
 }
 
+const selectAnnouncementComments = async (announcementId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id, data_publicado, resenha, id_resposta_comentario, spoiler, id_usuario, status, avaliacao, titulo
+            FROM tbl_comentario_anuncio WHERE id_anuncio = ${announcementId}
+        `
+
+        const rsAnnouncementComments = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncementComments.length > 0)
+            return rsAnnouncementComments
+        else
+            return false
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     insertAnnouncementComment,
-    deleteAnnouncementComment
+    deleteAnnouncementComment,
+    selectAnnouncementComments
 }
