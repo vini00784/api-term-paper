@@ -586,6 +586,19 @@ const newShortStorieComment = async (comment) => {
     }
 }
 
+const deleteShortStorieComment = async (commentId) => {
+    if(commentId == '' || commentId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const deletedComment = await shortStorieCommentModel.deleteShortStorieComment(commentId)
+
+        if(deletedComment)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -615,5 +628,6 @@ module.exports = {
     listFavoritedShortStories,
     listReadedShortStories,
     listShortStoriesByGenreName,
-    newShortStorieComment
+    newShortStorieComment,
+    deleteShortStorieComment
 }

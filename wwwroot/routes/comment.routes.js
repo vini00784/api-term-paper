@@ -76,4 +76,20 @@ router
 
         res.status(statusCode).json(message)
     })
+
+router
+    .route('/delete-short-storie-comment/id/:commentId')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let commentId = req.params.commentId
+
+        const deletedComment = await shortStorieController.deleteShortStorieComment(commentId)
+
+        statusCode = deletedComment.status
+        message = deletedComment.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
