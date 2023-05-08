@@ -107,4 +107,19 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/short-storie-comments/id/:shortStorieId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let shortStorieId = req.params.shortStorieId
+
+        const shortStorieComments = await shortStorieController.listShortStorieComments(shortStorieId)
+
+        statusCode = shortStorieComments.status
+        message = shortStorieComments.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

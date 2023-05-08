@@ -599,6 +599,21 @@ const deleteShortStorieComment = async (commentId) => {
     }
 }
 
+const listShortStorieComments = async (shortStorieId) => {
+    if(shortStorieId == '' || shortStorieId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const shortStorieCommentsData = await shortStorieCommentModel.selectShortStorieComments(shortStorieId)
+
+        if(shortStorieCommentsData) {
+            let commentsJson = {}
+            commentsJson = shortStorieCommentsData
+            return { status: 200, message: commentsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -629,5 +644,6 @@ module.exports = {
     listReadedShortStories,
     listShortStoriesByGenreName,
     newShortStorieComment,
-    deleteShortStorieComment
+    deleteShortStorieComment,
+    listShortStorieComments
 }
