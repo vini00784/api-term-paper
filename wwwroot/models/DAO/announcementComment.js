@@ -83,9 +83,25 @@ const insertAnnouncementCommentLike = async (commentLike) => {
     }
 }
 
+const deleteAnnouncementCommentLike = async (commentId, userId) => {
+    try {
+        let sql = `DELETE FROM tbl_comentario_curtida WHERE id_comentario = ${commentId} AND id_usuario = ${userId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementComment,
     deleteAnnouncementComment,
     selectAnnouncementComments,
-    insertAnnouncementCommentLike
+    insertAnnouncementCommentLike,
+    deleteAnnouncementCommentLike
 }

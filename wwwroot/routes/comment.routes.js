@@ -149,4 +149,20 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/dislike-announcement-comment/?')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let commentId = req.query.commentId
+        let userId = req.query.userId
+
+        const dislikeAnnouncementComment = await announcementController.dislikeAnnouncementComment(commentId, userId)
+
+        statusCode = dislikeAnnouncementComment.status
+        message = dislikeAnnouncementComment.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
