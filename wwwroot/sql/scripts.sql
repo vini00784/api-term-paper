@@ -546,3 +546,7 @@ SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
    WHERE id_segue = 88;
 
 -- O script acima traz os usuários que tal usuário está seguindo
+
+SELECT * FROM tbl_comentario_anuncio;
+SELECT * FROM tbl_comentario_curtida;
+DELETE FROM tbl_comentario_curtida;
