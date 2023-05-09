@@ -550,5 +550,5 @@ SELECT tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
 SELECT * FROM tbl_comentario_anuncio;
 SELECT * FROM tbl_comentario_curtida;
 DELETE FROM tbl_comentario_curtida;
-DELETE FROM tbl_comentario_anuncio;
-UPDATE tbl_anuncio SET avaliacao = 0;
+DELETE FROM tbl_comentario_historia_curta;
+UPDATE tbl_historia_curta SET avaliacao = 0;
