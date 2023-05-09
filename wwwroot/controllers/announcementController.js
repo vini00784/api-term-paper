@@ -660,6 +660,19 @@ const dislikeAnnouncementComment = async (commentId, userId) => {
     }
 }
 
+const verifyAnnouncementComment = async (announcementId, userId) => {
+    if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedAnnouncementComment = await announcementCommentModel.verifyAnnouncementComment(announcementId, userId)
+
+        if(verifiedAnnouncementComment)
+            return true
+        else
+            return false
+    }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -693,5 +706,6 @@ module.exports = {
     deleteAnnouncementComment,
     listAnnouncementComments,
     likeAnnouncementComment,
-    dislikeAnnouncementComment
+    dislikeAnnouncementComment,
+    verifyAnnouncementComment
 }

@@ -162,13 +162,14 @@ const verifyUserFollow = async (json, userId) => {
 }
 
 const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, userId) => {
-    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead } = require('../controllers/announcementController.js')
+    const { verifyAnnouncementLike, verifyAnnouncementFavorite, verifyAnnouncementRead, verifyAnnouncementComment } = require('../controllers/announcementController.js')
     const { verifyUserBuy, verifyUserCart } = require('../controllers/buyController.js')
     const announcementLikeVerify = await verifyAnnouncementLike(announcementId, userId)
     const announcementFavoriteVerify = await verifyAnnouncementFavorite(announcementId, userId)
     const announcementReadVerify = await verifyAnnouncementRead(announcementId, userId)
     const announcementBuyVerify = await verifyUserBuy(announcementId, userId)
     const announcementCartVerify = await verifyUserCart(announcementId, userId)
+    const announcementCommentVerify = await verifyAnnouncementComment(announcementId, userId)
 
     if(json) {
         json.message.forEach(element => {
