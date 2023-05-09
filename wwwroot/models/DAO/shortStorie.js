@@ -83,7 +83,7 @@ const deleteShortStorie = async (shortStorieId) => {
 
 const selectAllShortStories = async () => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta ORDER BY id DESC`
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium, avaliacao FROM tbl_historia_curta ORDER BY id DESC`
 
         const rsShortStories = await prisma.$queryRawUnsafe(sql)
 
@@ -171,7 +171,7 @@ const selectPublicationTypeByShortStorieId = async (shortStorieId) => {
 
 const selectShortStorieById = async (shortStorieId) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta WHERE id = ${shortStorieId}`
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium, avaliacao FROM tbl_historia_curta WHERE id = ${shortStorieId}`
 
         const rsShortStorie = await prisma.$queryRawUnsafe(sql)
 
@@ -255,7 +255,7 @@ const selectShortStoriesDeactiveByUserId = async (shortStorieId) => {
 
 const selectActivatedShortStories = async (userId) => {
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_historia_curta
         
         INNER JOIN tbl_usuario
@@ -277,7 +277,7 @@ const selectActivatedShortStories = async (userId) => {
 
 const selectDesactivatedShortStories = async (userId) => {
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_historia_curta
         
         INNER JOIN tbl_usuario
@@ -299,7 +299,7 @@ const selectDesactivatedShortStories = async (userId) => {
 
 const selectShortStoriesByGenresUser = async (genresId) => {
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_genero_historia_curta
      
         INNER JOIN tbl_historia_curta
@@ -325,7 +325,7 @@ const selectShortStoriesByGenresUser = async (genresId) => {
 
 const selectShortStoriesByGenres = async (genresNames) => {
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_genero_historia_curta
      
         INNER JOIN tbl_historia_curta
@@ -351,7 +351,7 @@ const selectShortStoriesByGenres = async (genresNames) => {
 
 const selectShortStoriesByGenresName = async (genreName) => {
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_genero_historia_curta
      
         INNER JOIN tbl_historia_curta
@@ -377,7 +377,7 @@ const selectShortStoriesByGenresName = async (genreName) => {
 
 const selectShortStorieByTitleName = async (shortStorieTitle) => {
     try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium FROM tbl_historia_curta WHERE LOCATE('${shortStorieTitle}', titulo) AND tbl_historia_curta.status = true`
+        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, sinopse, capa, status, historia, data, premium, avaliacao FROM tbl_historia_curta WHERE LOCATE('${shortStorieTitle}', titulo) AND tbl_historia_curta.status = true`
 
         const rsShortStories = await prisma.$queryRawUnsafe(sql)
 
@@ -392,7 +392,7 @@ const selectShortStorieByTitleName = async (shortStorieTitle) => {
 
 const selectShortStorieByGenreName = async (genreNames) => { // Esse será usado no filtro que poderá chegar diversos gêneros diferentes
     try {
-        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
         FROM tbl_genero_historia_curta
      
         INNER JOIN tbl_historia_curta
