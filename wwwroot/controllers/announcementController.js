@@ -587,6 +587,8 @@ const newAnnouncementComment = async (comment) => {
     else if(comment.resenha.length > 2000 || comment.titulo.length > 80)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
     else {
+        if (comment.id_resposta == undefined) comment.id_resposta = null
+        
         const currentDate = new Date().toJSON().slice(0, 10)
         comment.data = currentDate
         comment.status = 1
