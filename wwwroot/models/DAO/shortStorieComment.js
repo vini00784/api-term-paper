@@ -20,10 +20,6 @@ const insertShortStorieComment = async (comment) => {
             ${comment.status},
             ${comment.avaliacao}
         )`
-
-        // (in data_publicado_comment date, in resenha_comment varchar(2000), in spoiler_comment tinyint, in titulo_comment varchar(80),
-        //  in id_short_story_comment int,in id_usuario_comment int, in status_comment tinyint, in avaliacao_comment smallint
-        // )
         
         const result = await prisma.$queryRawUnsafe(sql)
 
