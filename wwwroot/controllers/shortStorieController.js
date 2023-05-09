@@ -627,6 +627,19 @@ const likeShortStorieComment = async (commentLike) => {
     }
 }
 
+const dislikeShortStorieComment = async (commentId, userId) => {
+    if(commentId == '' || commentId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const dislikeComment = await shortStorieCommentModel.deleteShortStorieCommentLike(commentId, userId)
+
+        if(dislikeComment)
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        else 
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -659,5 +672,6 @@ module.exports = {
     newShortStorieComment,
     deleteShortStorieComment,
     listShortStorieComments,
-    likeShortStorieComment
+    likeShortStorieComment,
+    dislikeShortStorieComment
 }
