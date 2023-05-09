@@ -19,7 +19,7 @@ const insertShortStorieComment = async (comment) => {
             ${comment.id_usuario},
             ${comment.status},
             ${comment.avaliacao}
-        )`
+        )`fafsdafsfs
         
         const result = await prisma.$queryRawUnsafe(sql)
 
