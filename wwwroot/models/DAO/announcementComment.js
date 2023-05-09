@@ -37,7 +37,7 @@ const deleteAnnouncementComment = async (commentId) => {
     try {
         let sql = `CALL proc_delete_comentario_anuncio(${commentId})`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if(result)
             return true
@@ -51,7 +51,7 @@ const deleteAnnouncementComment = async (commentId) => {
 const selectAnnouncementComments = async (announcementId) => {
     try {
         let sql = `SELECT cast(id AS DECIMAL) AS id, data_publicado, resenha, id_resposta_comentario, spoiler, id_usuario, status, avaliacao, titulo
-            FROM tbl_comentario_anuncio WHERE id_anuncio = ${announcementId}
+            FROM tbl_comentario_anuncio WHERE id_anuncio = ${announcementId} AND status = true
         `
 
         const rsAnnouncementComments = await prisma.$queryRawUnsafe(sql)
