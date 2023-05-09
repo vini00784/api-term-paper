@@ -21,6 +21,8 @@ app.use((req, res, next) => {
     next()
 })
 
+'teste'
+
 // Importing of routers
 const genreRouter = require('./wwwroot/routes/genre.routes.js')
 const userRouter = require('./wwwroot/routes/user.routes.js')
