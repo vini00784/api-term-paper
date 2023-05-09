@@ -33,9 +33,9 @@ const insertAnnouncementComment = async (comment) => {
     }
 }
 
-const deleteAnnouncementComment = async (commentId) => {
+const deleteAnnouncementComment = async (commentId, announcementId) => {
     try {
-        let sql = `CALL proc_delete_comentario_anuncio(${commentId})`
+        let sql = `CALL proc_delete_comentario_anuncio_auto_avaliation(${commentId}, ${announcementId})`
 
         const result = await prisma.$queryRawUnsafe(sql)
 

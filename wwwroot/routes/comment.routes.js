@@ -63,13 +63,14 @@ router
     })
 
 router
-    .route('/delete-announcement-comment/id/:commentId')
+    .route('/delete-announcement-comment/id/?')
     .delete(async(req, res) => {
         let statusCode
         let message
-        let commentId = req.params.commentId
+        let commentId = req.query.commentId
+        let announcementId = req.query.announcementId
 
-        const deletedComment = await announcementController.deleteAnnouncementComment(commentId)
+        const deletedComment = await announcementController.deleteAnnouncementComment(commentId, announcementId)
 
         statusCode = deletedComment.status
         message = deletedComment.message

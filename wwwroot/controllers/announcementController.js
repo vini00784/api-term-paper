@@ -600,11 +600,11 @@ const newAnnouncementComment = async (comment) => {
     }
 }
 
-const deleteAnnouncementComment = async (commentId) => {
-    if(commentId == '' || commentId == undefined)
+const deleteAnnouncementComment = async (commentId, announcementId) => {
+    if(commentId == '' || commentId == undefined || announcementId == '' || announcementId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
-        const deletedComment = await announcementCommentModel.deleteAnnouncementComment(commentId)
+        const deletedComment = await announcementCommentModel.deleteAnnouncementComment(commentId, announcementId)
 
         if(deletedComment)
             return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
@@ -621,7 +621,13 @@ const listAnnouncementComments = async (announcementId) => {
 
         if(announcementCommentsData) {
             let commentsJson = {}
-            commentsJson = announcementCommentsData
+
+            const commentDataArray = announcementCommentsData.map(async element => {
+                element.id_anuncio = announcementId
+                return element
+            })
+            
+            commentsJson = await Promise.all(commentDataArray)
             return { status: 200, message: commentsJson }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
