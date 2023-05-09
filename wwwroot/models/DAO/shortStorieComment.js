@@ -40,7 +40,7 @@ const deleteShortStorieComment = async (commentId) => {
     try {
         let sql = `CALL proc_delete_comentario_historia_curta(${commentId})`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if(result)
             return true
@@ -54,7 +54,7 @@ const deleteShortStorieComment = async (commentId) => {
 const selectShortStorieComments = async (shortStorieId) => {
     try {
         let sql = `SELECT cast(id AS DECIMAL) AS id, data_publicacao, resenha, spoiler, titulo, avaliacao, id_historia_curta, id_usuario, status
-        FROM tbl_comentario_historia_curta WHERE id_historia_curta = ${shortStorieId}
+        FROM tbl_comentario_historia_curta WHERE id_historia_curta = ${shortStorieId} AND status = true
         `
 
         const rsShortStorieComments = await prisma.$queryRawUnsafe(sql)
