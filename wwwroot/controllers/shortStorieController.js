@@ -614,6 +614,19 @@ const listShortStorieComments = async (shortStorieId) => {
     }
 }
 
+const likeShortStorieComment = async (commentLike) => {
+    if(commentLike.id_comentario == '' || commentLike.id_comentario == undefined || commentLike.id_usuario == '' || commentLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const likeComment = await shortStorieCommentModel.insertShortStorieCommentLike(commentLike)
+
+        if(likeComment)
+            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newShortStorie,
     updateShortStorie,
@@ -645,5 +658,6 @@ module.exports = {
     listShortStoriesByGenreName,
     newShortStorieComment,
     deleteShortStorieComment,
-    listShortStorieComments
+    listShortStorieComments,
+    likeShortStorieComment
 }
