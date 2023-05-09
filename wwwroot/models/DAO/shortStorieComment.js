@@ -97,10 +97,26 @@ const deleteShortStorieCommentLike = async (commentId, userId) => {
     }
 }
 
+const countShortStorieComments = async (shortStorieId) => {
+    try {
+        let sql = `SELECT cast(count(id) AS DECIMAL) AS quantidade_comentarios FROM tbl_comentario_historia_curta WHERE id_historia_curta =  ${shortStorieId} AND status = true`
+
+        const rsComments = await prisma.$queryRawUnsafe(sql)
+
+        if(rsComments.length > 0)
+            return rsComments[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorieComment,
     deleteShortStorieComment,
     selectShortStorieComments,
     insertShortStorieCommentLike,
-    deleteShortStorieCommentLike
+    deleteShortStorieCommentLike,
+    countShortStorieComments
 }

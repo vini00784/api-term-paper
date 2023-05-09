@@ -6,6 +6,7 @@ const destructureAnnouncementJson = async (json) => {
     const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.js')
     const { countAnnouncementReads } = require('../models/DAO/announcementRead.js')
     const { countAnnouncementPurchases } = require('../models/DAO/buy.js')
+    const { countAnnouncementComments } = require('../models/DAO/announcementComment.js')
 
     const announcementDataArray = json.map(async announcementItem => {
         const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
@@ -16,6 +17,7 @@ const destructureAnnouncementJson = async (json) => {
             const announcementFavoritesData = await countAnnouncementFavorites(announcementItem.id)
             const announcementReadsData = await countAnnouncementReads(announcementItem.id)
             const announcementPurchasesData = await countAnnouncementPurchases(announcementItem.id)
+            const announcementCommentsData = await countAnnouncementComments(announcementItem.id)
         
             if(announcementParentalRatingData) {
                 announcementItem.classificacao = announcementParentalRatingData
@@ -40,6 +42,9 @@ const destructureAnnouncementJson = async (json) => {
 
                             if(announcementPurchasesData.quantidade_compras > 0 || announcementPurchasesData.quantidade_compras == undefined)
                                 announcementItem.compras = announcementPurchasesData
+
+                            if(announcementCommentsData.quantidade_comentarios > 0 || announcementPurchasesData.quantidade_comentarios == undefined)
+                                announcementItem.comentarios = announcementCommentsData
                         }
                     }
                 }
@@ -58,6 +63,7 @@ const destructureShortStorieJson = async (json) => {
     const { countShortStorieLikes } = require('../models/DAO/shortStorieLike.js')
     const { countShortStorieFavorites } = require('../models/DAO/shortStorieFavorite.js')
     const { countShortStorieReads } = require('../models/DAO/shortStorieRead.js')
+    const { countShortStorieComments } = require('../models/DAO/shortStorieComment.js')
 
     const shortStoriesDataArray = json.map(async shortStorieItem => {
         const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
@@ -67,6 +73,7 @@ const destructureShortStorieJson = async (json) => {
         const shortStorieLikesData = await countShortStorieLikes(shortStorieItem.id)
         const shortStorieFavoritesData = await countShortStorieFavorites(shortStorieItem.id)
         const shortStorieReadsData = await countShortStorieReads(shortStorieItem.id)
+        const shortStorieCommentsData = await countShortStorieComments(shortStorieItem.id)
 
         if(shortStorieParentalRatingData) {
             shortStorieItem.classificacao = shortStorieParentalRatingData
@@ -80,14 +87,17 @@ const destructureShortStorieJson = async (json) => {
                     if(shortStorieGenresData) {
                         shortStorieItem.generos = shortStorieGenresData
 
-                        if(shortStorieLikesData.quantidade_curtidas > 0)
+                        if(shortStorieLikesData)
                             shortStorieItem.curtidas = shortStorieLikesData
 
-                        if(shortStorieFavoritesData.quantidade_favoritos > 0)
+                        if(shortStorieFavoritesData)
                             shortStorieItem.favoritos = shortStorieFavoritesData
                         
-                        if(shortStorieReadsData.quantidade_lidos > 0)
+                        if(shortStorieReadsData)
                             shortStorieItem.lidos = shortStorieReadsData
+
+                        if(shortStorieCommentsData)
+                            shortStorieItem.comentarios = shortStorieCommentsData
                     }
                 }
             }
@@ -223,30 +233,6 @@ const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
         })
     }
 }
-
-// const verifyAnnouncementUserCartById = async (json, announcementId, userId) => {
-//     const { verifyCartItem } = require('../controllers/buyController.js')
-//     const announcementCartVerify = await verifyCartItem(announcementId, userId)
-
-//     if(json) {
-//         json.message.forEach(element => {
-//             element.carrinho = announcementCartVerify.message
-//         })
-//     }
-// }
-
-// const verifyAnnouncementUserCart = async (json, userId) => {
-//     const { verifyCartItem } = require('../controllers/buyController.js')
-
-//     if(json) {
-//         json.forEach(async element => {
-//             const announcementCartVerify = await verifyCartItem(element.id, userId)
-
-//             if(announcementCartVerify)
-//                 element.carrinho = announcementCartVerify.message
-//         })
-//     }
-// }
 
 module.exports = {
     destructureAnnouncementJson,
