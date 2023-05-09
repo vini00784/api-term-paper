@@ -32,9 +32,9 @@ const insertShortStorieComment = async (comment) => {
     }
 }
 
-const deleteShortStorieComment = async (commentId) => {
+const deleteShortStorieComment = async (commentId, shortStorieId) => {
     try {
-        let sql = `CALL proc_delete_comentario_historia_curta(${commentId})`
+        let sql = `CALL proc_delete_comentario_historia_curta_auto_avaliation(${commentId}, ${shortStorieId})`
 
         const result = await prisma.$queryRawUnsafe(sql)
 

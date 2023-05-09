@@ -586,11 +586,11 @@ const newShortStorieComment = async (comment) => {
     }
 }
 
-const deleteShortStorieComment = async (commentId) => {
-    if(commentId == '' || commentId == undefined)
+const deleteShortStorieComment = async (commentId, shortStorieId) => {
+    if(commentId == '' || commentId == undefined || shortStorieId == '' || shortStorieId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
-        const deletedComment = await shortStorieCommentModel.deleteShortStorieComment(commentId)
+        const deletedComment = await shortStorieCommentModel.deleteShortStorieComment(commentId, shortStorieId)
 
         if(deletedComment)
             return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}

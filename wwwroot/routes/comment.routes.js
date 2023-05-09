@@ -79,13 +79,14 @@ router
     })
 
 router
-    .route('/delete-short-storie-comment/id/:commentId')
+    .route('/delete-short-storie-comment/id/?')
     .delete(async(req, res) => {
         let statusCode
         let message
-        let commentId = req.params.commentId
+        let commentId = req.query.commentId
+        let shortStorieId = req.query.shortStorieId
 
-        const deletedComment = await shortStorieController.deleteShortStorieComment(commentId)
+        const deletedComment = await shortStorieController.deleteShortStorieComment(commentId, shortStorieId)
 
         statusCode = deletedComment.status
         message = deletedComment.message
