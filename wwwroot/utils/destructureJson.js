@@ -178,6 +178,7 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
             element.lido = announcementReadVerify
             element.comprado = announcementBuyVerify
             element.carrinho = announcementCartVerify
+            element.comentado = announcementCommentVerify
         })
     }
 }
