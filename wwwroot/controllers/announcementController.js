@@ -229,18 +229,26 @@ const listAnnouncementsByGenres = async (userId) => {
                     genresId += `${userGenres.message.genres[i].id_genero}, `
             }
 
+            let filteredJson
             const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
+            const announcementsByFollowingUsers = await announcementModel.selectAnnouncementsByFollowingUsers(userId)
 
-            let filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
-                parseInt(t.id) === parseInt(element.id)
-            ))))
+            if(announcementsByFollowingUsers) {
+                let announcementsByGenresAndFollowingUsers = Object.assign([], announcementsByGenre, announcementsByFollowingUsers)
+                
+                filteredJson = announcementsByGenresAndFollowingUsers.filter((element, index, self) => index === self.findIndex((t => (
+                    parseInt(t.id) === parseInt(element.id)
+                ))))
+            } else
+                filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
+                    parseInt(t.id) === parseInt(element.id)
+                ))))
 
-            await verifyAnnouncementLikeFavoriteRead(announcementsByGenre, userId)
-            // await verifyAnnouncementUserCart(announcementsByGenre, userId)
-
+            await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
+            
             if(filteredJson) {
                 let announcementsJson = {}
-
+                
                 const announcementDataArray = await destructureAnnouncementJson(filteredJson)
 
                 announcementsJson = await Promise.all(announcementDataArray)
