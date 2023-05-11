@@ -95,13 +95,14 @@ router
     })
 
 router
-    .route('/announcement-comments/id/:announcementId')
+    .route('/announcement-comments/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let announcementId = req.params.announcementId
+        let announcementId = req.query.announcementId
+        let userId = req.query.userId
 
-        const announcementComments = await announcementController.listAnnouncementComments(announcementId)
+        const announcementComments = await announcementController.listAnnouncementComments(announcementId, userId)
 
         statusCode = announcementComments.status
         message = announcementComments.message

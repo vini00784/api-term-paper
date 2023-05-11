@@ -615,7 +615,7 @@ const deleteAnnouncementComment = async (commentId, announcementId) => {
     }
 }
 
-const listAnnouncementComments = async (announcementId) => {
+const listAnnouncementComments = async (announcementId, userId) => {
     if(announcementId == '' || announcementId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
@@ -625,7 +625,9 @@ const listAnnouncementComments = async (announcementId) => {
             let commentsJson = {}
 
             const commentDataArray = announcementCommentsData.map(async element => {
+                const announcementLikeData = await verifyAnnouncementCommentLike(element.id, userId)
                 element.id_anuncio = announcementId
+                element.curtido = announcementLikeData
                 return element
             })
             
