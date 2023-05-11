@@ -599,7 +599,7 @@ const deleteShortStorieComment = async (commentId, shortStorieId) => {
     }
 }
 
-const listShortStorieComments = async (shortStorieId) => {
+const listShortStorieComments = async (shortStorieId, userId) => {
     if(shortStorieId == '' || shortStorieId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
@@ -607,7 +607,14 @@ const listShortStorieComments = async (shortStorieId) => {
 
         if(shortStorieCommentsData) {
             let commentsJson = {}
-            commentsJson = shortStorieCommentsData
+
+            const commentDataArray = shortStorieCommentsData.map(async element => {
+                const shortStorieCommentLikeData = await verifyShortStorieCommentLike(element.id, userId)
+                element.curtido = shortStorieCommentLikeData
+                return element
+            })
+
+            commentsJson = await Promise.all(commentDataArray)
             return { status: 200, message: commentsJson }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
@@ -637,6 +644,32 @@ const dislikeShortStorieComment = async (commentId, userId) => {
             return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
         else 
             return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
+const verifyShortStorieComment = async (shortStorieId, userId) => {
+    if(shortStorieId == '' || shortStorieId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedShortStorieComment = await shortStorieCommentModel.verifyShortStorieComment(shortStorieId, userId)
+
+        if(verifiedShortStorieComment)
+            return true
+        else
+            return false
+    }
+}
+
+const verifyShortStorieCommentLike = async (commentId, userId) => {
+    if(commentId == '' || commentId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const verifiedShortStorieCommentLike = await shortStorieCommentModel.verifyShortStorieCommentLike(commentId, userId)
+
+        if(verifiedShortStorieCommentLike)
+            return true
+        else
+            return false
     }
 }
 
@@ -673,5 +706,7 @@ module.exports = {
     deleteShortStorieComment,
     listShortStorieComments,
     likeShortStorieComment,
-    dislikeShortStorieComment
+    dislikeShortStorieComment,
+    verifyShortStorieComment,
+    verifyShortStorieCommentLike
 }

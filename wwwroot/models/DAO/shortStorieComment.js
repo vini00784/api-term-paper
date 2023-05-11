@@ -112,11 +112,43 @@ const countShortStorieComments = async (shortStorieId) => {
     }
 }
 
+const verifyShortStorieComment = async (shortStorieId, userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_comentario_historia_curta WHERE id_historia_curta = ${shortStorieId} AND id_usuario = ${userId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const verifyShortStorieCommentLike = async (shortStorieId, userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_comentario_historia_curta_curtida WHERE id_comentario_historia_curta = ${shortStorieId} AND id_usuario = ${userId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorieComment,
     deleteShortStorieComment,
     selectShortStorieComments,
     insertShortStorieCommentLike,
     deleteShortStorieCommentLike,
-    countShortStorieComments
+    countShortStorieComments,
+    verifyShortStorieComment,
+    verifyShortStorieCommentLike
 }

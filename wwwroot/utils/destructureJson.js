@@ -206,16 +206,18 @@ const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
 }
 
 const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId) => {
-    const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead } = require('../controllers/shortStorieController.js')
+    const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead, verifyShortStorieComment } = require('../controllers/shortStorieController.js')
     const shortStorieLikeVerify = await verifyShortStorieLike(shortStorieId, userId)
     const shortStorieFavoriteVerify = await verifyShortStorieFavorite(shortStorieId, userId)
     const shortStorieReadVerify = await verifyShortStorieRead(shortStorieId, userId)
+    const shortStorieCommentVerify = await verifyShortStorieComment(shortStorieId, userId)
 
     if(json) {
         json.message.forEach(element => {
             element.curtido = shortStorieLikeVerify
             element.favorito = shortStorieFavoriteVerify
             element.lido = shortStorieReadVerify
+            element.comentado = shortStorieCommentVerify
         })
     }
 }

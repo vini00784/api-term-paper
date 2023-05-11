@@ -111,13 +111,14 @@ router
     })
 
 router
-    .route('/short-storie-comments/id/:shortStorieId')
+    .route('/short-storie-comments/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let shortStorieId = req.params.shortStorieId
+        let shortStorieId = req.query.shortStorieId
+        let userId = req.query.userId
 
-        const shortStorieComments = await shortStorieController.listShortStorieComments(shortStorieId)
+        const shortStorieComments = await shortStorieController.listShortStorieComments(shortStorieId, userId)
 
         statusCode = shortStorieComments.status
         message = shortStorieComments.message
