@@ -143,6 +143,21 @@ const verifyAnnouncementCommentLike = async (commentId, userId) => {
     }
 }
 
+const countAnnouncementCommentLikes = async (commentId) => {
+    try {
+        let sql = `SELECT cast(count(id) AS DECIMAL) AS quantidade_curtidas FROM tbl_comentario_curtida WHERE id_comentario = ${commentId}`
+
+        const rsCommentLikes = await prisma.$queryRawUnsafe(sql)
+
+        if(rsCommentLikes.length > 0)
+            return rsCommentLikes[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncementComment,
     deleteAnnouncementComment,
@@ -151,5 +166,6 @@ module.exports = {
     deleteAnnouncementCommentLike,
     countAnnouncementComments,
     verifyAnnouncementComment,
-    verifyAnnouncementCommentLike
+    verifyAnnouncementCommentLike,
+    countAnnouncementCommentLikes
 }

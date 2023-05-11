@@ -623,11 +623,17 @@ const listAnnouncementComments = async (announcementId, userId) => {
 
         if(announcementCommentsData) {
             let commentsJson = {}
+            const { countAnnouncementCommentLikes } = require('../models/DAO/announcementComment.js')
 
             const commentDataArray = announcementCommentsData.map(async element => {
-                const announcementLikeData = await verifyAnnouncementCommentLike(element.id, userId)
+                const announcementCommentLikeData = await verifyAnnouncementCommentLike(element.id, userId)
+                const announcementCommentsLikes = await countAnnouncementCommentLikes(element.id)
                 element.id_anuncio = announcementId
-                element.curtido = announcementLikeData
+                element.curtido = announcementCommentLikeData
+                
+                if(announcementCommentsLikes)
+                    element.curtidas = announcementCommentsLikes
+                
                 return element
             })
             

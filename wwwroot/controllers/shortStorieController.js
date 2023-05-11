@@ -607,10 +607,16 @@ const listShortStorieComments = async (shortStorieId, userId) => {
 
         if(shortStorieCommentsData) {
             let commentsJson = {}
+            const { countShortStorieCommentLikes } = require('../models/DAO/shortStorieComment.js')
 
             const commentDataArray = shortStorieCommentsData.map(async element => {
                 const shortStorieCommentLikeData = await verifyShortStorieCommentLike(element.id, userId)
+                const shortStorieCommentLikes = await countShortStorieCommentLikes(element.id)
                 element.curtido = shortStorieCommentLikeData
+
+                if(shortStorieCommentLikes)
+                    element.curtidas = shortStorieCommentLikes
+                
                 return element
             })
 
