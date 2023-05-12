@@ -98,10 +98,26 @@ const verifyUserFollow = async (followerId, followingId) => {
     }
 }
 
+const verifyUserFollowing = async (followerId, followingId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_seguidor = ${followerId} AND id_segue = ${followingId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertFollower,
     deleteFollow,
     selectUserFollowers,
     selectFollowingUsers,
-    verifyUserFollow
+    verifyUserFollow,
+    verifyUserFollowing
 }

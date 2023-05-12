@@ -86,10 +86,12 @@ router // Route to get user by ID, update user and delete user
         if(searchUser != '' && searchUser != undefined) {
             const userData = await userController.searchUserByID(searchUser)
 
-            const { verifyUserFollow } = require('../models/DAO/followers.js')
+            const { verifyUserFollow, verifyUserFollowing } = require('../models/DAO/followers.js')
 
             const userFollowVerify = await verifyUserFollow(currentUser, searchUser)
+            const userFollowingVerify = await verifyUserFollowing(currentUser, searchUser)
             userData.message.seguindo = userFollowVerify
+            userData.message.te_segue = userFollowingVerify
     
             if(userData) {
                 statusCode = userData.status
