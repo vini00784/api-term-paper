@@ -117,6 +117,7 @@ const destructureUserJson = async (json) => {
     const { selectShortStoriesActiveByUserId } = require('../models/DAO/shortStorie.js')
     const { selectShortStoriesDeactiveByUserId } = require('../models/DAO/shortStorie.js')
     const { countUserFollowers, countUserFollowing } = require('../models/DAO/followers.js')
+    const { countUserWorks } = require('../models/DAO/user.js')
 
     const userDataArray = json?.map(async userItem => {
         const userTagArrayData = await selectTagByUserId(userItem.id)
@@ -127,6 +128,7 @@ const destructureUserJson = async (json) => {
         const userShortStorieDeactiveArrayData = await selectShortStoriesDeactiveByUserId(userItem.id)
         const userFollowersData = await countUserFollowers(userItem.id)
         const userFollowingData = await countUserFollowing(userItem.id)
+        const userWorksData = await countUserWorks(userItem.id)
 
         if(userTagArrayData) {
             userItem.tags = userTagArrayData
@@ -151,6 +153,9 @@ const destructureUserJson = async (json) => {
 
                 if(userFollowingData)
                     userItem.qtde_seguindo = userFollowingData
+
+                if(userWorksData)
+                    userItem.obras = userWorksData
             }
         }
         return userItem
