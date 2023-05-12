@@ -8,7 +8,7 @@ const destructureAnnouncementJson = async (json) => {
     const { countAnnouncementPurchases } = require('../models/DAO/buy.js')
     const { countAnnouncementComments } = require('../models/DAO/announcementComment.js')
 
-    const announcementDataArray = json.map(async announcementItem => {
+    const announcementDataArray = json?.map(async announcementItem => {
         const announcementParentalRatingData = await selectParentalRatingByAnnouncementId(announcementItem.id)
             const announcementUserData = await selectUserByAnnouncementId(announcementItem.id)
             const publicationTypeData = await selectPublicationTypeByAnnouncementId(announcementItem.id)
@@ -65,7 +65,7 @@ const destructureShortStorieJson = async (json) => {
     const { countShortStorieReads } = require('../models/DAO/shortStorieRead.js')
     const { countShortStorieComments } = require('../models/DAO/shortStorieComment.js')
 
-    const shortStoriesDataArray = json.map(async shortStorieItem => {
+    const shortStoriesDataArray = json?.map(async shortStorieItem => {
         const shortStorieParentalRatingData = await selectParentalRatingByShortStorieId(shortStorieItem.id)
         const shortStorieUserData = await selectUserByShortStorieId(shortStorieItem.id)
         const publicationTypeData = await selectPublicationTypeByShortStorieId(shortStorieItem.id)
@@ -118,7 +118,7 @@ const destructureUserJson = async (json) => {
     const { selectShortStoriesDeactiveByUserId } = require('../models/DAO/shortStorie.js')
     const { countUserFollowers, countUserFollowing } = require('../models/DAO/followers.js')
 
-    const userDataArray = json.map(async userItem => {
+    const userDataArray = json?.map(async userItem => {
         const userTagArrayData = await selectTagByUserId(userItem.id)
         const userGenreArrayData = await selectGenreByUserId(userItem.id)
         const userAnnouncementAtiveArrayData = await selectAnnouncementAtiveByUserId(userItem.id)
@@ -163,7 +163,7 @@ const verifyUserFollow = async (json, userId) => {
     const { verifyUserFollow } = require('../models/DAO/followers.js')
 
     if (json) {
-        json.forEach(async element => {
+        json?.forEach(async element => {
             const userFollowVerify = await verifyUserFollow(userId, element.id)
             element.seguindo = userFollowVerify
         })
@@ -181,7 +181,7 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
     const announcementCommentVerify = await verifyAnnouncementComment(announcementId, userId)
 
     if(json) {
-        json.message.forEach(element => {
+        json?.message?.forEach(element => {
             element.curtido = announcementLikeVerify
             element.favorito = announcementFavoriteVerify
             element.lido = announcementReadVerify
@@ -197,7 +197,7 @@ const verifyAnnouncementLikeFavoriteRead = async (json, userId) => {
     const { verifyUserBuy, verifyUserCart } = require('../controllers/buyController.js')
 
     if(json) {
-        json.forEach(async element => {
+        json?.forEach(async element => {
             const announcementLikeVerify = await verifyAnnouncementLike(element.id, userId)
             const announcementFavoriteVerify = await verifyAnnouncementFavorite(element.id, userId)
             const announcementReadVerify = await verifyAnnouncementRead(element.id, userId)
@@ -222,7 +222,7 @@ const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId)
     const shortStorieCommentVerify = await verifyShortStorieComment(shortStorieId, userId)
 
     if(json) {
-        json.message.forEach(element => {
+        json?.message?.forEach(element => {
             element.curtido = shortStorieLikeVerify
             element.favorito = shortStorieFavoriteVerify
             element.lido = shortStorieReadVerify
@@ -235,7 +235,7 @@ const verifyShortStorieLikeFavoriteRead = async (json, userId) => {
     const { verifyShortStorieLike, verifyShortStorieFavorite, verifyShortStorieRead } = require('../controllers/shortStorieController.js')
 
     if(json) {
-        json.forEach(async element => {
+        json?.forEach(async element => {
             const shortStorieLikeVerify = await verifyShortStorieLike(element.id, userId)
             const shortStorieFavoriteVerify = await verifyShortStorieFavorite(element.id, userId)
             const shortStorieReadVerify = await verifyShortStorieRead(element.id, userId)
