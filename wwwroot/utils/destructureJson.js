@@ -116,6 +116,7 @@ const destructureUserJson = async (json) => {
     const { selectAnnouncementDeactivateByUserId } = require('../models/DAO/announcement.js')
     const { selectShortStoriesActiveByUserId } = require('../models/DAO/shortStorie.js')
     const { selectShortStoriesDeactiveByUserId } = require('../models/DAO/shortStorie.js')
+    const { countUserFollowers, countUserFollowing } = require('../models/DAO/followers.js')
 
     const userDataArray = json.map(async userItem => {
         const userTagArrayData = await selectTagByUserId(userItem.id)
@@ -124,6 +125,8 @@ const destructureUserJson = async (json) => {
         const userAnnouncementDeactivateArrayData = await selectAnnouncementDeactivateByUserId(userItem.id)
         const userShortStorieActiveArrayData = await selectShortStoriesActiveByUserId(userItem.id)
         const userShortStorieDeactiveArrayData = await selectShortStoriesDeactiveByUserId(userItem.id)
+        const userFollowersData = await countUserFollowers(userItem.id)
+        const userFollowingData = await countUserFollowing(userItem.id)
 
         if(userTagArrayData) {
             userItem.tags = userTagArrayData
@@ -141,7 +144,13 @@ const destructureUserJson = async (json) => {
                     userItem.historias_curtas_ativas = userShortStorieActiveArrayData
 
                 if(userShortStorieDeactiveArrayData)
-                userItem.historias_curtas_desativadas = userShortStorieDeactiveArrayData                
+                    userItem.historias_curtas_desativadas = userShortStorieDeactiveArrayData
+
+                if(userFollowersData)
+                    userItem.seguidores = userFollowersData
+
+                if(userFollowingData)
+                    userItem.qtde_seguindo = userFollowingData
             }
         }
         return userItem

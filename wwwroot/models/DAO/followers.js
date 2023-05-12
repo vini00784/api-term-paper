@@ -113,11 +113,43 @@ const verifyUserFollowing = async (followerId, followingId) => {
     }
 }
 
+const countUserFollowers = async (userId) => {
+    try {
+        let sql = `SELECT cast(COUNT(id) AS DECIMAL) AS quantidade_seguidores FROM tbl_seguidor_seguidores WHERE id_seguidor = ${userId}`
+
+        const rsFollowers = await prisma.$queryRawUnsafe(sql)
+
+        if(rsFollowers.length > 0)
+            return rsFollowers[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const countUserFollowing = async (userId) => {
+    try {
+        let sql = `SELECT cast(COUNT(id) AS DECIMAL) AS quantidade_seguindo FROM tbl_seguidor_seguidores WHERE id_segue = ${userId}`
+
+        const rsFollowing = await prisma.$queryRawUnsafe(sql)
+
+        if(rsFollowing.length > 0)
+            return rsFollowing[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertFollower,
     deleteFollow,
     selectUserFollowers,
     selectFollowingUsers,
     verifyUserFollow,
-    verifyUserFollowing
+    verifyUserFollowing,
+    countUserFollowers,
+    countUserFollowing
 }
