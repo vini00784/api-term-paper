@@ -200,16 +200,19 @@ const selectLastId = async () => {
     }
 }
 
-const selectUserByName = async () => {
+const countUserWorks = async (userId) => {
     try {
-        let sql = ``
+        let sql = `SELECT cast(COUNT(id) AS DECIMAL) AS total_obras
+        FROM (
+           SELECT id FROM tbl_historia_curta WHERE id_usuario = ${userId}
+           UNION ALL
+           SELECT id FROM tbl_anuncio WHERE id_usuario = ${userId}
+        ) AS tbl_total_obras`
 
-        const rsUsers = await prisma.$queryRawUnsafe(sql)
+        const rsWorks = await prisma.$queryRawUnsafe(sql)
 
-        if(rsUsers.length > 0)
-            return rsUsers
-        else
-            return false
+        if(rsWorks.length > 0)
+            return rsWorks[0]
     } catch (err) {
         console.log(err)
     }
@@ -225,5 +228,6 @@ module.exports = {
     login,
     selectUserByID,
     verifyUserName,
-    selectLastId
+    selectLastId,
+    countUserWorks
 }
