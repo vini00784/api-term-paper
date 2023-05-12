@@ -226,7 +226,7 @@ const verifyShortStorieLikeFavoriteReadById = async(json, shortStorieId, userId)
     const shortStorieReadVerify = await verifyShortStorieRead(shortStorieId, userId)
     const shortStorieCommentVerify = await verifyShortStorieComment(shortStorieId, userId)
 
-    if(json) {
+    if(json && typeof(json.message) != 'string') {
         json?.message?.forEach(element => {
             element.curtido = shortStorieLikeVerify
             element.favorito = shortStorieFavoriteVerify
