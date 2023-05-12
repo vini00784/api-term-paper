@@ -180,7 +180,7 @@ const verifyAnnouncementLikeFavoriteReadById = async (json, announcementId, user
     const announcementCartVerify = await verifyUserCart(announcementId, userId)
     const announcementCommentVerify = await verifyAnnouncementComment(announcementId, userId)
 
-    if(json) {
+    if(json && typeof(json.message) != 'string') {
         json?.message?.forEach(element => {
             element.curtido = announcementLikeVerify
             element.favorito = announcementFavoriteVerify
