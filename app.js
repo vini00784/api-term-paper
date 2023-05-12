@@ -33,7 +33,8 @@ const shortStorieRouter = require('./wwwroot/routes/shortStorie.routes.js')
 const complaintsRouter = require('./wwwroot/routes/complaint.routes.js')
 const buyRouter = require('./wwwroot/routes/buy.routes.js')
 const followerRouter = require('./wwwroot/routes/follower.routes.js')
-const commentRouter = require('./wwwroot/routes/comment.routes')
+const commentRouter = require('./wwwroot/routes/comment.routes.js')
+const recommendationRouter = require('./wwwroot/routes/recommendation.routes.js')
 
 // Using routers
 
@@ -47,6 +48,7 @@ app.use(complaintsRouter)
 app.use(buyRouter)
 app.use(followerRouter)
 app.use(commentRouter)
+app.use(recommendationRouter)
 
 // Using routers
 
