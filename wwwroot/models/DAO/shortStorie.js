@@ -416,6 +416,29 @@ const selectShortStorieByGenreName = async (genreNames) => { // Esse será usado
     }
 }
 
+const selectShortStoriesByFollowingUsers = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
+        FROM tbl_seguidor_seguidores
+          
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+        INNER JOIN tbl_historia_curta
+           ON tbl_usuario.id = tbl_historia_curta.id_usuario
+          
+           WHERE tbl_seguidor_seguidores.id_segue = ${userId} AND tbl_historia_curta.status = true`
+
+        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncements.length > 0)
+            return rsAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
@@ -435,5 +458,6 @@ module.exports = {
     selectShortStoriesByGenres,
     selectShortStoriesByGenresName,
     selectShortStorieByTitleName,
-    selectShortStorieByGenreName
+    selectShortStorieByGenreName,
+    selectShortStoriesByFollowingUsers
 }

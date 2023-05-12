@@ -222,13 +222,22 @@ const listShortStoriesByGenresUser = async (userId) => {
                 genresId += `${userGenres.message.genres[i].id_genero}, `
         }
 
+        let filteredJson
         const shortStoriesByGenre = await shortStorieModel.selectShortStoriesByGenresUser(genresId)
+        const shortStoriesByFollowingUsers = await shortStorieModel.selectShortStoriesByFollowingUsers(userId)
 
-        let filteredJson = shortStoriesByGenre.filter((element, index, self) => index === self.findIndex((t => (
-            parseInt(t.id) === parseInt(element.id)
-        ))))
+        if(shortStoriesByFollowingUsers) {
+            let shortStoriesByGenresAndFollowingUsers = Object.assign([], shortStoriesByGenre, shortStoriesByFollowingUsers)
 
-        await verifyShortStorieLikeFavoriteRead(shortStoriesByGenre, userId)
+            filteredJson = shortStoriesByGenresAndFollowingUsers.filter((element, index, self) => index === self.findIndex((t => (
+                parseInt(t.id) === parseInt(element.id)
+            ))))
+        } else
+            filteredJson = shortStoriesByGenre.filter((element, index, self) => index === self.findIndex((t => (
+                parseInt(t.id) === parseInt(element.id)
+            ))))
+
+        await verifyShortStorieLikeFavoriteRead(filteredJson, userId)
 
         if(filteredJson) {
             let shortStoriesJson = {}
