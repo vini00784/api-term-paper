@@ -583,4 +583,21 @@ SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, 
           
            WHERE tbl_seguidor_seguidores.id_segue = 88 AND tbl_historia_curta.status = true;
 SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_segue = 88 AND id_seguidor = 83; 
-SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_seguidor = 88 AND id_segue = 83
+SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_seguidor = 88 AND id_segue = 83;
+SELECT SUM(cast(count(tbl_historia_curta.id) AS DECIMAL) + cast(count(tbl_anuncio.id) AS DECIMAL))
+   FROM tbl_usuario
+
+   INNER JOIN tbl_historia_curta
+      ON tbl_usuario.id = tbl_historia_curta.id_usuario
+   INNER JOIN tbl_anuncio
+      on tbl_usuario.id = tbl_anuncio.id_usuario;
+
+SELECT cast(COUNT(id) AS DECIMAL) AS total_obras
+   FROM (
+      SELECT id FROM tbl_historia_curta WHERE id_usuario = 83
+      UNION ALL
+      SELECT id FROM tbl_anuncio WHERE id_usuario = 83
+   ) AS tbl_total_obras;
+
+SELECT id FROM tbl_historia_curta WHERE id_usuario = 83;
+SELECT id FROM tbl_anuncio WHERE id_usuario = 83;
