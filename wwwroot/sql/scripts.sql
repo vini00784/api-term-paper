@@ -552,3 +552,35 @@ SELECT * FROM tbl_comentario_curtida;
 DELETE FROM tbl_comentario_curtida;
 DELETE FROM tbl_comentario_historia_curta;
 UPDATE tbl_historia_curta SET avaliacao = 0;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
+   FROM tbl_seguidor_seguidores
+     
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+   INNER JOIN tbl_anuncio
+      ON tbl_usuario.id = tbl_anuncio.id_usuario
+     
+      WHERE tbl_seguidor_seguidores.id_segue = 88 AND tbl_anuncio.status = true;
+SELECT tbl_usuario.id, tbl_usuario.foto, tbl_usuario.nome, tbl_usuario.user_name
+   FROM tbl_seguidor_seguidores
+     
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+     
+      WHERE tbl_seguidor_seguidores.id_segue = 88;
+
+DESC tbl_anuncio;
+DELETE FROM tbl_anuncio WHERE id = 51;
+DESC tbl_carrinho;
+SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
+        FROM tbl_seguidor_seguidores
+          
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+        INNER JOIN tbl_historia_curta
+           ON tbl_usuario.id = tbl_historia_curta.id_usuario
+          
+           WHERE tbl_seguidor_seguidores.id_segue = 88 AND tbl_historia_curta.status = true;
+SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_segue = 88 AND id_seguidor = 83; 
+SELECT cast(id AS DECIMAL) AS id FROM tbl_seguidor_seguidores WHERE id_seguidor = 88 AND id_segue = 83
