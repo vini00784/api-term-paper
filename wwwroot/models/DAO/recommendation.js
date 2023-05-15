@@ -178,6 +178,26 @@ const selectRecommendationsByFollowingUsers = async (userId) => {
     }
 }
 
+const selectRecommendationsByUserId = async (userId) => {
+    try {
+        let sql = `SELECT cast(tbl_recomendacao.id AS DECIMAL) AS id, tbl_recomendacao.conteudo, tbl_recomendacao.data_hora, tbl_recomendacao.id_usuario, tbl_recomendacao.id_anuncio, tbl_recomendacao.spoiler
+        FROM tbl_recomendacao
+        
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_recomendacao.id_usuario
+        WHERE tbl_recomendacao.id_usuario = ${userId}`
+
+        const rsRecommendations = await prisma.$queryRawUnsafe(sql)
+
+        if(rsRecommendations.length > 0)
+            return rsRecommendations
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertRecommendation,
     deleteRecommendation,
@@ -188,5 +208,6 @@ module.exports = {
     selectRecommendationById,
     countRecommendationLikes,
     countRecommendationFavorites,
-    selectRecommendationsByFollowingUsers
+    selectRecommendationsByFollowingUsers,
+    selectRecommendationsByUserId
 }
