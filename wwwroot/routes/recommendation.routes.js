@@ -34,4 +34,19 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/recommendation/id/:recommendationId')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let recommendationId = req.params.recommendationId
+
+        const deletedRecommendation = await recommendationController.deleteRecommendation(recommendationId)
+
+        statusCode = deletedRecommendation.status
+        message = deletedRecommendation.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

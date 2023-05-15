@@ -29,6 +29,20 @@ const newRecommendation = async (recommendation) => {
     }
 }
 
+const deleteRecommendation = async (recommendationId) => {
+    if(recommendationId == '' || recommendationId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const deletedRecommendation = await recommendationModel.deleteRecommendation(recommendationId)
+
+        if(deletedRecommendation)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
-    newRecommendation
+    newRecommendation,
+    deleteRecommendation
 }
