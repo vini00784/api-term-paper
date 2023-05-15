@@ -50,6 +50,19 @@ router
         res.status(statusCode).json(message)
     })
 
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let recommendationId = req.params.recommendationId
+
+        const recommendationData = await recommendationController.searchRecommendationById(recommendationId)
+
+        statusCode = recommendationData.status
+        message = recommendationData.message
+
+        res.status(statusCode).json(message)
+    })
+
 router
     .route('/like-recommendation')
     .post(jsonParser, async(req, res) => {
@@ -135,5 +148,6 @@ router
 
         res.status(statusCode).json(message)
     })
+
 
 module.exports = router

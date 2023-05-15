@@ -94,11 +94,28 @@ const unfavoriteRecommendation = async (recommendationId, userId) => {
     }
 }
 
+const searchRecommendationById = async (recommendationId) => {
+    if(recommendationId == '' || recommendationId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const recommendationData = await recommendationModel.selectRecommendationById(recommendationId)
+
+        if(recommendationData) {
+            let recommendationJson = {}
+
+            recommendationJson = recommendationData
+            return { status: 200, message: recommendationJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newRecommendation,
     deleteRecommendation,
     likeRecommendation,
     dislikeRecommendation,
     favoriteRecommendation,
-    unfavoriteRecommendation
+    unfavoriteRecommendation,
+    searchRecommendationById
 }

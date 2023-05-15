@@ -110,11 +110,27 @@ const deleteRecommendationFavorite = async (recommendationId, userId) => {
     }
 }
 
+const selectRecommendationById = async (recommendationId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id, conteudo, data_hora, id_usuario, id_anuncio, spoiler FROM tbl_recomendacao WHERE id = ${recommendationId}`
+
+        const rsRecommendation = await prisma.$queryRawUnsafe(sql)
+
+        if(rsRecommendation.length > 0)
+            return rsRecommendation
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertRecommendation,
     deleteRecommendation,
     insertRecommendationLike,
     deleteRecommendationLike,
     insertRecommendationFavorite,
-    deleteRecommendationFavorite
+    deleteRecommendationFavorite,
+    selectRecommendationById
 }
