@@ -103,7 +103,16 @@ const searchRecommendationById = async (recommendationId) => {
         if(recommendationData) {
             let recommendationJson = {}
 
-            recommendationJson = recommendationData
+            const recommendationArrayData = recommendationData.map(async element => {
+                const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
+                const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
+                
+                element.curtidas = recommendationLikesData
+                element.favoritos = recommendationFavoritesData
+                return element
+            })
+
+            recommendationJson = await Promise.all(recommendationArrayData)
             return { status: 200, message: recommendationJson }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
