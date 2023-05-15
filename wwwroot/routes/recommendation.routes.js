@@ -76,4 +76,20 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/dislike-recommendation/?')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let recommendationId = req.query.recommendationId
+        let userId = req.query.userId
+
+        const dislikedRecommendation = await recommendationController.dislikeRecommendation(recommendationId, userId)
+
+        statusCode = dislikedRecommendation.status
+        message = dislikedRecommendation.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

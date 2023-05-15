@@ -55,8 +55,22 @@ const likeRecommendation = async (recommendationLike) => {
     }
 }
 
+const dislikeRecommendation = async (recommendationId, userId) => {
+    if(recommendationId == ''|| recommendationId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const dislikedRecommendation = await recommendationModel.deleteRecommendationLike(recommendationId, userId)
+
+        if(dislikedRecommendation)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newRecommendation,
     deleteRecommendation,
-    likeRecommendation
+    likeRecommendation,
+    dislikeRecommendation
 }
