@@ -81,10 +81,24 @@ const favoriteRecommendation = async (recommendationFavorite) => {
     }
 }
 
+const unfavoriteRecommendation = async (recommendationId, userId) => {
+    if(recommendationId == ''|| recommendationId == undefined || userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const unfavoritedRecommendation = await recommendationModel.deleteRecommendationFavorite(recommendationId, userId)
+
+        if(unfavoritedRecommendation)
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        else
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     newRecommendation,
     deleteRecommendation,
     likeRecommendation,
     dislikeRecommendation,
-    favoriteRecommendation
+    favoriteRecommendation,
+    unfavoriteRecommendation
 }

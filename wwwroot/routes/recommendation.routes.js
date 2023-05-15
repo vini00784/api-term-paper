@@ -120,4 +120,20 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/unfavorite-recommendation/?')
+    .delete(async(req, res) => {
+        let statusCode
+        let message
+        let recommendationId = req.query.recommendationId
+        let userId = req.query.userId
+
+        const unfavoritedRecommendation = await recommendationController.unfavoriteRecommendation(recommendationId, userId)
+
+        statusCode = unfavoritedRecommendation.status
+        message = unfavoritedRecommendation.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
