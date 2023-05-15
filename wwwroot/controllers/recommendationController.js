@@ -68,9 +68,23 @@ const dislikeRecommendation = async (recommendationId, userId) => {
     }
 }
 
+const favoriteRecommendation = async (recommendationFavorite) => {
+    if(recommendationFavorite.id_recomendacao == '' || recommendationFavorite.id_recomendacao == undefined || recommendationFavorite.id_usuario == '' || recommendationFavorite.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newRecommendationFavorite = await recommendationModel.insertRecommendationFavorite(recommendationFavorite)
+
+        if(newRecommendationFavorite)
+            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newRecommendation,
     deleteRecommendation,
     likeRecommendation,
-    dislikeRecommendation
+    dislikeRecommendation,
+    favoriteRecommendation
 }
