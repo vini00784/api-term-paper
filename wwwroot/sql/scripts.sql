@@ -601,3 +601,14 @@ SELECT cast(COUNT(id) AS DECIMAL) AS total_obras
 
 SELECT id FROM tbl_historia_curta WHERE id_usuario = 83;
 SELECT id FROM tbl_anuncio WHERE id_usuario = 83;
+SELECT * FROM tbl_recomendacao;
+SELECT cast(COUNT(id) AS DECIMAL) AS quantidade_curtidas FROM tbl_recomendacao_curtida WHERE id_recomendacao = 5;
+SELECT cast(tbl_recomendacao.id AS DECIMAL) AS id, tbl_recomendacao.conteudo, tbl_recomendacao.data_hora, tbl_recomendacao.id_usuario, tbl_recomendacao.id_anuncio, tbl_recomendacao.spoiler 
+        FROM tbl_seguidor_seguidores
+
+        INNER JOIN tbl_usuario
+            ON tbl_usuario.id = tbl_seguidor_seguidores.id_seguidor
+        INNER JOIN tbl_recomendacao
+            ON tbl_usuario.id = tbl_recomendacao.id_usuario
+
+        WHERE tbl_seguidor_seguidores.id_segue = 110;
