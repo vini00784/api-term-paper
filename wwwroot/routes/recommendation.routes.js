@@ -149,5 +149,19 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/recommendations/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const recommendationsByFollowingUsers = await recommendationController.getRecommendationsByFollowingUsers(userId)
+
+        statusCode = recommendationsByFollowingUsers.status
+        message = recommendationsByFollowingUsers.message
+
+        res.status(statusCode).json(message)
+    })
 
 module.exports = router

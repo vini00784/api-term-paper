@@ -119,6 +119,31 @@ const searchRecommendationById = async (recommendationId) => {
     }
 }
 
+const getRecommendationsByFollowingUsers = async (userId) => {
+    if(userId == '' || userId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    else {
+        const recommendationsByFollowingUsersData = await recommendationModel.selectRecommendationsByFollowingUsers(userId)
+
+        if(recommendationsByFollowingUsersData) {
+            let recommendationsJson = {}
+
+            const recommendationArrayData = recommendationsByFollowingUsersData.map(async element => {
+                const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
+                const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
+                
+                element.curtidas = recommendationLikesData
+                element.favoritos = recommendationFavoritesData
+                return element
+            })
+
+            recommendationsJson = await Promise.all(recommendationArrayData)
+            return { status: 200, message: recommendationsJson }
+        } else
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+    }
+}
+
 module.exports = {
     newRecommendation,
     deleteRecommendation,
@@ -126,5 +151,6 @@ module.exports = {
     dislikeRecommendation,
     favoriteRecommendation,
     unfavoriteRecommendation,
-    searchRecommendationById
+    searchRecommendationById,
+    getRecommendationsByFollowingUsers
 }
