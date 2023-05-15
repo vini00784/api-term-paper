@@ -42,7 +42,21 @@ const deleteRecommendation = async (recommendationId) => {
     }
 }
 
+const likeRecommendation = async (recommendationLike) => {
+    if(recommendationLike.id_recomendacao == '' || recommendationLike.id_recomendacao == undefined || recommendationLike.id_usuario == '' || recommendationLike.id_usuario == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const newRecommendationLike = await recommendationModel.insertRecommendationLike(recommendationLike)
+
+        if(newRecommendationLike)
+            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+        else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 module.exports = {
     newRecommendation,
-    deleteRecommendation
+    deleteRecommendation,
+    likeRecommendation
 }

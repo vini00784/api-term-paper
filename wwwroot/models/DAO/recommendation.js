@@ -44,7 +44,26 @@ const deleteRecommendation = async (recommendationId) => {
     }
 }
 
+const insertRecommendationLike = async (recommendationLike) => {
+    try {
+        let sql = `INSERT INTO tbl_recomendacao_curtida (id_recomendacao, id_usuario) values (
+            ${recommendationLike.id_recomendacao},
+            ${recommendationLike.id_usuario}
+        )`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertRecommendation,
-    deleteRecommendation
+    deleteRecommendation,
+    insertRecommendationLike
 }
