@@ -12,7 +12,7 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 const recommendationModel = require('../models/DAO/recommendation.js')
 
 const newRecommendation = async (recommendation) => {
-    if(recommendation.conteudo == '' || recommendation.conteudo == undefined || recommendation.id_usuario == '' || recommendation.id_usuario == undefined || recommendation.id_anuncio == '' || recommendation.id_anuncio == undefined)
+    if(recommendation.conteudo == '' || recommendation.conteudo == undefined || recommendation.id_usuario == '' || recommendation.id_usuario == undefined || recommendation.id_anuncio == '' || recommendation.id_anuncio == undefined || recommendation.spoiler == '' || recommendation.spoiler == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else if(recommendation.conteudo.length > 2000)
         return { status: 400, message: MESSAGE_ERROR.EXCEEDED_CHARACTERS }
