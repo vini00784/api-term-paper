@@ -94,8 +94,8 @@ const unfavoriteRecommendation = async (recommendationId, userId) => {
     }
 }
 
-const searchRecommendationById = async (recommendationId) => {
-    if(recommendationId == '' || recommendationId == undefined)
+const searchRecommendationById = async (recommendationId, userId) => {
+    if(recommendationId == '' || recommendationId == undefined || userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     else {
         const recommendationData = await recommendationModel.selectRecommendationById(recommendationId)
@@ -106,9 +106,13 @@ const searchRecommendationById = async (recommendationId) => {
             const recommendationArrayData = recommendationData.map(async element => {
                 const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
                 const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
+                const verifyRecommendationLike = await recommendationModel.verifyRecommendationLike(element.id, userId)
+                const verifyRecommendationFavorite = await recommendationModel.verifyRecommendationFavorite(element.id, userId)
                 
                 element.curtidas = recommendationLikesData
                 element.favoritos = recommendationFavoritesData
+                element.curtido = verifyRecommendationLike
+                element.favorito = verifyRecommendationFavorite
                 return element
             })
 
@@ -131,9 +135,13 @@ const getRecommendationsByFollowingUsers = async (userId) => {
             const recommendationArrayData = recommendationsByFollowingUsersData.map(async element => {
                 const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
                 const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
+                const verifyRecommendationLike = await recommendationModel.verifyRecommendationLike(element.id, userId)
+                const verifyRecommendationFavorite = await recommendationModel.verifyRecommendationFavorite(element.id, userId)
                 
                 element.curtidas = recommendationLikesData
                 element.favoritos = recommendationFavoritesData
+                element.curtido = verifyRecommendationLike
+                element.favorito = verifyRecommendationFavorite
                 return element
             })
 

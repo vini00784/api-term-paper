@@ -50,12 +50,15 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/recommendation/id/?')
     .get(async(req, res) => {
         let statusCode
         let message
-        let recommendationId = req.params.recommendationId
+        let recommendationId = req.query.recommendationId
+        let userId = req.query.userId
 
-        const recommendationData = await recommendationController.searchRecommendationById(recommendationId)
+        const recommendationData = await recommendationController.searchRecommendationById(recommendationId, userId)
 
         statusCode = recommendationData.status
         message = recommendationData.message

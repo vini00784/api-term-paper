@@ -198,6 +198,36 @@ const selectRecommendationsByUserId = async (userId) => {
     }
 }
 
+const verifyRecommendationLike = async (recommendationId, userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_recomendacao_curtida WHERE id_recomendacao = ${recommendationId} AND id_usuario = ${userId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const verifyRecommendationFavorite = async (recommendationId, userId) => {
+    try {
+        let sql = `SELECT cast(id AS DECIMAL) AS id FROM tbl_favorito_recomendacao WHERE id_recomendacao = ${recommendationId} AND id_usuario = ${userId}`
+
+        const rsResult = await prisma.$queryRawUnsafe(sql)
+
+        if(rsResult.length > 0)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertRecommendation,
     deleteRecommendation,
@@ -209,5 +239,7 @@ module.exports = {
     countRecommendationLikes,
     countRecommendationFavorites,
     selectRecommendationsByFollowingUsers,
-    selectRecommendationsByUserId
+    selectRecommendationsByUserId,
+    verifyRecommendationLike,
+    verifyRecommendationFavorite
 }
