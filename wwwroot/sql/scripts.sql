@@ -612,3 +612,10 @@ SELECT cast(tbl_recomendacao.id AS DECIMAL) AS id, tbl_recomendacao.conteudo, tb
             ON tbl_usuario.id = tbl_recomendacao.id_usuario
 
         WHERE tbl_seguidor_seguidores.id_segue = 110;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao, cast(COUNT(tbl_quantidade_lidos_anuncio.id) AS DECIMAL) AS quantidade_lidos
+   FROM tbl_quantidade_lidos_anuncio
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_quantidade_lidos_anuncio.id_anuncio
+   ORDER BY quantidade_lidos;
