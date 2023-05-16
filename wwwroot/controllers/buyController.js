@@ -298,20 +298,22 @@ const listPurchasedAnnouncements = async (userId) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const purchasedAnnouncementsData = await buyModel.selectPurchasedAnnouncements(userId)
-
-        let filteredJson = purchasedAnnouncementsData.filter((element, index, self) => index === self.findIndex((t => (
-            parseInt(t.id) === parseInt(element.id)
-        ))))
-
-        await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
-
-        if(filteredJson) {
-            let purchasedAnnouncements = {}
-
-            const announcementDataArray = await destructureAnnouncementJson(filteredJson)
-
-            purchasedAnnouncements = await Promise.all(announcementDataArray)
-            return { status: 200, message: purchasedAnnouncements }
+        if(purchasedAnnouncementsData) {
+            let filteredJson = purchasedAnnouncementsData.filter((element, index, self) => index === self.findIndex((t => (
+                parseInt(t.id) === parseInt(element.id)
+            ))))
+    
+            await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
+    
+            if(filteredJson) {
+                let purchasedAnnouncements = {}
+    
+                const announcementDataArray = await destructureAnnouncementJson(filteredJson)
+    
+                purchasedAnnouncements = await Promise.all(announcementDataArray)
+                return { status: 200, message: purchasedAnnouncements }
+            } else
+                return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
     }
