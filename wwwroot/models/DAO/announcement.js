@@ -396,10 +396,11 @@ const selectAnnouncementByGenreName = async (genreNames) => { // Esse será usad
 }
 
 // Seleciona todos os anúncios referidos a determinados parametros de filtros
-const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice) => {
+const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice, bestRated) => {
     try {
         let sqlFrom = "tbl_anuncio"
         let sqlWhere = "tbl_anuncio.status = true"
+        let sqlOrderBy = "ORDER BY tbl_anuncio.id DESC"
 
         if (genresNames != "") {
             sqlFrom = `tbl_genero_anuncio
@@ -420,11 +421,16 @@ const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice) => 
         if (maxPrice != "")
             sqlWhere += ` AND tbl_anuncio.preco <= ${maxPrice}`
 
+        if(bestRated)
+            sqlOrderBy = `ORDER BY tbl_anuncio.avaliacao DESC`
+
+        console.log(sqlOrderBy)
+
         let sqlBase = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
         FROM ${sqlFrom}
      
         WHERE ${sqlWhere}
-        ORDER BY tbl_anuncio.id DESC`
+        ${sqlOrderBy}`
 
         const rsAnnouncement = await prisma.$queryRawUnsafe(sqlBase)
 

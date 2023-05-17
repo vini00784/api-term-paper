@@ -555,7 +555,7 @@ const listAnnouncementsByGenreName = async (genres, userId) => {
         return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
 }
 
-const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, userId) => {
+const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, userId, bestRated) => {
     let genresNamesLength = genres?.nome_genero?.length
     let genresNames = ""
    
@@ -570,7 +570,7 @@ const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, user
             genresNames += `'${genres.nome_genero[i].nome}', `
     }
    
-    const announcementsByGenresPrice = await announcementModel.selectAnnouncementsByFilters(genresNames, minPrice, maxPrice)
+    const announcementsByGenresPrice = await announcementModel.selectAnnouncementsByFilters(genresNames, minPrice, maxPrice, bestRated)
 
     await verifyAnnouncementLikeFavoriteRead(announcementsByGenresPrice, userId)
 
