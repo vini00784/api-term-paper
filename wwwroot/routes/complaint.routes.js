@@ -108,6 +108,39 @@ router
     })
 
 router
+    .route('/report-recommendation/:userId')
+    .post(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let headerContentType = req.headers['content-type']
+        let userId = req.params.userId
+
+        if(userId != '' && userId != undefined) {
+            if(headerContentType == 'application/json') {
+                let bodyData = req.body
+
+                if(JSON.stringify(bodyData) != '{}') {
+                    const newRecommendationComplaint = await complaintsController.newRecommendationComplaint(bodyData, userId)
+
+                    statusCode = newRecommendationComplaint.status
+                    message = newRecommendationComplaint.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.EMPTY_BODY
+                }
+            } else {
+                statusCode = 415
+                message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+            }
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        res.status(statusCode).json(message)
+    })
+
+router
     .route('/complaint-types')
     .get(async(req, res) => {
         let statusCode

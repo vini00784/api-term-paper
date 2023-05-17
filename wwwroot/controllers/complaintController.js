@@ -12,6 +12,7 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 const announcementComplaintModel = require('../models/DAO/announcementComplaint.js')
 const shortStorieComplaintModel = require('../models/DAO/shortStorieComplaint.js')
 const userComplaintModel = require('../models/DAO/userComplaint.js')
+const recommendationComplaintModel = require('../models/DAO/recommendationComplaint.js')
 
 const newAnnouncementComplaint = async (announcementComplaint, userId) => {
     if(announcementComplaint.descricao == '' || announcementComplaint.descricao == undefined || announcementComplaint.id_anuncio == '' || announcementComplaint.id_anuncio == undefined)
@@ -125,6 +126,44 @@ const newUserComplaint = async (userComplaint, userId) => {
     }
 }
 
+const newRecommendationComplaint = async (recommendationComplaint, userId) => {
+    if(recommendationComplaint.descricao == '' || recommendationComplaint.descricao == undefined || recommendationComplaint.id_recomendacao == ''|| recommendationComplaint.id_recomendacao == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        recommendationComplaint.id_denunciador = userId
+        const newRecommendationComplaint = await recommendationComplaintModel.insertRecommendationComplaint(recommendationComplaint)
+        
+        if(newRecommendationComplaint) {
+            let newRecommendationComplaintId = await recommendationComplaintModel.selectLastRecommendationComplaintId()
+            console.log(newRecommendationComplaintId)
+
+            if(newRecommendationComplaintId > 0) {
+                let recommendationComplaintType = {}
+
+                recommendationComplaintType.id_denuncia = newRecommendationComplaintId
+
+                let recommendationComplaintTypeLength = recommendationComplaint.tipo.length
+                let resultNewRecommendationComplaintType
+                for(let i = 0; i < recommendationComplaintTypeLength; i++) {
+                    recommendationComplaintType.id_tipo_denuncia = recommendationComplaint.tipo[i].id_tipo_denuncia
+                    resultNewRecommendationComplaintType = await recommendationComplaintModel.insertRecommendationComplaintType(recommendationComplaintType)
+                }
+
+                if(resultNewRecommendationComplaintType)
+                    return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
+                else {
+                    await userComplaintModel.deleteUserComplaint(newRecommendationComplaintId)
+                    return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+                }
+            } else {
+                await userComplaintModel.deleteUserComplaint(newRecommendationComplaintId)
+                return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+            }
+        } else
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
 const listAllComplaintTypes = async () => {
     const complaintTypesData = await announcementComplaintModel.selectAllComplaintTypes()
 
@@ -141,5 +180,6 @@ module.exports = {
     newAnnouncementComplaint,
     newShortStorieComplaint,
     newUserComplaint,
+    newRecommendationComplaint,
     listAllComplaintTypes
 }
