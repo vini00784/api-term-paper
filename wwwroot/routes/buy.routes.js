@@ -191,29 +191,26 @@ router
 router
     .route('/intent-payment-update')
     .post(async (req, res) => {
-        const teste = req.body
         try {
-        
             const id = req.body.object.id;
-        const { selectCartByStripeId } = require('../models/DAO/buy.js')
-        const cartItems = await selectCartByStripeId(id)
-        
+            const { selectCartByStripeId } = require('../models/DAO/buy.js')
+            const cartItems = await selectCartByStripeId(id)
+    
 
-        switch(event.type) {
-            case 'checkout.session.completed':
-                await buyController.confirmBuy(cartItems.id_usuario)
-            break;
-            default:
-                console.log("Unhandled event type")
-        }
+            switch(event.type) {
+                case 'checkout.session.completed':
+                    await buyController.confirmBuy(cartItems.id_usuario)
+                    break;
+                default:
+                    console.log("Unhandled event type")
+            }
 
-        return res.status(200).json({
-            received: true
-        })   
-        } catch (error) {
-            
             return res.status(200).json({
-                received: req.body
+                received: true
+            })   
+        } catch (error) {
+            return res.status(200).json({
+                received: error.message
             })   
         }
     })
