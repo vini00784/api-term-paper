@@ -191,6 +191,8 @@ router
 router
     .route('/intent-payment-update')
     .post(async (req, res) => {
+        try {
+         
         const event = req.body
         const paymentIntentObj = event.object;
         const { id } = paymentIntentObj;
@@ -208,7 +210,13 @@ router
 
         return res.status(200).json({
             received: true
-        })
+        })   
+        } catch (error) {
+            
+            return res.status(200).json({
+                received: error.message
+            })   
+        }
     })
 
 module.exports = router
