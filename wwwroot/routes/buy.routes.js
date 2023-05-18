@@ -192,10 +192,7 @@ router
     .route('/intent-payment-update')
     .post(async (req, res) => {
         try {
-         
-        const event = req.body
-        const paymentIntentObj = event.object;
-        const { id } = paymentIntentObj;
+        const id = req.body.data.object.id;
         const { selectCartByStripeId } = require('../models/DAO/buy.js')
         const cartItems = await selectCartByStripeId(id)
         
