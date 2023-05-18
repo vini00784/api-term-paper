@@ -1,6 +1,7 @@
 const express = require('express')
 const jsonParser = express.json()
 const buyController = require('../controllers/buyController.js')
+const { paymentStripe } = require('../libs/stripe.js')
 
 // File with standardized messages
 const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
@@ -132,18 +133,39 @@ router
     })
 
 router
-    .route('/confirm-buy/user-id/:userId')
+    .route('/intent-buy/user-id/:userId')
     .post(jsonParser, async(req, res) => {
-        let statusCode
-        let message
         let userId = req.params.userId
+    
+        const listCartItems = await buyController.listCartItems(userId)
         
-        const confirmedBuy = await buyController.confirmBuy(userId)
+        // console.log(listCartItems.message.items);
 
-        statusCode = confirmedBuy.status
-        message = confirmedBuy.message
+        const data = { products: [] };
 
-        res.status(statusCode).json(message)
+
+        data.products = listCartItems.message.items.map(({
+            titulo,
+            preco,
+            capa,
+            sinopse
+            }) => {
+            return {
+                name: titulo,
+                images: [capa],
+                price: preco * 100,
+                description: sinopse
+            }
+        })
+
+        // Id < --
+        const checkoutSession = await paymentStripe.createSession(data) // add
+        console.log(checkoutSession.id)
+        
+        const newStripePaymentId = await buyController.newStripePaymentId(userId, checkoutSession.id)
+    
+
+        res.status(200).json(checkoutSession.url)
     })
 
 router
@@ -164,6 +186,29 @@ router
         }
 
         res.status(statusCode).json(message)
+    })
+
+router
+    .route('/intent-payment-update')
+    .post(async (req, res) => {
+        const event = req.body
+        const paymentIntentObj = event.object;
+        const { id } = paymentIntentObj;
+        const { selectCartByStripeId } = require('../models/DAO/buy.js')
+        const cartItems = await selectCartByStripeId(id)
+        
+
+        switch(event.type) {
+            case 'payment_intent.succeeded':
+                await buyController.confirmBuy(cartItems.id_usuario)
+            break;
+            default:
+                console.log("Unhandled event type")
+        }
+
+        return res.status(200).json({
+            received: true
+        })
     })
 
 module.exports = router

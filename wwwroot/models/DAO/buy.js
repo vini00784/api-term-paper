@@ -6,6 +6,7 @@
 */
 
 // Instance of the PrismaClient class
+const { filterAnnouncementsByGenresPrice } = require('../../controllers/announcementController.js')
 const prisma = require('../../libs/prisma.js')
 
 const insertBuyWithoutCart = async (buy) => {
@@ -61,7 +62,7 @@ const insertItemInCart = async (cart) => {
 
 const selectCartItems = async (cartId) => {
     try {
-        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) AS id_anuncio, tbl_anuncio.titulo, tbl_anuncio.sinopse, tbl_anuncio.capa, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi
         FROM tbl_compra
 
         INNER JOIN tbl_anuncio
@@ -275,6 +276,38 @@ const selectPurchasedAnnouncements = async (userId) => {
     }
 }
 
+const insertPaymentStripeId = async (cartId, paymentStripeId) => {
+    try {
+        let sql = `UPDATE tbl_carrinho SET 
+        id_pagamento_stripe = '${paymentStripeId}' 
+        WHERE id = ${cartId}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectCartByStripeId = async (paymentStripeId) => {
+    try {
+        let sql = `SELECT * FROM tbl_carrinho WHERE id_pagamento_stripe = '${paymentStripeId}'`
+
+        const rsCartByStripe = await prisma.$queryRawUnsafe(sql)
+
+        if(rsCartByStripe.length > 0)
+            return rsCartByStripe
+        else
+            return false
+    } catch (error) {
+        
+    }
+}
+
 module.exports = { 
     insertBuyWithoutCart,
     insertCart,
@@ -290,5 +323,7 @@ module.exports = {
     verifyUserBuy,
     verifyUserCart,
     countAnnouncementPurchases,
-    selectPurchasedAnnouncements
+    selectPurchasedAnnouncements,
+    insertPaymentStripeId,
+    selectCartByStripeId
  }

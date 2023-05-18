@@ -619,3 +619,7 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    INNER JOIN tbl_anuncio
       ON tbl_anuncio.id = tbl_quantidade_lidos_anuncio.id_anuncio
    ORDER BY quantidade_lidos;
+   SELECT * FROM tbl_carrinho WHERE id_pagamento_stripe = 'cs_test_b1JazkyMh80sOXRNdNlOYpcKXlfYHMIotH0M5XZnTuTc32kGi7tVKuXeO9';
+   DESC tbl_carrinho;
+   DESC tbl_compra;
+   SELECT * FROM tbl_carrinho

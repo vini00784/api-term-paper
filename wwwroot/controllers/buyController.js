@@ -107,6 +107,21 @@ const listCartItems = async (userId) => {
     }
 }
 
+const newStripePaymentId = async (userId, paymentStripeId) => {
+    if(paymentStripeId == ''|| paymentStripeId == undefined)
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    else {
+        const lastUserCart = await buyModel.selectLastCart(userId)
+
+        const insertStripePaymentId = await buyModel.insertPaymentStripeId(lastUserCart, paymentStripeId)
+
+        if(insertStripePaymentId)
+            return true
+        else
+            return false
+    }
+}
+
 const deleteCartItem = async (announcementId, userId) => {
     if(announcementId == '' || announcementId == undefined || userId == '' || userId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -324,6 +339,7 @@ module.exports = {
     createCart,
     insertItemCart,
     listCartItems,
+    newStripePaymentId,
     deleteCartItem,
     verifyCart,
     confirmBuy,
