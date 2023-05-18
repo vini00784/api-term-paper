@@ -191,8 +191,10 @@ router
 router
     .route('/intent-payment-update')
     .post(async (req, res) => {
+        const teste = req.body
         try {
-        const id = req.body.data.object.id;
+        
+            const id = req.body.object.id;
         const { selectCartByStripeId } = require('../models/DAO/buy.js')
         const cartItems = await selectCartByStripeId(id)
         
@@ -211,7 +213,7 @@ router
         } catch (error) {
             
             return res.status(200).json({
-                received: error.message
+                received: req.body
             })   
         }
     })
