@@ -141,7 +141,7 @@ router
         
         // console.log(listCartItems.message.items);
 
-        const data = { products: [] };
+        const data = { id: userId, products: [] };
 
 
         data.products = listCartItems.message.items.map(({
@@ -160,7 +160,7 @@ router
 
         // Id < --
         const checkoutSession = await paymentStripe.createSession(data) // add
-        console.log(checkoutSession.id)
+        console.log(checkoutSession)
         
         const newStripePaymentId = await buyController.newStripePaymentId(userId, checkoutSession.id)
     
@@ -199,7 +199,7 @@ router
         
 
         switch(event.type) {
-            case 'payment_intent.succeeded':
+            case 'checkout.session.completed':
                 await buyController.confirmBuy(cartItems.id_usuario)
             break;
             default:

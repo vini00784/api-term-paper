@@ -11,6 +11,7 @@ class PaymentStripe {
         const session = await this.stripe.checkout.sessions.create({
             success_url: `${process.env.BASE_URL}/redirect`,
             cancel_url:`${process.env.BASE_URL}/redirect`,
+            client_reference_id: data.id,
             mode: 'payment',
             line_items: data.products.map((item) => ({
                 price_data: {
