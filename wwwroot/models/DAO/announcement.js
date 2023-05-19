@@ -358,7 +358,7 @@ const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice, bes
             sqlOrderBy = `ORDER BY tbl_anuncio.avaliacao DESC`
 
         if(announcementTitle != "")
-            sqlWhere += ` AND LOCATE(${announcementTitle}, tbl_anuncio.titulo)`
+            sqlWhere += ` AND LOCATE('${announcementTitle}', tbl_anuncio.titulo)`
 
         let sqlBase = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
         FROM ${sqlFrom}

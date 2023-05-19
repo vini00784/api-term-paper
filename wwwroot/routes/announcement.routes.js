@@ -615,11 +615,18 @@ router
         let announcementTitle = req.query.announcementTitle
         
         let bodyData = req.body
+
+        if(bodyData.nome_genero == null) {
+            const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(null, minValue, maxValue, userId, bestRated, announcementTitle)
+        
+            statusCode = announcementsByGenresPrice.status
+            message = announcementsByGenresPrice.message
+        } else {
+            const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue, userId, bestRated, announcementTitle)
             
-        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue, userId, bestRated, announcementTitle)
-    
-        statusCode = announcementsByGenresPrice.status
-        message = announcementsByGenresPrice.message
+            statusCode = announcementsByGenresPrice.status
+            message = announcementsByGenresPrice.message
+        }
 
         res.status(statusCode).json(message)
     })
