@@ -642,4 +642,30 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/filter-short-stories/?')
+    .post(jsonParser, async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.query.userId
+        let bestRated = req.query.bestRated
+        let shortStorieTitle = req.query.shortStorieTitle
+        
+        let bodyData = req.body
+
+        if(bodyData.nome_genero == null) {
+            const shortStories = await shortStorieController.filterShortStories(null, shortStorieTitle, bestRated, userId)
+        
+            statusCode = shortStories.status
+            message = shortStories.message
+        } else {
+            const shortStories = await shortStorieController.filterShortStories(bodyData, shortStorieTitle, bestRated, userId)
+            
+            statusCode = shortStories.status
+            message = shortStories.message
+        }
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

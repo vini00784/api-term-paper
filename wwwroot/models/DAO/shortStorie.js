@@ -439,6 +439,50 @@ const selectShortStoriesByFollowingUsers = async (userId) => {
     }
 }
 
+const selectShortStoriesByFilters = async (genresName, shortStorieTitle, bestRated) => {
+    try {
+        let sqlFrom = 'tbl_historia_curta'
+        let sqlWhere = 'tbl_historia_curta.status = true'
+        let sqlOrderBy = 'ORDER BY tbl_historia_curta.id DESC'
+
+        if(genresName != "") {
+            sqlFrom = `tbl_genero_historia_curta
+            
+            INNER JOIN tbl_historia_curta
+                ON tbl_historia_curta.id = tbl_genero_historia_curta.id_historia_curta
+            INNER JOIN tbl_generos
+                ON tbl_generos.id = tbl_genero_historia_curta.id_genero
+            INNER JOIN tbl_usuario
+                ON tbl_usuario.id = tbl_historia_curta.id_usuario`
+
+            sqlWhere += ` AND tbl_generos.nome in(${genresName})`
+        }
+
+        if(bestRated)
+            sqlOrderBy = 'ORDER BY tbl_historia_curta.avaliacao DESC'
+
+        if(shortStorieTitle != "")
+            sqlWhere += ` AND LOCATE('${shortStorieTitle}', tbl_historia_curta.titulo)`
+
+        let sqlBase = `SELECT cast(tbl_historia_curta.id AS DECIMAL) as id, tbl_historia_curta.titulo, tbl_historia_curta.sinopse, tbl_historia_curta.capa, tbl_historia_curta.status, tbl_historia_curta.historia, tbl_historia_curta.data, tbl_historia_curta.premium, tbl_historia_curta.avaliacao
+        FROM ${sqlFrom}
+        
+        WHERE ${sqlWhere}
+        ${sqlOrderBy}`
+
+        console.log(sqlBase)
+
+        const rsShortStories = await prisma.$queryRawUnsafe(sqlBase)
+
+        if(rsShortStories.length > 0)
+            return rsShortStories
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertShortStorie,
     updateShortStorie,
@@ -459,5 +503,6 @@ module.exports = {
     selectShortStoriesByGenresName,
     selectShortStorieByTitleName,
     selectShortStorieByGenreName,
-    selectShortStoriesByFollowingUsers
+    selectShortStoriesByFollowingUsers,
+    selectShortStoriesByFilters
 }

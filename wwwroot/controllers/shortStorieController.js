@@ -687,6 +687,39 @@ const verifyShortStorieCommentLike = async (commentId, userId) => {
             return false
     }
 }
+const filterShortStories = async (genres, shortStorieTitle, bestRated, userId) => {
+    let genresNamesLength = genres?.nome_genero?.length
+    let genreNames = ""
+   
+    for(let i = 0; i < genresNamesLength; i++) {
+        if(genresNamesLength == 1) {
+            genreNames += `'${genres.nome_genero[0].nome}'`
+        }
+        else if(i == genresNamesLength - 1) {
+            genreNames += `'${genres.nome_genero[i].nome}'`
+        }
+        else
+            genreNames += `'${genres.nome_genero[i].nome}', `
+    }
+   
+    const shortStoriesFiltered = await shortStorieModel.selectShortStoriesByFilters(genreNames, shortStorieTitle, bestRated)
+
+    await verifyShortStorieLikeFavoriteRead(shortStoriesFiltered, userId)
+
+    // let filteredJson = announcementsByGenresPrice.filter((element, index, self) => index === self.findIndex((t => (
+    //     parseInt(t.id) === parseInt(element.id)
+    // ))))
+
+    if(shortStoriesFiltered) {
+        let shortStoriesJson = {}
+
+        const shortStoriesDataArray = await destructureShortStorieJson(shortStoriesFiltered)
+
+        shortStoriesJson = await Promise.all(shortStoriesDataArray)
+        return { status: 200, message: shortStoriesJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
 
 module.exports = {
     newShortStorie,
@@ -723,5 +756,6 @@ module.exports = {
     likeShortStorieComment,
     dislikeShortStorieComment,
     verifyShortStorieComment,
-    verifyShortStorieCommentLike
+    verifyShortStorieCommentLike,
+    filterShortStories
 }
