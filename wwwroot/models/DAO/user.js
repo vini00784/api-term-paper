@@ -218,6 +218,27 @@ const countUserWorks = async (userId) => {
     }
 }
 
+const selectUserByRecommendation = async (recommendationId) => {
+    try {
+        let sql = `SELECT tbl_usuario.user_name, tbl_usuario.nome, tbl_usuario.foto
+        FROM tbl_recomendacao
+     
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_recomendacao.id_usuario
+     
+        WHERE tbl_recomendacao.id = ${recommendationId}`
+
+        const rsUser = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUser.length > 0)
+            return rsUser
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
@@ -229,5 +250,6 @@ module.exports = {
     selectUserByID,
     verifyUserName,
     selectLastId,
-    countUserWorks
+    countUserWorks,
+    selectUserByRecommendation
 }

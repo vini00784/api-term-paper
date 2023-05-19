@@ -102,17 +102,20 @@ const searchRecommendationById = async (recommendationId, userId) => {
 
         if(recommendationData) {
             let recommendationJson = {}
+            const { selectUserByRecommendation } = require('../models/DAO/user.js')
 
             const recommendationArrayData = recommendationData.map(async element => {
                 const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
                 const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
                 const verifyRecommendationLike = await recommendationModel.verifyRecommendationLike(element.id, userId)
                 const verifyRecommendationFavorite = await recommendationModel.verifyRecommendationFavorite(element.id, userId)
+                const recommendationUserData = await selectUserByRecommendation(element.id)
                 
                 element.curtidas = recommendationLikesData
                 element.favoritos = recommendationFavoritesData
                 element.curtido = verifyRecommendationLike
                 element.favorito = verifyRecommendationFavorite
+                element.usuario = recommendationUserData
                 return element
             })
 
