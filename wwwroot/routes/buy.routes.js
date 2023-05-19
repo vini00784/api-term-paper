@@ -198,13 +198,13 @@ router
 
             await buyController.confirmBuy(cartItems.id_usuario)
                 
-
             return res.status(200).json({
                 received: true
             })   
 
         } catch (error) {
             return res.status(200).json({
+                body: req.body,
                 received: error.message
             })   
         }
