@@ -328,75 +328,8 @@ const selectAnnouncementsByGenres = async (genresId) => {
     }
 }
 
-const selectAnnouncementByGenresName = async (genreName) => {
-    try {
-        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
-        FROM tbl_genero_anuncio
-     
-        INNER JOIN tbl_anuncio
-           ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
-        INNER JOIN tbl_generos
-           ON tbl_generos.id = tbl_genero_anuncio.id_genero
-        INNER JOIN tbl_usuario
-           ON tbl_usuario.id = tbl_anuncio.id_usuario
-     
-        WHERE LOCATE('${genreName}', tbl_generos.nome) AND tbl_anuncio.status = true
-        ORDER BY tbl_anuncio.id DESC`
-
-        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
-
-        if(rsAnnouncements.length > 0)
-            return rsAnnouncements
-        else
-            return false
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-const selectAnnouncementByTitleName = async (announcementTitle) => {
-    try {
-        let sql = `SELECT cast(id AS DECIMAL) as id, titulo, volume, capa, status, premium, sinopse, data, quantidade_paginas, preco, pdf, epub, mobi, avaliacao FROM tbl_anuncio WHERE LOCATE('${announcementTitle}', titulo) AND tbl_anuncio.status = true`
-
-        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
-
-        if(rsAnnouncements.length > 0)
-            return rsAnnouncements
-        else
-            return false
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-const selectAnnouncementByGenreName = async (genreNames) => { // Esse será usado no filtro que poderá chegar diversos gêneros diferentes
-    try {
-        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
-        FROM tbl_genero_anuncio
-     
-        INNER JOIN tbl_anuncio
-           ON tbl_anuncio.id = tbl_genero_anuncio.id_anuncio
-        INNER JOIN tbl_generos
-           ON tbl_generos.id = tbl_genero_anuncio.id_genero
-        INNER JOIN tbl_usuario
-           ON tbl_usuario.id = tbl_anuncio.id_usuario
-     
-        WHERE tbl_generos.nome in(${genreNames}) AND tbl_anuncio.status = true
-        ORDER BY tbl_anuncio.id DESC`
-        
-        const rsAnnouncements = await prisma.$queryRawUnsafe(sql)
-        
-        if(rsAnnouncements.length > 0)
-            return rsAnnouncements
-        else
-            return false
-    } catch (err) {
-        console.log(err)
-    }
-}
-
 // Seleciona todos os anúncios referidos a determinados parametros de filtros
-const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice, bestRated) => {
+const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice, bestRated, announcementTitle) => {
     try {
         let sqlFrom = "tbl_anuncio"
         let sqlWhere = "tbl_anuncio.status = true"
@@ -423,6 +356,9 @@ const selectAnnouncementsByFilters = async (genresNames, minPrice, maxPrice, bes
 
         if(bestRated)
             sqlOrderBy = `ORDER BY tbl_anuncio.avaliacao DESC`
+
+        if(announcementTitle != "")
+            sqlWhere += ` AND LOCATE(${announcementTitle}, tbl_anuncio.titulo)`
 
         let sqlBase = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao
         FROM ${sqlFrom}
@@ -480,9 +416,6 @@ module.exports = {
     selectActivatedAnnouncements,
     selectDesactivatedAnnouncements,
     selectAnnouncementsByGenres,
-    selectAnnouncementByGenresName,
-    selectAnnouncementByTitleName,
-    selectAnnouncementByGenreName,
     selectAnnouncementsByFilters,
     selectAnnouncementsByFollowingUsers
 }

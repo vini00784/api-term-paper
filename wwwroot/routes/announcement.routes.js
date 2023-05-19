@@ -612,10 +612,11 @@ router
         let maxValue = req.query.maxValue
         let userId = req.query.userId
         let bestRated = req.query.bestRated
+        let announcementTitle = req.query.announcementTitle
         
         let bodyData = req.body
             
-        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue, userId, bestRated)
+        const announcementsByGenresPrice = await announcementController.filterAnnouncementsByGenresPrice(bodyData, minValue, maxValue, userId, bestRated, announcementTitle)
     
         statusCode = announcementsByGenresPrice.status
         message = announcementsByGenresPrice.message

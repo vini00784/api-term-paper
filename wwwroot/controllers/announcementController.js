@@ -260,48 +260,6 @@ const listAnnouncementsByGenres = async (userId) => {
     }
 }
 
-const listAnnouncementsByGenresName = async (genreName, userId) => {
-    if(genreName == '' || genreName == undefined)
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else {
-        const announcementsByGenreName = await announcementModel.selectAnnouncementByGenresName(genreName)
-
-        await verifyAnnouncementLikeFavoriteRead(announcementsByGenreName, userId)
-        // await verifyAnnouncementUserCart(announcementsByGenreName, userId)
-
-        if(announcementsByGenreName) {
-            let announcementsJson = {}
-
-            const announcementDataArray = await destructureAnnouncementJson(announcementsByGenreName)
-            
-            announcementsJson = await Promise.all(announcementDataArray)
-            return { status: 200, message: announcementsJson }
-        } else
-            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
-    }
-}
-
-const listAnnouncementsByTitleName = async (announcementTitle, userId) => {
-    if(announcementTitle == '' || announcementTitle == undefined)
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    else {
-        const announcementsByTitleName = await announcementModel.selectAnnouncementByTitleName(announcementTitle)
-
-        await verifyAnnouncementLikeFavoriteRead(announcementsByTitleName, userId)
-        // await verifyAnnouncementUserCart(announcementsByTitleName, userId)
-
-        if(announcementsByTitleName) {
-            let announcementsJson = {}
-
-            const announcementDataArray = await destructureAnnouncementJson(announcementsByTitleName)
-
-            announcementsJson = await Promise.all(announcementDataArray)
-            return { status: 200, message: announcementsJson }
-        } else
-            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
-    }
-}
-
 const likeAnnouncement = async (announcementLike) => {
     if(announcementLike.id_anuncio == '' || announcementLike.id_anuncio == undefined || announcementLike.id_usuario == '' || announcementLike.id_usuario == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -518,44 +476,7 @@ const listReadedAnnouncements = async (userID) => {
     }
 }
 
-const listAnnouncementsByGenreName = async (genres, userId) => {
-    if(genres) {
-        let genresNamesLength = genres.nome_genero.length
-        let genresNames = ""
-   
-        for(let i = 0; i < genresNamesLength; i++) {
-            if(genresNamesLength == 1) {
-                genresNames += `'${genres.nome_genero[0].nome}'`
-            }
-            else if(i == genresNamesLength - 1) {
-                genresNames += `'${genres.nome_genero[i].nome}'`
-            }
-            else
-                genresNames += `'${genres.nome_genero[i].nome}', `
-        }
-   
-        const announcementsByGenresName = await announcementModel.selectAnnouncementByGenreName(genresNames)
-
-        let filteredJson = announcementsByGenresName.filter((element, index, self) => index === self.findIndex((t => (
-            parseInt(t.id) === parseInt(element.id)
-        ))))
-
-        await verifyAnnouncementLikeFavoriteRead(announcementsByGenresName, userId)
-   
-        if(filteredJson) {
-            let announcementsJson = {}
-   
-            const announcementsDataArray = await destructureAnnouncementJson(filteredJson)
-   
-            announcementsJson = await Promise.all(announcementsDataArray)
-            return { status: 200, message: announcementsJson }
-        } else
-            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
-    } else
-        return { status: 400, message: MESSAGE_ERROR.EMPTY_BODY }
-}
-
-const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, userId, bestRated) => {
+const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, userId, bestRated, announcementTitle) => {
     let genresNamesLength = genres?.nome_genero?.length
     let genresNames = ""
    
@@ -570,7 +491,7 @@ const filterAnnouncementsByGenresPrice = async (genres, minPrice, maxPrice, user
             genresNames += `'${genres.nome_genero[i].nome}', `
     }
    
-    const announcementsByGenresPrice = await announcementModel.selectAnnouncementsByFilters(genresNames, minPrice, maxPrice, bestRated)
+    const announcementsByGenresPrice = await announcementModel.selectAnnouncementsByFilters(genresNames, minPrice, maxPrice, bestRated, announcementTitle)
 
     await verifyAnnouncementLikeFavoriteRead(announcementsByGenresPrice, userId)
 
@@ -715,8 +636,6 @@ module.exports = {
     listActivatedAnnouncements,
     listDesactivatedAnnouncements,
     listAnnouncementsByGenres,
-    listAnnouncementsByGenresName,
-    listAnnouncementsByTitleName,
     likeAnnouncement,
     countAnnouncementLikes,
     dislikeAnnouncement,
@@ -731,7 +650,6 @@ module.exports = {
     verifyAnnouncementRead,
     listFavoritedAnnouncements,
     listReadedAnnouncements,
-    listAnnouncementsByGenreName,
     filterAnnouncementsByGenresPrice,
     newAnnouncementComment,
     deleteAnnouncementComment,
