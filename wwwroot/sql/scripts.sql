@@ -622,4 +622,12 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    SELECT * FROM tbl_carrinho WHERE id_pagamento_stripe = 'cs_test_b1JazkyMh80sOXRNdNlOYpcKXlfYHMIotH0M5XZnTuTc32kGi7tVKuXeO9';
    DESC tbl_carrinho;
    DESC tbl_compra;
-   SELECT * FROM tbl_carrinho
+   SELECT * FROM tbl_recomendacao;
+
+SELECT tbl_usuario.nome, tbl_usuario.foto
+   FROM tbl_recomendacao
+
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_recomendacao.id_usuario
+
+   WHERE tbl_recomendacao.id = 7;
