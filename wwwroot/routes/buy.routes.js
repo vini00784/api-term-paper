@@ -195,19 +195,14 @@ router
             const id = req.body.object.id;
             const { selectCartByStripeId } = require('../models/DAO/buy.js')
             const cartItems = await selectCartByStripeId(id)
-    
 
-            switch(event.type) {
-                case 'checkout.session.completed':
-                    await buyController.confirmBuy(cartItems.id_usuario)
-                    break;
-                default:
-                    console.log("Unhandled event type")
-            }
+            await buyController.confirmBuy(cartItems.id_usuario)
+                
 
             return res.status(200).json({
                 received: true
             })   
+            
         } catch (error) {
             return res.status(200).json({
                 received: error.message
