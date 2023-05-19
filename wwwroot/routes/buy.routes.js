@@ -205,7 +205,6 @@ router
 
         } catch (error) {
             return res.status(200).json({
-                body: req.body,
                 received: error.message
             })   
         }
