@@ -190,9 +190,10 @@ router
 
 router
     .route('/intent-payment-update')
-    .post(async (req, res) => {
+    .post(jsonParser, async (req, res) => {
         try {
             const id = req.body.data.object.id;
+
             const { selectCartByStripeId } = require('../models/DAO/buy.js')
             const cartItems = await selectCartByStripeId(id)
 
