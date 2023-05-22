@@ -625,6 +625,22 @@ const verifyAnnouncementCommentLike = async (commentId, userId) => {
     }
 }
 
+const listAnnouncementsByPurchases = async (userId) => {
+    const announcementsByPurchasesData = await announcementModel.selectAnnouncementsByPurchasesCount()
+
+    await verifyAnnouncementLikeFavoriteRead(announcementsByPurchasesData, userId)
+
+    if(announcementsByPurchasesData) {
+        let announcementsJson = {}
+
+        const announcementsDataArray = await destructureAnnouncementJson(announcementsByPurchasesData)
+
+        announcementsJson = await Promise.all(announcementsDataArray)
+        return { status: 200, message: announcementsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -657,5 +673,6 @@ module.exports = {
     likeAnnouncementComment,
     dislikeAnnouncementComment,
     verifyAnnouncementComment,
-    verifyAnnouncementCommentLike
+    verifyAnnouncementCommentLike,
+    listAnnouncementsByPurchases
 }

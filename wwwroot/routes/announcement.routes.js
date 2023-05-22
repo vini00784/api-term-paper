@@ -631,4 +631,18 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/most-purchased-announcements/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId = req.params.userId
+
+        const announcementsByPurchases = await announcementController.listAnnouncementsByPurchases(userId)
+        statusCode = announcementsByPurchases.status
+        message = announcementsByPurchases.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router
