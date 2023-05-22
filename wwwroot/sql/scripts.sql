@@ -631,3 +631,21 @@ SELECT tbl_usuario.nome, tbl_usuario.foto
       ON tbl_usuario.id = tbl_recomendacao.id_usuario
 
    WHERE tbl_recomendacao.id = 7;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao, cast(count(tbl_livros_comprados.id) AS DECIMAL) AS quantidade_vendas
+   FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+
+   GROUP BY tbl_anuncio.id
+   ORDER BY quantidade_vendas DESC;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao, cast(count(tbl_anuncio_curtida.id) AS DECIMAL) as quantidade_curtidas
+   FROM tbl_anuncio_curtida
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_anuncio_curtida.id_anuncio
+
+   GROUP BY tbl_anuncio.id
+   ORDER BY quantidade_curtidas DESC;
