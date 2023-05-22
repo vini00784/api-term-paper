@@ -138,11 +138,8 @@ router
         let userId = req.params.userId
     
         const listCartItems = await buyController.listCartItems(userId)
-        
-        // console.log(listCartItems.message.items);
 
         const data = { id: userId, products: [] };
-
 
         data.products = listCartItems.message.items.map(({
             titulo,
@@ -160,10 +157,8 @@ router
 
         // Id < --
         const checkoutSession = await paymentStripe.createSession(data) // add
-        console.log(checkoutSession)
         
-        const newStripePaymentId = await buyController.newStripePaymentId(userId, checkoutSession.id)
-    
+        await buyController.newStripePaymentId(userId, checkoutSession.id)
 
         res.status(200).json(checkoutSession.url)
     })
@@ -192,12 +187,12 @@ router
     .route('/intent-payment-update')
     .post(jsonParser, async (req, res) => {
         try {
-            const id = req.body.data.object.id;
+            const id = req.body.data.object.id
 
             const { selectCartByStripeId } = require('../models/DAO/buy.js')
             const cartItems = await selectCartByStripeId(id)
 
-            await buyController.confirmBuy(cartItems.id_usuario)
+            await buyController.confirmBuy(cartItems[0].id_usuario)
                 
             return res.status(200).json({
                 received: true
