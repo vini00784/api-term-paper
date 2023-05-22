@@ -645,4 +645,18 @@ router
         res.status(statusCode).json(message)
     })
 
+router
+    .route('/most-liked-announcements/user-id/:userId')
+    .get(async(req, res) => {
+        let statusCode
+        let message
+        let userId =req.params.userId
+
+        const announcementsByLikes = await announcementController.listAnnouncementsByLikes(userId)
+        statusCode = announcementsByLikes.status
+        message = announcementsByLikes.message
+
+        res.status(statusCode).json(message)
+    })
+
 module.exports = router

@@ -641,6 +641,22 @@ const listAnnouncementsByPurchases = async (userId) => {
         return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
 }
 
+const listAnnouncementsByLikes = async (userId) => {
+    const announcementsByLikesData = await announcementModel.selectAnnouncementsByLikesCount()
+
+    await verifyAnnouncementLikeFavoriteRead(announcementsByLikesData, userId)
+
+    if(announcementsByLikesData) {
+        let announcementsJson = {}
+
+        const announcementsDataArray = await destructureAnnouncementJson(announcementsByLikesData)
+
+        announcementsJson = await Promise.all(announcementsDataArray)
+        return { status: 200, message: announcementsJson }
+    } else
+        return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+}
+
 module.exports = {
     newAnnouncement,
     updateAnnouncement,
@@ -674,5 +690,6 @@ module.exports = {
     dislikeAnnouncementComment,
     verifyAnnouncementComment,
     verifyAnnouncementCommentLike,
-    listAnnouncementsByPurchases
+    listAnnouncementsByPurchases,
+    listAnnouncementsByLikes
 }

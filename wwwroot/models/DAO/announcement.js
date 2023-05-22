@@ -422,6 +422,28 @@ const selectAnnouncementsByPurchasesCount = async () => {
     }
 }
 
+const selectAnnouncementsByLikesCount = async () => {
+    try {
+        let sql = `SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao, cast(count(tbl_anuncio_curtida.id) AS DECIMAL) as quantidade_curtidas
+        FROM tbl_anuncio_curtida
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_anuncio_curtida.id_anuncio
+     
+        GROUP BY tbl_anuncio.id
+        ORDER BY quantidade_curtidas DESC`
+
+        const rsMostLikedAnnouncements = await prisma.$queryRawUnsafe(sql)
+
+        if(rsMostLikedAnnouncements.length > 0)
+            return rsMostLikedAnnouncements
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = {
     insertAnnouncement,
     updateAnnouncement,
@@ -440,5 +462,6 @@ module.exports = {
     selectAnnouncementsByGenres,
     selectAnnouncementsByFilters,
     selectAnnouncementsByFollowingUsers,
-    selectAnnouncementsByPurchasesCount
+    selectAnnouncementsByPurchasesCount,
+    selectAnnouncementsByLikesCount
 }
