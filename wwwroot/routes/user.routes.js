@@ -100,8 +100,8 @@ router // Route to get user by ID, update user and delete user
                 const verifyRecommendationLike = await recommendationModel.verifyRecommendationLike(element.id, currentUser)
                 const verifyRecommendationFavorite = await recommendationModel.verifyRecommendationFavorite(element.id, currentUser)
 
-                element.quantidade_curtidas = recommendationLikesData
-                element.quantidade_favoritos = recommendationFavoritesData
+                element.curtidas = recommendationLikesData
+                element.favoritos = recommendationFavoritesData
                 element.curtido = verifyRecommendationLike
                 element.favorito = verifyRecommendationFavorite
 
