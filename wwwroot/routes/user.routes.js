@@ -85,14 +85,31 @@ router // Route to get user by ID, update user and delete user
     
         if(searchUser != '' && searchUser != undefined) {
             const userData = await userController.searchUserByID(searchUser)
-
+            
             const { verifyUserFollow, verifyUserFollowing } = require('../models/DAO/followers.js')
-
+            
             const userFollowVerify = await verifyUserFollow(currentUser, searchUser)
             const userFollowingVerify = await verifyUserFollowing(currentUser, searchUser)
             userData.message.seguindo = userFollowVerify
             userData.message.te_segue = userFollowingVerify
-    
+            
+            const userRecommendationsData = userData.message.recomendacoes.map(async element => {
+                const recommendationModel = require('../models/DAO/recommendation.js')
+                const recommendationLikesData = await recommendationModel.countRecommendationLikes(element.id)
+                const recommendationFavoritesData = await recommendationModel.countRecommendationFavorites(element.id)
+                const verifyRecommendationLike = await recommendationModel.verifyRecommendationLike(element.id, currentUser)
+                const verifyRecommendationFavorite = await recommendationModel.verifyRecommendationFavorite(element.id, currentUser)
+
+                element.quantidade_curtidas = recommendationLikesData
+                element.quantidade_favoritos = recommendationFavoritesData
+                element.curtido = verifyRecommendationLike
+                element.favorito = verifyRecommendationFavorite
+
+                return element
+            })
+
+            userData.message.recomendacoes = await Promise.all(userRecommendationsData)
+
             if(userData) {
                 statusCode = userData.status
                 message = userData.message
