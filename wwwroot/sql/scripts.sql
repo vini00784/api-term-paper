@@ -649,3 +649,17 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
 
    GROUP BY tbl_anuncio.id
    ORDER BY quantidade_curtidas DESC;
+
+SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.volume, tbl_anuncio.capa, tbl_anuncio.status, tbl_anuncio.premium, tbl_anuncio.sinopse, tbl_anuncio.data, tbl_anuncio.quantidade_paginas, tbl_anuncio.preco, tbl_anuncio.pdf, tbl_anuncio.epub, tbl_anuncio.mobi, tbl_anuncio.avaliacao, cast(count(tbl_anuncio_curtida.id) AS DECIMAL) as quantidade_curtidas, cast(count(tbl_anuncio_favorito.id) AS DECIMAL) as quantidade_favoritos, cast(count(tbl_quantidade_lidos_anuncio.id) AS DECIMAL) as quantidade_lidos
+   FROM tbl_anuncio_curtida
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_anuncio_curtida.id_anuncio
+   INNER JOIN tbl_anuncio_favorito
+      ON tbl_anuncio.id = tbl_anuncio_favorito.id_anuncio
+   INNER JOIN tbl_quantidade_lidos_anuncio
+      ON tbl_anuncio.id = tbl_quantidade_lidos_anuncio.id_anuncio
+
+   WHERE tbl_anuncio.id = 66
+   GROUP BY tbl_anuncio.id
+   ORDER BY tbl_anuncio.id DESC;
