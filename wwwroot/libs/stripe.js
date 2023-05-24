@@ -1,16 +1,13 @@
 const Stripe = require('stripe')
 
-
-
 class PaymentStripe {
     constructor() {
         this.stripe = new Stripe(process.env.STRIPE_KEY, { apiVersion: '2022-11-15 '});
     }
     async createSession(data) {
-        // console.log(data);
         const session = await this.stripe.checkout.sessions.create({
-            success_url: `${process.env.BASE_URL}/redirect`,
-            cancel_url:`${process.env.BASE_URL}/redirect`,
+            success_url: `${process.env.BASE_URL}/redirect-success`,
+            cancel_url:`${process.env.BASE_URL}/redirect-fail`,
             client_reference_id: data.id,
             mode: 'payment',
             line_items: data.products.map((item) => ({
@@ -31,6 +28,5 @@ class PaymentStripe {
 }
 
 const paymentStripe = new PaymentStripe;
-
 
 module.exports = { paymentStripe }
