@@ -147,10 +147,12 @@ const selectLastCart = async (userId) => {
 }
 
 const confirmBuy = async (cart) => {
+    // console.log(cart.data_compra)
     try {
-        let sql = `INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio) values (
+        let sql = `INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio, data_compra) values (
             ${cart.id_usuario},
-            ${cart.id_anuncio}
+            ${cart.id_anuncio},
+            '${cart.data_compra}'
         )`
 
         const result = await prisma.$executeRawUnsafe(sql)

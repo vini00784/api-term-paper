@@ -160,13 +160,16 @@ const confirmBuy = async (userId) => {
 
             if(announcementsIds) {
                 const announcementsIdsLength = announcementsIds.length
-        
+                const currentDate = new Date().toJSON().slice(0, 10)
+
                 let confirmedBuy
                 let boughtBookJson = {}
                 boughtBookJson.id_usuario = userId
+                boughtBookJson.data_compra = currentDate
         
                 for(let i = 0; i < announcementsIdsLength; i++) {
                     boughtBookJson.id_anuncio = announcementsIds[i].id
+                    // console.log(boughtBookJson)
                     confirmedBuy = await buyModel.confirmBuy(boughtBookJson)
                 }
         

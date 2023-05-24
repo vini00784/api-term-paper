@@ -160,7 +160,7 @@ router
         
         await buyController.newStripePaymentId(userId, checkoutSession.id)
 
-        res.status(200).json(checkoutSession.url)
+        res.status(200).json( {url: checkoutSession.url, intent_id: checkoutSession.id} )
     })
 
 router
