@@ -15,7 +15,7 @@ const buyModel = require('../models/DAO/buy.js')
 const { destructureAnnouncementJson, verifyAnnouncementLikeFavoriteRead} = require('../utils/destructureJson.js')
 
 const newBuyWithoutCart = async (buy) => {
-    if(buy.id_anuncio == '' || buy.id_anuncio == undefined || buy.id_usuario == '' || buy.id_usuario == undefined)
+    if(buy.id_anuncio == '' || buy.id_anuncio == undefined || buy.id_usuario == '' || buy.id_usuario == undefined || buy.id_stripe == '' || buy.id_stripe == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const resultNewBuy = await buyModel.insertBuyWithoutCart(buy)

@@ -111,21 +111,6 @@ router
         let headerContentType = req.headers['content-type']
         let bodyData = req.body
 
-        // if(headerContentType == 'application/json') {
-        //     if(JSON.stringify(bodyData) != '{}') {
-                // const newAnnouncementBuy = await buyController.newBuyWithoutCart(bodyData)
-
-        //         statusCode = newAnnouncementBuy.status
-        //         message = newAnnouncementBuy.message
-        //     } else {
-        //         statusCode = 400
-        //         message = MESSAGE_ERROR.EMPTY_BODY
-        //     }
-        // } else {
-        //     statusCode = 415
-        //     message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
-        // }
-
         const { searchAnnouncementById } = require('../controllers/announcementController.js')
 
         let userId = req.params.userId
@@ -149,8 +134,6 @@ router
         })
 
         const checkoutSession = await paymentStripe.createSession(data)
-
-        await buyController.newStripePaymentId(userId, checkoutSession.id)
 
         res.status(200).json( {url: checkoutSession.url, intent_id: checkoutSession.id} )
     })
@@ -194,8 +177,6 @@ router
                 description: sinopse
             }
         })
-
-        console.log(data.id)
 
         // Id < --
         const checkoutSession = await paymentStripe.createSession(data) // add
