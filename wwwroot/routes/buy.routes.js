@@ -9,33 +9,6 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 const router = express.Router()
 
 router
-    .route('/buy-announcement')
-    .post(jsonParser, async (req, res) => {
-        let statusCode
-        let message
-        let headerContentType = req.headers['content-type']
-
-        if(headerContentType == 'application/json') {
-            let bodyData = req.body
-
-            if(JSON.stringify(bodyData) != '{}') {
-                const newAnnouncementBuy = await buyController.newBuyWithoutCart(bodyData)
-
-                statusCode = newAnnouncementBuy.status
-                message = newAnnouncementBuy.message
-            } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
-            }
-        } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
-        }
-
-        res.status(statusCode).json(message)
-    })
-
-router
     .route('/create-cart/user-id/:userId')
     .post(jsonParser, async(req, res) => {
         let statusCode
@@ -133,6 +106,73 @@ router
     })
 
 router
+    .route('/intent-buy-announcement/user-id/:userId')
+    .post(jsonParser, async (req, res) => {
+        let headerContentType = req.headers['content-type']
+        let bodyData = req.body
+
+        // if(headerContentType == 'application/json') {
+        //     if(JSON.stringify(bodyData) != '{}') {
+                // const newAnnouncementBuy = await buyController.newBuyWithoutCart(bodyData)
+
+        //         statusCode = newAnnouncementBuy.status
+        //         message = newAnnouncementBuy.message
+        //     } else {
+        //         statusCode = 400
+        //         message = MESSAGE_ERROR.EMPTY_BODY
+        //     }
+        // } else {
+        //     statusCode = 415
+        //     message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        // }
+
+        const { searchAnnouncementById } = require('../controllers/announcementController.js')
+
+        let userId = req.params.userId
+
+        const item = await searchAnnouncementById(bodyData.id_anuncio)
+
+        const data = { id: userId, products: [] }
+
+        data.products = item.message.map(({
+            titulo,
+            preco,
+            capa,
+            sinopse
+        }) => {
+            return {
+                name: titulo,
+                images: [capa],
+                price: preco * 100,
+                description: sinopse
+            }
+        })
+
+        const checkoutSession = await paymentStripe.createSession(data)
+
+        await buyController.newStripePaymentId(userId, checkoutSession.id)
+
+        res.status(200).json( {url: checkoutSession.url, intent_id: checkoutSession.id} )
+    })
+
+router
+    .route('/intent-directly-payment-update')
+    .post(jsonParser, async(req, res) => {
+        try {
+            let bodyData = req.body
+            await buyController.newBuyWithoutCart(bodyData)
+                
+            return res.status(200).json({
+                received: true
+            })   
+        } catch (err) {
+            return res.status(400).json({
+                received: err.message
+            })
+        }
+    })
+
+router
     .route('/intent-buy/user-id/:userId')
     .post(jsonParser, async(req, res) => {
         let userId = req.params.userId
@@ -154,6 +194,8 @@ router
                 description: sinopse
             }
         })
+
+        console.log(data.id)
 
         // Id < --
         const checkoutSession = await paymentStripe.createSession(data) // add

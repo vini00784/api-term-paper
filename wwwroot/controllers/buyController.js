@@ -111,14 +111,31 @@ const newStripePaymentId = async (userId, paymentStripeId) => {
     if(paymentStripeId == ''|| paymentStripeId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
-        const lastUserCart = await buyModel.selectLastCart(userId)
+        let lastUserCart = await buyModel.selectLastCart(userId)
 
-        const insertStripePaymentId = await buyModel.insertPaymentStripeId(lastUserCart, paymentStripeId)
+        if(lastUserCart) {
+            const insertStripePaymentId = await buyModel.insertPaymentStripeId(lastUserCart, paymentStripeId)
+    
+            if(insertStripePaymentId)
+                return true
+            else
+                return false
+        } else {
+            await buyModel.insertCart({
+                id_usuario: userId,
+                status: "false"
+            })
 
-        if(insertStripePaymentId)
-            return true
-        else
-            return false
+            lastUserCart = await buyModel.selectLastCart(userId)
+
+            const insertStripePaymentId = await buyModel.insertPaymentStripeId(lastUserCart, paymentStripeId)
+    
+            if(insertStripePaymentId)
+                return true
+            else
+                return false
+        }
+
     }
 }
 
