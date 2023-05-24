@@ -663,3 +663,6 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    WHERE tbl_anuncio.id = 66
    GROUP BY tbl_anuncio.id
    ORDER BY tbl_anuncio.id DESC;
+   SELECT * FROM tbl_carrinho;
+   DELETE FROM tbl_compra;
+   DELETE FROM tbl_carrinho;
