@@ -663,6 +663,18 @@ SELECT cast(tbl_anuncio.id AS DECIMAL) as id, tbl_anuncio.titulo, tbl_anuncio.vo
    WHERE tbl_anuncio.id = 66
    GROUP BY tbl_anuncio.id
    ORDER BY tbl_anuncio.id DESC;
-   SELECT * FROM tbl_carrinho;
-   DELETE FROM tbl_compra;
-   DELETE FROM tbl_carrinho;
+SELECT * FROM tbl_carrinho;
+DESC tbl_carrinho;
+DESC tbl_compra;
+DESC tbl_livros_comprados;
+SELECT SUM(tbl_anuncio.preco) AS receita_gerada
+   FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+
+   WHERE tbl_livros_comprados.id_anuncio = 1;
+
+SELECT * FROM tbl_anuncio;
+SELECT * FROM tbl_livros_comprados;
+SELECT * FROM tbl_generos;
