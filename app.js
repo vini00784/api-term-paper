@@ -35,6 +35,7 @@ const buyRouter = require('./wwwroot/routes/buy.routes.js')
 const followerRouter = require('./wwwroot/routes/follower.routes.js')
 const commentRouter = require('./wwwroot/routes/comment.routes.js')
 const recommendationRouter = require('./wwwroot/routes/recommendation.routes.js')
+const dashboardRouter = require('./wwwroot/routes/dashboard.routes.js')
 
 // Using routers
 
@@ -49,6 +50,7 @@ app.use(buyRouter)
 app.use(followerRouter)
 app.use(commentRouter)
 app.use(recommendationRouter)
+app.use(dashboardRouter)
 
 // Using routers
 
