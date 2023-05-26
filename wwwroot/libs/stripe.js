@@ -6,7 +6,7 @@ class PaymentStripe {
     }
     async createSession(data) {
         const session = await this.stripe.checkout.sessions.create({
-            success_url: `${process.env.BASE_URL}/redirect-success`,
+            success_url: `${process.env.BASE_URL}/confirm-buy`,
             cancel_url:`${process.env.BASE_URL}/redirect-fail`,
             client_reference_id: data.id,
             mode: 'payment',
