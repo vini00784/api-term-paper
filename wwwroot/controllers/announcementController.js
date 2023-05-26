@@ -233,30 +233,34 @@ const listAnnouncementsByGenres = async (userId) => {
             const announcementsByGenre = await announcementModel.selectAnnouncementsByGenres(genresId)
             const announcementsByFollowingUsers = await announcementModel.selectAnnouncementsByFollowingUsers(userId)
 
-            if(announcementsByFollowingUsers) {
-                let announcementsByGenresAndFollowingUsers = Object.assign([], announcementsByGenre, announcementsByFollowingUsers)
+            if(announcementsByGenre) {
+                if(announcementsByFollowingUsers) {
+                    let announcementsByGenresAndFollowingUsers = Object.assign([], announcementsByGenre, announcementsByFollowingUsers)
+                    
+                    filteredJson = announcementsByGenresAndFollowingUsers.filter((element, index, self) => index === self.findIndex((t => (
+                        parseInt(t.id) === parseInt(element.id)
+                    ))))
+                } else
+                    filteredJson = announcementsByGenre?.filter((element, index, self) => index === self.findIndex((t => (
+                        parseInt(t.id) === parseInt(element.id)
+                    ))))
+    
+                await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
                 
-                filteredJson = announcementsByGenresAndFollowingUsers.filter((element, index, self) => index === self.findIndex((t => (
-                    parseInt(t.id) === parseInt(element.id)
-                ))))
-            } else
-                filteredJson = announcementsByGenre.filter((element, index, self) => index === self.findIndex((t => (
-                    parseInt(t.id) === parseInt(element.id)
-                ))))
-
-            await verifyAnnouncementLikeFavoriteRead(filteredJson, userId)
-            
-            if(filteredJson) {
-                let announcementsJson = {}
-                
-                const announcementDataArray = await destructureAnnouncementJson(filteredJson)
-
-                announcementsJson = await Promise.all(announcementDataArray)
-                return { status: 200, message: announcementsJson }
+                if(filteredJson) {
+                    let announcementsJson = {}
+                    
+                    const announcementDataArray = await destructureAnnouncementJson(filteredJson)
+    
+                    announcementsJson = await Promise.all(announcementDataArray)
+                    return { status: 200, message: announcementsJson }
+                } else
+                    return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
             } else
                 return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         } else
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+
     }
 }
 
