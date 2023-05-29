@@ -678,3 +678,31 @@ SELECT SUM(tbl_anuncio.preco) AS receita_gerada
 SELECT * FROM tbl_anuncio;
 SELECT * FROM tbl_livros_comprados;
 SELECT * FROM tbl_generos;
+SELECT 
+   CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 1 THEN 0 END) AS DECIMAL) AS somente_escritor,
+   CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 2 THEN 0 END) AS DECIMAL) AS somente_leitor
+   FROM tbl_usuario_tag
+
+   INNER JOIN tbl_tag
+      ON tbl_tag.id = tbl_usuario_tag.id_tag
+   INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+   INNER JOIN tbl_livros_comprados
+      ON tbl_usuario.id = tbl_livros_comprados.id_usuario
+      
+   WHERE tbl_livros_comprados.id_anuncio = 1;
+
+SELECT * FROM tbl_livros_comprados WHERE id_usuario = 3 OR id_usuario = 4;
+SELECT * FROM tbl_usuario_tag WHERE id_usuario = 3 OR id_usuario = 4;
+SELECT * FROM tbl_usuario;
+
+SELECT COUNT(*)
+FROM tbl_usuario_tag
+WHERE EXISTS (
+    SELECT CAST(COUNT(tbl_usuario_tag.id) AS DECIMAL)
+    FROM tbl_usuario_tag
+    INNER JOIN tbl_usuario
+      ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+    GROUP BY tbl_usuario.id
+    HAVING COUNT(tbl_usuario_tag.id) > 1
+);
