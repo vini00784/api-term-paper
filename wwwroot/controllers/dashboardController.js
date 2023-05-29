@@ -45,26 +45,30 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         const announcementReadsData = await countAnnouncementReads(announcementId)
         const announcementPurchasesData = await countAnnouncementPurchases(announcementId)
         const announcementRecommendationsData = await countAnnouncementRecommendations(announcementId)
-    
+        const userTagsData = await dashboardModel.selectUserTagsData(announcementId)
+        
         const announcementData = {}
-
+        
         if(announcementRevenueData)
             announcementData.receita = announcementRevenueData.message
-
+        
         if(announcementLikesData.quantidade_curtidas)
             announcementData.curtidas = announcementLikesData
-
+        
         if(announcementFavoritesData.quantidade_favoritos)
             announcementData.favoritos = announcementFavoritesData
-
+        
         if(announcementReadsData.quantidade_lidos)
             announcementData.lidos = announcementReadsData
-
+        
         if(announcementPurchasesData.quantidade_compras)
             announcementData.compras = announcementPurchasesData
-
+        
         if(announcementRecommendationsData.quantidade_recomendacoes)
             announcementData.recomendacoes = announcementRecommendationsData
+        
+        if(userTagsData)
+            announcementData.dados_usuarios = userTagsData
 
         return announcementData
     }

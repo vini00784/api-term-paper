@@ -30,6 +30,34 @@ const selectAnnouncementRevenue = async (announcementId) => {
     }
 }
 
+const selectUserTagsData = async (announcementId) => {
+    try {
+        let sql = `SELECT 
+        CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 1 THEN 0 END) AS DECIMAL) AS somente_escritor,
+        CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 2 THEN 0 END) AS DECIMAL) AS somente_leitor
+        FROM tbl_usuario_tag
+     
+        INNER JOIN tbl_tag
+           ON tbl_tag.id = tbl_usuario_tag.id_tag
+        INNER JOIN tbl_usuario
+           ON tbl_usuario.id = tbl_usuario_tag.id_usuario
+        INNER JOIN tbl_livros_comprados
+           ON tbl_usuario.id = tbl_livros_comprados.id_usuario
+           
+        WHERE tbl_livros_comprados.id_anuncio = ${announcementId}`
+
+        const rsUserTags = await prisma.$queryRawUnsafe(sql)
+
+        if(rsUserTags.length > 0)
+            return rsUserTags[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
-    selectAnnouncementRevenue
+    selectAnnouncementRevenue,
+    selectUserTagsData
  }
