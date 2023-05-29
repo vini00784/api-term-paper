@@ -11,6 +11,13 @@ const { MESSAGE_SUCCESS, MESSAGE_ERROR } = require('../module/config.js')
 // Dashboard model
 const dashboardModel = require('../models/DAO/dashboard.js')
 
+// Utils functions
+const { countAnnouncementLikes } = require('../models/DAO/announcementLike.js')
+const { countAnnouncementFavorites } = require('../models/DAO/announcementFavorite.js')
+const { countAnnouncementReads } = require('../models/DAO/announcementRead.js')
+const { countAnnouncementPurchases } = require('../models/DAO/buy.js')
+const { countAnnouncementRecommendations } = require('../models/DAO/recommendation.js')
+
 const getAnnouncementRevenue = async (announcementId) => {
     if(announcementId == '' || announcementId == undefined)
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -33,13 +40,31 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     else {
         const announcementRevenueData = await getAnnouncementRevenue(announcementId)
+        const announcementLikesData = await countAnnouncementLikes(announcementId)
+        const announcementFavoritesData = await countAnnouncementFavorites(announcementId)
+        const announcementReadsData = await countAnnouncementReads(announcementId)
+        const announcementPurchasesData = await countAnnouncementPurchases(announcementId)
+        const announcementRecommendationsData = await countAnnouncementRecommendations(announcementId)
     
         const announcementData = {}
 
         if(announcementRevenueData)
             announcementData.receita = announcementRevenueData.message
 
-        console.log(announcementData)
+        if(announcementLikesData.quantidade_curtidas)
+            announcementData.curtidas = announcementLikesData
+
+        if(announcementFavoritesData.quantidade_favoritos)
+            announcementData.favoritos = announcementFavoritesData
+
+        if(announcementReadsData.quantidade_lidos)
+            announcementData.lidos = announcementReadsData
+
+        if(announcementPurchasesData.quantidade_compras)
+            announcementData.compras = announcementPurchasesData
+
+        if(announcementRecommendationsData.quantidade_recomendacoes)
+            announcementData.recomendacoes = announcementRecommendationsData
 
         return announcementData
     }
