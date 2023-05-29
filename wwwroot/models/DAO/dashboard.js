@@ -11,7 +11,7 @@ const prisma = require('../../libs/prisma.js')
 
 const selectAnnouncementRevenue = async (announcementId) => {
     try {
-        let sql = `SELECT CAST(COUNT(tbl_anuncio.preco) AS DECIMAL) AS receita_gerada
+        let sql = `SELECT SUM(tbl_anuncio.preco) AS receita_gerada
         FROM tbl_livros_comprados
      
         INNER JOIN tbl_anuncio
