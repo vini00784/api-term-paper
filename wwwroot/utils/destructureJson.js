@@ -37,7 +37,7 @@ const destructureAnnouncementJson = async (json) => {
                             if(announcementFavoritesData.quantidade_favoritos > 0 || announcementFavoritesData.quantidade_favoritos == undefined)
                                 announcementItem.favoritos = announcementFavoritesData
 
-                            if(announcementReadsData.quantidade_lido > 0 || announcementReadsData.quantidade_lido == undefined)
+                            if(announcementReadsData.quantidade_lidos > 0 || announcementReadsData.quantidade_lidos == undefined)
                                 announcementItem.lidos = announcementReadsData
 
                             if(announcementPurchasesData.quantidade_compras > 0 || announcementPurchasesData.quantidade_compras == undefined)
