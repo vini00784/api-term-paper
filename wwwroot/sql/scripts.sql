@@ -694,15 +694,22 @@ SELECT
 
 SELECT * FROM tbl_livros_comprados WHERE id_usuario = 3 OR id_usuario = 4;
 SELECT * FROM tbl_usuario_tag WHERE id_usuario = 3 OR id_usuario = 4;
-SELECT * FROM tbl_usuario;
-
-SELECT COUNT(*)
-FROM tbl_usuario_tag
-WHERE EXISTS (
-    SELECT CAST(COUNT(tbl_usuario_tag.id) AS DECIMAL)
-    FROM tbl_usuario_tag
-    INNER JOIN tbl_usuario
-      ON tbl_usuario.id = tbl_usuario_tag.id_usuario
-    GROUP BY tbl_usuario.id
-    HAVING COUNT(tbl_usuario_tag.id) > 1
-);
+SELECT * FROM tbl_anuncio;
+SELECT
+   CAST(COUNT(tbl_comentario_anuncio.id) AS DECIMAL) AS total_avaliacoes,
+   CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 1 THEN 0 END) AS DECIMAL) AS avaliacao_um,
+   CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 2 THEN 0 END) AS DECIMAL) AS avaliacao_dois,
+   CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 3 THEN 0 END) AS DECIMAL) AS avaliacao_tres,
+   CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 4 THEN 0 END) AS DECIMAL) AS avaliacao_quatro,
+   CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 5 THEN 0 END) AS DECIMAL) AS avaliacao_cinco,
+   tbl_comentario_anuncio.titulo AS titulo_comentario,
+   tbl_comentario_anuncio.avaliacao,
+   tbl_comentario_anuncio.resenha AS conteudo_comentario
+   FROM tbl_comentario_anuncio
+   
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_comentario_anuncio.id_anuncio
+   
+   WHERE tbl_comentario_anuncio.id_anuncio = 1
+   GROUP BY tbl_comentario_anuncio.id;
+DESC tbl_comentario_anuncio;
