@@ -110,10 +110,8 @@ const selectUserByUsername = async (userName) => {
         INNER JOIN tbl_tag
            ON tbl_tag.id = tbl_usuario_tag.id_tag
      
-        WHERE (LOCATE('${userName}', tbl_usuario.user_name) OR LOCATE('${userName}', tbl_usuario.nome)) AND tbl_tag.tag = 'Autor'`
-
-        // WHERE LOCATE('${announcementTitle}', titulo) AND tbl_anuncio.status = true
-
+        WHERE (LOCATE('${userName}', tbl_usuario.user_name) OR LOCATE('${userName}', tbl_usuario.nome)) AND tbl_usuario_tag.id_tag = 1`
+        
         const rsUserByUsername = await prisma.$queryRawUnsafe(sql)
 
         if(rsUserByUsername)
