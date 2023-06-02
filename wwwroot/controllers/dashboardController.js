@@ -46,6 +46,8 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         const announcementPurchasesData = await countAnnouncementPurchases(announcementId)
         const announcementRecommendationsData = await countAnnouncementRecommendations(announcementId)
         const userTagsData = await dashboardModel.selectUserTagsData(announcementId)
+        const announcementRatesData = await dashboardModel.selectAnnouncementRates(announcementId)
+        const announcementRatesPercentData = await dashboardModel.selectAnnouncementRatesPercent(announcementId)
         
         const announcementData = {}
         
@@ -69,6 +71,12 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         
         if(userTagsData)
             announcementData.dados_usuarios = userTagsData
+
+        if(announcementRatesData)
+            announcementData.avaliacoes = announcementRatesData
+
+        if(announcementRatesPercentData)
+            announcementData.percentual_avaliacoes = announcementRatesPercentData
 
         return announcementData
     }

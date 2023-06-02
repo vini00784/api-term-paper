@@ -57,7 +57,60 @@ const selectUserTagsData = async (announcementId) => {
     }
 }
 
+const selectAnnouncementRates = async (announcementId) => {
+    try {
+        let sql = `SELECT CAST(tbl_comentario_anuncio.id AS DECIMAL) AS id, tbl_comentario_anuncio.titulo, tbl_comentario_anuncio.resenha, tbl_comentario_anuncio.avaliacao
+        FROM tbl_comentario_anuncio
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_comentario_anuncio.id_anuncio
+     
+        WHERE tbl_comentario_anuncio.id_anuncio = ${announcementId}`
+
+        const rsAnnouncementRates = await prisma.$queryRawUnsafe(sql)
+
+        if(rsAnnouncementRates.length > 0)
+            return rsAnnouncementRates
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectAnnouncementRatesPercent = async (announcementId) => {
+    try {
+        let sql = `SELECT
+        CAST(COUNT(tbl_comentario_anuncio.id) AS DECIMAL) AS total_avaliacoes,
+        (CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 1 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_avaliacao_um,
+        (CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 2 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_avaliacao_dois,
+        (CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 3 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_avaliacao_tres,
+        (CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 4 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_avaliacao_quatro,
+        (CAST(COUNT(CASE WHEN tbl_comentario_anuncio.avaliacao = 5 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_avaliacao_cinco
+        FROM tbl_comentario_anuncio
+        
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_comentario_anuncio.id_anuncio
+        
+        WHERE tbl_comentario_anuncio.id_anuncio = ${announcementId}
+        GROUP BY tbl_anuncio.id`
+
+        const rsAnnouncementsRatesPercent = await prisma.$queryRawUnsafe(sql)
+
+        // console.log(rsAnnouncementsRatesPercent)
+
+        if(rsAnnouncementsRatesPercent.length > 0)
+            return rsAnnouncementsRatesPercent[0]
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     selectAnnouncementRevenue,
-    selectUserTagsData
+    selectUserTagsData,
+    selectAnnouncementRates,
+    selectAnnouncementRatesPercent
  }
