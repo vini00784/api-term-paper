@@ -233,7 +233,7 @@ const listShortStoriesByGenresUser = async (userId) => {
                 parseInt(t.id) === parseInt(element.id)
             ))))
         } else
-            filteredJson = shortStoriesByGenre.filter((element, index, self) => index === self.findIndex((t => (
+            filteredJson = shortStoriesByGenre?.filter((element, index, self) => index === self.findIndex((t => (
                 parseInt(t.id) === parseInt(element.id)
             ))))
 
