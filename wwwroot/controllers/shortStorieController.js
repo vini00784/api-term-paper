@@ -232,13 +232,14 @@ const listShortStoriesByGenresUser = async (userId) => {
             filteredJson = shortStoriesByGenresAndFollowingUsers.filter((element, index, self) => index === self.findIndex((t => (
                 parseInt(t.id) === parseInt(element.id)
             ))))
-        } else
+        } else if(shortStoriesByGenre) {
             filteredJson = shortStoriesByGenre?.filter((element, index, self) => index === self.findIndex((t => (
                 parseInt(t.id) === parseInt(element.id)
             ))))
-
+        }
+                
         await verifyShortStorieLikeFavoriteRead(filteredJson, userId)
-
+                
         if(filteredJson) {
             let shortStoriesJson = {}
 
