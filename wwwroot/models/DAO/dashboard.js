@@ -33,8 +33,8 @@ const selectAnnouncementRevenue = async (announcementId) => {
 const selectUserTagsData = async (announcementId) => {
     try {
         let sql = `SELECT 
-        CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 1 THEN 0 END) AS DECIMAL) AS somente_escritor,
-        CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 2 THEN 0 END) AS DECIMAL) AS somente_leitor
+        (CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 1 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_somente_escritor,
+        (CAST(COUNT(CASE WHEN tbl_usuario_tag.id_tag = 2 THEN 0 END) AS DECIMAL) * 100) / COUNT(*) AS porcentagem_somente_leitor
         FROM tbl_usuario_tag
      
         INNER JOIN tbl_tag
