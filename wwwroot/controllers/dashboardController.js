@@ -48,6 +48,7 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         const userTagsData = await dashboardModel.selectUserTagsData(announcementId)
         const announcementRatesData = await dashboardModel.selectAnnouncementRates(announcementId)
         const announcementRatesPercentData = await dashboardModel.selectAnnouncementRatesPercent(announcementId)
+        const announcementSellByWeekData = await dashboardModel.selectSellDataByWeek(announcementId)
         
         const announcementData = {}
         
@@ -77,6 +78,19 @@ const getAnnouncementsInfosFun = async (announcementId) => {
 
         if(announcementRatesPercentData)
             announcementData.percentual_avaliacoes = announcementRatesPercentData
+
+        if(announcementSellByWeekData) {
+            let acc = 0
+            
+            announcementSellByWeekData.map(({ faturamento }) => { 
+                acc += faturamento.d[0]
+            })
+
+            announcementSellByWeekData.push({
+                total: acc
+            })
+            announcementData.teste = announcementSellByWeekData
+        }
 
         return announcementData
     }
