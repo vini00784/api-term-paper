@@ -719,13 +719,33 @@ SELECT CAST(tbl_comentario_anuncio.id AS DECIMAL) AS id, tbl_comentario_anuncio.
 
    WHERE tbl_comentario_anuncio.id_anuncio = 1;
 
--- TRUNCATE tbl_livros_comprados;
+-- TRUNCATE tbl_compra;
 -- SET foreign_key_checks = 1;
 
 SELECT * FROM tbl_livros_comprados;
-SELECT COUNT(*) AS quantidade_compras
+SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas, tbl_livros_comprados.data_compra, SUM(tbl_anuncio.preco) AS faturamento
    FROM tbl_livros_comprados
 
-   WHERE tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK);
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
 
-SELECT * FROM tbl_livros_comprados
+   WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+   GROUP BY tbl_livros_comprados.data_compra;
+
+SELECT MAX(COUNT(*))
+   FROM tbl_livros_comprados
+
+   WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+   GROUP BY tbl_livros_comprados.data_compra;
+
+SELECT * FROM tbl_livros_comprados;
+
+INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio, data_compra) values (
+   2, 2, '2023-05-31'
+);
+SELECT * FROM tbl_anuncio;
+SELECT * FROM tbl_generos;
+
+DELETE FROM tbl_livros_comprados;
+DELETE FROM tbl_compra;
+DELETE FROM tbl_carrinho;
