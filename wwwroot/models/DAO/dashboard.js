@@ -108,9 +108,32 @@ const selectAnnouncementRatesPercent = async (announcementId) => {
     }
 }
 
+const selectSellDataByWeek = async (announcementId) => {
+    try {
+        let sql = `SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas, tbl_livros_comprados.data_compra, CAST(SUM(tbl_anuncio.preco) AS DECIMAL) AS faturamento
+        FROM tbl_livros_comprados
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+     
+        WHERE tbl_livros_comprados.id_anuncio = ${announcementId} AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+        GROUP BY tbl_livros_comprados.data_compra`
+
+        const sellData = await prisma.$queryRawUnsafe(sql)
+
+        if(sellData.length > 0)
+            return sellData
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 module.exports = { 
     selectAnnouncementRevenue,
     selectUserTagsData,
     selectAnnouncementRates,
-    selectAnnouncementRatesPercent
+    selectAnnouncementRatesPercent,
+    selectSellDataByWeek
  }
