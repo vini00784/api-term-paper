@@ -252,27 +252,6 @@ router
     })
 
 router
-    .route('/announcements/genre-name/?') // EndPoint que traz os anúncios de acordo com os gêneros escolhidos pelo usuário
-    .get(async(req, res) => {
-        let statusCode
-        let message
-        let genreName = req.query.genreName
-        let userId = req.query.userId
-
-        const announcementsData = await announcementController.listAnnouncementsByGenresName(genreName, userId)
-
-        if(announcementsData) {
-            statusCode = announcementsData.status
-            message = announcementsData.message
-        } else {
-            statusCode = 400
-            message = MESSAGE_ERROR.NOT_FOUND_DB
-        }
-
-        res.status(statusCode).json(message)
-    })
-
-router
     .route('/announcements/announcement-title/?')
     .get(async(req, res) => {
         let statusCode
