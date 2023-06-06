@@ -730,22 +730,45 @@ SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas, tbl_livros_comprados.data
       ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
 
    WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
-   GROUP BY tbl_livros_comprados.data_compra;
+   GROUP BY tbl_livros_comprados.data_compra
+   ORDER BY quantidade_vendas DESC;
 
-SELECT MAX(COUNT(*))
+SELECT tbl_livros_comprados.data_compra
    FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+
+   WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+   GROUP BY tbl_livros_comprados.data_compra;
+   
+SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas
+   FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
 
    WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
    GROUP BY tbl_livros_comprados.data_compra;
 
+SELECT SUM(tbl_anuncio.preco) AS faturamento
+   FROM tbl_livros_comprados
+
+   INNER JOIN tbl_anuncio
+      ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+
+   WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+   GROUP BY tbl_livros_comprados.data_compra;
+
+SELECT CAST(COUNT(*) AS DECIMAL) AS maior_valor
+   FROM tbl_livros_comprados
+
+   WHERE tbl_livros_comprados.id_anuncio = 2 AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+   GROUP BY tbl_livros_comprados.data_compra
+   ORDER BY maior_valor DESC LIMIT 1;
+
 SELECT * FROM tbl_livros_comprados;
 
 INSERT INTO tbl_livros_comprados (id_usuario, id_anuncio, data_compra) values (
-   2, 2, '2023-05-31'
+   2, 2, '2023-06-02'
 );
-SELECT * FROM tbl_anuncio;
-SELECT * FROM tbl_generos;
-
-DELETE FROM tbl_livros_comprados;
-DELETE FROM tbl_compra;
-DELETE FROM tbl_carrinho;

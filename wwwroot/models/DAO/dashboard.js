@@ -110,7 +110,9 @@ const selectAnnouncementRatesPercent = async (announcementId) => {
 
 const selectSellDataByWeek = async (announcementId) => {
     try {
-        let sql = `SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas, tbl_livros_comprados.data_compra, CAST(SUM(tbl_anuncio.preco) AS DECIMAL) AS faturamento
+        let sellData = {}
+
+        let sqlDate = `SELECT tbl_livros_comprados.data_compra
         FROM tbl_livros_comprados
      
         INNER JOIN tbl_anuncio
@@ -119,10 +121,53 @@ const selectSellDataByWeek = async (announcementId) => {
         WHERE tbl_livros_comprados.id_anuncio = ${announcementId} AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
         GROUP BY tbl_livros_comprados.data_compra`
 
-        const sellData = await prisma.$queryRawUnsafe(sql)
+        let sqlSales = `SELECT CAST(COUNT(*) AS DECIMAL) AS quantidade_vendas
+        FROM tbl_livros_comprados
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+     
+        WHERE tbl_livros_comprados.id_anuncio = ${announcementId} AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+        GROUP BY tbl_livros_comprados.data_compra`
 
-        if(sellData.length > 0)
+        let sqlInvoicing = `SELECT SUM(tbl_anuncio.preco) AS faturamento
+        FROM tbl_livros_comprados
+     
+        INNER JOIN tbl_anuncio
+           ON tbl_anuncio.id = tbl_livros_comprados.id_anuncio
+     
+        WHERE tbl_livros_comprados.id_anuncio = ${announcementId} AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+        GROUP BY tbl_livros_comprados.data_compra`
+
+        sellData.dates = await prisma.$queryRawUnsafe(sqlDate)
+
+        sellData.sales = await prisma.$queryRawUnsafe(sqlSales)
+
+        sellData.invoicing = await prisma.$queryRawUnsafe(sqlInvoicing)
+
+        if(sellData)
             return sellData
+        else
+            return false
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const selectMaxValue = async (announcementId) => {
+    try {
+        let sql = `SELECT CAST(COUNT(*) AS DECIMAL) AS maior_valor
+        FROM tbl_livros_comprados
+     
+        WHERE tbl_livros_comprados.id_anuncio = ${announcementId} AND tbl_livros_comprados.data_compra >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+        GROUP BY tbl_livros_comprados.data_compra
+        ORDER BY maior_valor DESC LIMIT 1`
+
+
+        const rsMaxValue = await prisma.$queryRawUnsafe(sql)
+
+        if(rsMaxValue.length > 0)
+            return rsMaxValue[0]
         else
             return false
     } catch (err) {
@@ -135,5 +180,6 @@ module.exports = {
     selectUserTagsData,
     selectAnnouncementRates,
     selectAnnouncementRatesPercent,
-    selectSellDataByWeek
+    selectSellDataByWeek,
+    selectMaxValue
  }

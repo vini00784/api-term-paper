@@ -49,6 +49,7 @@ const getAnnouncementsInfosFun = async (announcementId) => {
         const announcementRatesData = await dashboardModel.selectAnnouncementRates(announcementId)
         const announcementRatesPercentData = await dashboardModel.selectAnnouncementRatesPercent(announcementId)
         const announcementSellByWeekData = await dashboardModel.selectSellDataByWeek(announcementId)
+        const announcementMaxValue = await dashboardModel.selectMaxValue(announcementId)
         
         const announcementData = {}
         
@@ -80,16 +81,13 @@ const getAnnouncementsInfosFun = async (announcementId) => {
             announcementData.percentual_avaliacoes = announcementRatesPercentData
 
         if(announcementSellByWeekData) {
-            let acc = 0
-            
-            announcementSellByWeekData.map(({ faturamento }) => { 
-                acc += faturamento.d[0]
-            })
+            announcementData.weekSell = announcementSellByWeekData
+        }
 
-            announcementSellByWeekData.push({
-                total: acc
-            })
-            announcementData.teste = announcementSellByWeekData
+        if (announcementMaxValue) {
+            const roundedValue = parseInt((parseInt(announcementMaxValue.maior_valor) / 5) + 1) * 5
+
+            announcementData.roundedData = roundedValue
         }
 
         return announcementData
