@@ -143,7 +143,7 @@ const selectSellDataByWeek = async (announcementId) => {
 
         sellData.sales = await prisma.$queryRawUnsafe(sqlSales)
 
-        sellData.invoicing = await prisma.$queryRawUnsafe(sqlInvoicing)
+        // sellData.invoicing = await prisma.$queryRawUnsafe(sqlInvoicing)
 
         if(sellData)
             return sellData
