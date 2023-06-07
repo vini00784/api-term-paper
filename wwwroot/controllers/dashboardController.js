@@ -82,12 +82,20 @@ const getAnnouncementsInfosFun = async (announcementId) => {
 
         if(announcementSellByWeekData) {
             announcementData.weekSell = announcementSellByWeekData
-        }
 
-        if (announcementMaxValue) {
-            const roundedValue = parseInt((parseInt(announcementMaxValue.maior_valor) / 5) + 1) * 5
+            if (announcementMaxValue) {
+                const roundedValue = parseInt((parseInt(announcementMaxValue.maior_valor) / 5) + 1) * 5
+    
+                announcementData.roundedData = roundedValue
 
-            announcementData.roundedData = roundedValue
+                announcementData.weekSell.invoicing = []
+    
+                announcementData.weekSell.sales.forEach(element => {
+                    let percent = (100 * [element.quantidade_vendas] / roundedValue)
+
+                    announcementData.weekSell.invoicing.push(percent)
+                })
+            }
         }
 
         return announcementData
