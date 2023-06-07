@@ -11,7 +11,7 @@ const prisma = require('../../libs/prisma.js')
 
 const selectAnnouncementRevenue = async (announcementId) => {
     try {
-        let sql = `SELECT SUM(tbl_anuncio.preco) AS receita_gerada
+        let sql = `SELECT ROUND(SUM(tbl_anuncio.preco), 2) AS receita_gerada
         FROM tbl_livros_comprados
      
         INNER JOIN tbl_anuncio
